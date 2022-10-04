@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "prospector",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/prospector",
+      "args": ["--profile", "${workspaceFolder}/.prospector_full.yaml"],
+      "isBackground": false,
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "close": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "revealProblems": "onProblem"
+      },
+      "problemMatcher": {
+        "owner": "python",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": [
+          {
+            "regexp": "^(.*):(\\d+): (.*)$",
+            "file": 1,
+            "line": 2,
+            "message": 3,
+            "loop": true
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "jebbs.plantuml",
+    "lextudio.restructuredtext",
+    "esbenp.prettier-vscode",
+    "usernamehw.errorlens"
+  ]
+}

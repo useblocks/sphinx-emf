@@ -1,0 +1,37 @@
+# Base prospector configuration that's supposed to run fast.
+# It is designed to be used in VsCode linters
+
+# options: emacs, grouped, json, pylint, text, vscode, xunit, yaml
+output-format: pylint # works best with VSCode problem matcher in tasks.json
+
+# properties from default profile (no need to inherit)
+strictness: veryhigh
+test-warnings: true
+doc-warnings: true
+member-warnings: true
+autodetect: false # detection does not work reliably
+
+ignore-paths:
+  - .venv/
+  - .nox/
+  - .mypy_cache/
+  - docs/_build/
+  - docs/utils/
+ignore-patterns: []
+
+max-line-length: 120
+
+mccabe:
+  run: true
+  options:
+    max-complexity: 10
+
+pydocstyle:
+  disable:
+    - D212 # go for summary on line 2 in multiline docstrings
+
+mypy:
+  run: true
+  options:
+    ignore-missing-imports: true
+    follow-imports: skip

@@ -1,0 +1,27 @@
+# Extended prospector configuration that checks  supposed to run fast.
+# It is designed to be used in VsCode linters
+
+inherits:
+  - .prospector.yaml
+
+bandit:
+  run: true
+  options:
+    config: pyproject.toml
+
+dodgy:
+  run: true
+
+mccabe:
+  run: true
+  options:
+    max-complexity: 10
+
+pyroma:
+  run: true
+
+mypy:
+  run: true
+
+vulture:
+  run: true

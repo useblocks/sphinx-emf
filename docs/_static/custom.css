@@ -1,0 +1,9 @@
+.wy-nav-content {
+    /* don't constrain width (whole window) */
+    max-width: None;
+}
+
+.wy-side-nav-search>a img.logo {
+    /* smaller navigation bar logo */
+    max-width:60%;
+}

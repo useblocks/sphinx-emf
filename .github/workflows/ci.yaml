@@ -1,0 +1,56 @@
+
+name: CI
+on: [pull_request]
+jobs:
+  tests:
+    name: "${{ matrix.os }}: py${{ matrix.python-version }} sphinx: ${{ matrix.sphinx-version }} sphinx-needs-version: ${{ matrix.sphinx-needs-version }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true  # Set on "false" to get the results of ALL builds
+      matrix:
+        os: ["ubuntu-latest"]
+        # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1829077.html
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        include:
+          # Check only newest setups for win server
+          - os: "windows-latest"
+            python-version: "3.10"
+            sphinx-version: "5.0.2"
+            sphinx-needs-version: "1.0.2"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Set Up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'poetry'
+      - name: Install project
+        run: poetry install
+      - name: Final package list
+        run: |
+          poetry show --all
+      - name: Run Tests on Windows
+        run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
+        if: runner.os == 'Windows'
+      - name: Run Tests on Linux
+        run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
+        if: runner.os == 'Linux'
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+          cache: 'poetry'
+      - name: Install project
+        run: poetry install
+      - uses: pre-commit/action@v3.0.0
+

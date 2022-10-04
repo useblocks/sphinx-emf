@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "name": "Python: main",
+      "type": "python",
+      "request": "launch",
+      "module": "sphinx_emf.main",
+      "justMyCode": false
+    }
+  ]
+}
