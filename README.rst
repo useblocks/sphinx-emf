@@ -10,6 +10,6 @@ Usage
 
     pip install sphinx-emf
 
-2. Add it to your project with poetry:
+2. Add it to your project with poetry::
 
     poetry add sphinx-emf
