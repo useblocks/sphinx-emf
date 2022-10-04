@@ -45,13 +45,12 @@ html_logo = "./_static/logo.png"
 html_favicon = "./_static/logo-favicon.ico"
 html_theme_options = {
     # TOC options
-    'collapse_navigation': False,
-    'sticky_navigation': False,
-    'navigation_depth': 7,
+    "collapse_navigation": False,
+    "sticky_navigation": False,
+    "navigation_depth": 7,
     # content options
-    'prev_next_buttons_location': None,
+    "prev_next_buttons_location": None,
 }
 
 html_static_path = ["_static"]
 html_css_files = ["custom.css"]
-
