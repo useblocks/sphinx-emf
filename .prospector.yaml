@@ -29,6 +29,7 @@ mccabe:
 pydocstyle:
   disable:
     - D212 # go for summary on line 2 in multiline docstrings
+    - D203 # go for class docstring on line 1
 
 mypy:
   run: true
