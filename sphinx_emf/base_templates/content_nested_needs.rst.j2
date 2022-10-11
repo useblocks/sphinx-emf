@@ -1,0 +1,13 @@
+{% for title, nested_needs in need['nested_content'].items() %}
+    {% if title %}
+
+
+**{{ title }}**
+    {% else %}
+
+    {% endif %}
+    {% for nested_need in nested_needs %}
+
+        {% include "content_nested_need.rst.j2" %}
+    {% endfor %}
+{% endfor %}

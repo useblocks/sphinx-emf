@@ -1,0 +1,7 @@
+.. {{ need['type'] }}:: {{ need['title'] }}
+    {% filter indent(width=indent, first=True) %}
+:id: {{ need['id'] -}}
+        {% include "options.rst.j2" %}
+        {% include "content_fields.rst.j2" %}
+
+    {% endfilter %}
