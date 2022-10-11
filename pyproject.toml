@@ -10,27 +10,26 @@ license = "MIT"
 readme = "README.rst"
 repository = "http://github.com/useblocks/sphinx-emf"
 documentation = "https://sphinx-emf.readthedocs.io/"
-classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-    ]
-
-packages = [
-    {include = "sphinx_emf"}
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
 ]
+
+packages = [{ include = "sphinx_emf" }]
 
 
 [tool.poetry.dependencies]
 python = ">=3.7.2,<3.11"
-
+Jinja2 = "^3.1.2"
+pyecore = { git = "https://github.com/pyecore/pyecore.git", rev = "749f76926b784fb945024d761da741ae30ca34cd" } # branch develop on 2022-10-05
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^2"
@@ -39,7 +38,7 @@ pre-commit = "^2"
 nox = "^2022.8.7"
 nox-poetry = "^1.0.1"
 pytest = "^7"
-pytest-xdist="*"  # parallelisation
+pytest-xdist = "*"    # parallelisation
 
 # mypy
 docutils-stubs = "^0.0.22"
@@ -63,7 +62,7 @@ sphinx = "^5"
 sphinx-rtd-theme = "^1.0.0"
 
 [tool.pytest.ini_options]
-asyncio_mode= "auto"
+asyncio_mode = "auto"
 
 [tool.vulture]
 # currently ignored by prospector, see https://github.com/PyCQA/prospector/issues/505
@@ -98,5 +97,8 @@ module = []
 ignore_errors = true
 
 [build-system]
-requires = ["setuptools", "poetry_core>=1.0.8"]  # setuptools for deps like plantuml
+requires = [
+    "setuptools",
+    "poetry_core>=1.0.8",
+] # setuptools for deps like plantuml
 build-backend = "poetry.core.masonry.api"
