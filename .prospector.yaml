@@ -36,3 +36,10 @@ mypy:
   options:
     ignore-missing-imports: true
     follow-imports: skip
+
+pylint:
+  run: true
+  options:
+    extension-pkg-whitelist: pydantic
+  disable:
+    logging-fstring-interpolation
