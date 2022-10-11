@@ -7,14 +7,6 @@ from typing import Any, Callable, Dict, List, Literal, Tuple, Union
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pyecore.ecore import EEnumLiteral, EOrderedSet
 
-from sphinx_emf.logger import config_logger
-from sphinx_emf.config.config_writer import (
-    MAP_EMF_CLASSES_2_NEEDS,
-    OUTPUT_DIRECTORY,
-    PATH_M1_MODEL,
-    PATH_M2_MODEL,
-    RST_INDENT,
-)
 from sphinx_emf.ecore.io_ecore import load
 from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natural_sort_in_place
 
@@ -77,14 +69,14 @@ def set_need_value(
     return need_definition[0], transformer_result
 
 
-def walk_ecore_tree(item, need, context):
+def walk_ecore_tree(item, need, context, config):
     """Recursively walk the ECore model from a root element and populate a root need."""
     item_type = item.__class__.__name__
-    if not is_type_allowed(item):
+    if not is_type_allowed(item, config):
         return
 
     xmi_id = get_xmi_id(item)
-    need_map = MAP_EMF_CLASSES_2_NEEDS[item_type]  # map of ECore field names to need names
+    need_map = config.emf_classes_2_needs[item_type]  # map of ECore field names to need names
 
     # build fields list to analyze, order is the appearance in need_map
     sorted_emf_fields = list(need_map["options"].keys()) + list(need_map["content"].keys())
@@ -124,7 +116,7 @@ def walk_ecore_tree(item, need, context):
     context["id_map_ecore_2_needs"][xmi_id] = need["id"]
 
     for field_name in fields:
-        if not is_field_allowed(item, field_name):
+        if not is_field_allowed(item, field_name, config):
             continue
         value = getattr(item, field_name)
         if value is None:
@@ -142,11 +134,11 @@ def walk_ecore_tree(item, need, context):
         elif isinstance(value, EOrderedSet):
             # need links or nested needs
             # sort the items to get reproducible RST output
-            natural_sort_in_place(value.items)
+            natural_sort_in_place(value.items, config)
             list_needs: List[Dict[str, Any]] = []
             for inner_item in value.items:
                 new_need = {}
-                walk_ecore_tree(inner_item, new_need, context)
+                walk_ecore_tree(inner_item, new_need, context, config)
                 if new_need:
                     list_needs.append(new_need)
             if list_needs:
@@ -162,22 +154,10 @@ def walk_ecore_tree(item, need, context):
             raise ValueError(f"Unexpected field type {type(value)} for id {xmi_id}")
 
 
-def run() -> None:
+def write_rst(config) -> None:
     """Load model and write need objects."""
-    config_logger()
     # history is not used
-    root, _ = load(PATH_M1_MODEL, PATH_M2_MODEL)
-    # generate_unique_need_ids(root, set())
-    need_root = {}
-    context: Dict[Literal["id_map_ecore_2_needs", "id_map_needs_2_ecore"], Any] = {
-        "id_map_ecore_2_needs": {},
-        "id_map_needs_2_ecore": {},
-    }
-    walk_ecore_tree(root, need_root, context)
-    if not os.path.exists(OUTPUT_DIRECTORY):
-        # create the output directory
-        os.makedirs(OUTPUT_DIRECTORY, exist_ok=True)
-
+    roots = load(config)
     dir_this_file = os.path.dirname(os.path.realpath(__file__))
     env = Environment(
         loader=FileSystemLoader(searchpath=os.path.join(dir_this_file, "base_templates")),
@@ -186,11 +166,22 @@ def run() -> None:
         lstrip_blocks=True,
     )
     env.add_extension("jinja2.ext.do")  # enable usage of {% do %}
-    need_template = env.get_template("need.rst.j2")
-    need_template_out = need_template.render(need=need_root, indent=RST_INDENT)
-    output_file_name = "need_out.rst"
-    with open(os.path.join(OUTPUT_DIRECTORY, output_file_name), "w", encoding="utf-8") as file_handler:
-        file_handler.write(need_template_out)
+    for root in roots:
+        need_root: Dict[str, Any] = {}
+        context: Dict[Literal["id_map_ecore_2_needs", "id_map_needs_2_ecore"], Any] = {
+            "id_map_ecore_2_needs": {},
+            "id_map_needs_2_ecore": {},
+        }
+        walk_ecore_tree(root, need_root, context, config)
+        if not os.path.exists(config.emf_output_directory):
+            # create the output directory
+            os.makedirs(config.emf_output_directory, exist_ok=True)
+
+        need_template = env.get_template("need.rst.j2")
+        need_template_out = need_template.render(need=need_root, indent=config.emf_rst_indent)
+        output_file_name = f"{root.__class__.__name__}_out.rst"
+        with open(os.path.join(config.emf_output_directory, output_file_name), "w", encoding="utf-8") as file_handler:
+            file_handler.write(need_template_out)
     # for template_path in TEMPLATES:
     #     template_dir = os.path.dirname(template_path)
     #     template_file_name = os.path.basename(template_path)
@@ -203,5 +194,9 @@ def run() -> None:
     #         file_handler.write(tool_j2_out)
 
 
+def read_rst() -> None:
+    """Load model and read need objects from RST."""
+
+
 if __name__ == "__main__":
-    run()
+    write_rst()

@@ -1,35 +1,26 @@
 """Utils to generate need RST code."""
 
 import re
+from sphinx_emf.config.model import SphinxEmfConfig
 
-from sphinx_emf.config.config_writer import (
-    EMF_SORT_FIELD,
-    MAP_EMF_CLASSES_2_NEEDS,
-    MAP_FILTER_ALLOWED_EMF_CLASSES,
-    MAP_FILTER_ALLOWED_EMF_VALUES,
-    MAP_FILTER_DENIED_EMF_CLASSES,
-    MAP_FILTER_DENIED_EMF_VALUES,
-)
-
-
-def is_type_allowed(item):
+def is_type_allowed(item, config: SphinxEmfConfig):
     """Determine whether the ECore item is valid for import."""
     item_type = item.__class__.__name__
-    if item_type not in MAP_EMF_CLASSES_2_NEEDS:
+    if item_type not in config.emf_classes_2_needs:
         # item has no definition in class -> need map
         return False
-    if MAP_FILTER_ALLOWED_EMF_CLASSES:
-        if item_type not in MAP_FILTER_ALLOWED_EMF_CLASSES:
+    if config.emf_allowed_classes:
+        if item_type not in config.emf_allowed_classes:
             return False
-    if item_type in MAP_FILTER_DENIED_EMF_CLASSES:
+    if item_type in config.emf_denied_classes:
         return False
-    if item_type in MAP_FILTER_ALLOWED_EMF_VALUES:
-        for field_name, values in MAP_FILTER_ALLOWED_EMF_VALUES[item_type].items():
+    if item_type in config.emf_allowed_values:
+        for field_name, values in config.emf_allowed_values[item_type].items():
             field_value = getattr(item, field_name, None)
             if field_value not in values:
                 return False
-    if item_type in MAP_FILTER_DENIED_EMF_VALUES:
-        for field_name, values in MAP_FILTER_DENIED_EMF_VALUES[item_type].items():
+    if item_type in config.emf_denied_values:
+        for field_name, values in config.emf_denied_values[item_type].items():
             field_value = getattr(item, field_name, None)
             if field_value in values:
                 return False
@@ -45,7 +36,7 @@ def get_xmi_id(item):
     return item._internal_id  # pylint: disable=protected-access
 
 
-def is_field_allowed(item, field_name):
+def is_field_allowed(item, field_name, config: SphinxEmfConfig):
     """Determine whether a certain ECore item field is valid for import."""
     if field_name == "_internal_id":
         return True
@@ -53,8 +44,8 @@ def is_field_allowed(item, field_name):
     field_types = ["options", "content"]
     field_known = False
     for field_type in field_types:
-        if field_type in MAP_EMF_CLASSES_2_NEEDS[item_type]:
-            if field_name in MAP_EMF_CLASSES_2_NEEDS[item_type][field_type]:
+        if field_type in config.emf_classes_2_needs[item_type]:
+            if field_name in config.emf_classes_2_needs[item_type][field_type]:
                 field_known = True
                 break
     if not field_known:
@@ -62,15 +53,15 @@ def is_field_allowed(item, field_name):
     return True
 
 
-def natural_sort_in_place(list_to_sort):
+def natural_sort_in_place(list_to_sort, config: SphinxEmfConfig):
     """Sort a list by a given attribute naturally (correctly handling numbers)."""
 
     def convert(text):
         return int(text) if text.isdigit() else text.lower()
 
     def alphanum_key(key):
-        return [convert(c) for c in re.split("([0-9]+)", getattr(key, EMF_SORT_FIELD))]
+        return [convert(c) for c in re.split("([0-9]+)", getattr(key, config.emf_sort_field))]
 
-    if EMF_SORT_FIELD:
-        # only sort if EMF_SORT_FIELD has a value
+    if config.emf_sort_field:
+        # only sort if emf_sort_field has a value
         list_to_sort.sort(key=alphanum_key)

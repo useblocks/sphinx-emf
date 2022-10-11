@@ -2,25 +2,25 @@
 from pyecore.resources import URI, ResourceSet
 from pyecore.resources.xmi import XMIResource
 
-from sphinx_emf.config.config_writer import EMF_RESOURCE_SET_HOOK
+from sphinx_emf.config.model import SphinxEmfConfig
 
 
-def load(m1_model, m2_model):
+def load(config: SphinxEmfConfig):
     """Read a M1 EMF file with its M2 ECore model using pyecore."""
     rset = ResourceSet()
 
     # load M2 model
-    resource = rset.get_resource(URI(m2_model))
+    resource = rset.get_resource(URI(config.emf_path_m2_model))
     mm_root = resource.contents[0]
     rset.metamodel_registry[mm_root.nsURI] = mm_root
 
-    if EMF_RESOURCE_SET_HOOK is not None:
+    if config.emf_pre_read_hook is not None:
         # option to run user specific code (like add M2 )
-        EMF_RESOURCE_SET_HOOK(rset)
+        config.emf_pre_read_hook(rset)
 
     # At this point, the .ecore is loaded in the 'rset' as a metamodel
     # load the M1 model
-    resource = rset.get_resource(URI(m1_model))
+    resource = rset.get_resource(URI(config.emf_path_m1_model))
 
     model_root = resource.contents[0]
     model_root_history = resource.contents[1]
