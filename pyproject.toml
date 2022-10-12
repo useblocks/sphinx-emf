@@ -68,7 +68,7 @@ sphinx-rtd-theme = { version = "^1.0.0", optional = true }
 docs = ["esbonio", "sphinx-rtd-theme"]
 
 [tool.poetry.scripts]
-emf_import = "sphinx_emf.cli:run"
+sphinx-emf-cli = "sphinx_emf.cli:run"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
