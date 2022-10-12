@@ -12,4 +12,4 @@ def test_run_main():
     config_path = os.path.join(dir_this_file, "data", "prod", "config_sphinx_emf.py")
     runner = CliRunner()
     response = runner.invoke(run, [config_path])
-    assert response.exit_code == 0
+    assert response.exit_code == 0  # nosec

@@ -1,6 +1,6 @@
 """Read M1 model with pyecore using the M2 model."""
 from pyecore.resources import URI, ResourceSet
-from pyecore.resources.xmi import XMIResource
+from pyecore.resources.xmi import XMIOptions, XMIResource
 
 from sphinx_emf.config.model import SphinxEmfConfig
 
@@ -42,4 +42,9 @@ def save_m1(model_roots, output_path: str):
     resource_out = XMIResource(URI(output_path), use_uuid=True)
     for root in model_roots:
         resource_out.append(root)
-    resource_out.save()
+    resource_out.save(
+        options={
+            XMIOptions.SERIALIZE_DEFAULT_VALUES: True,
+            XMIOptions.OPTION_USE_XMI_TYPE: True,
+        }
+    )

@@ -8,7 +8,7 @@ from sphinx_emf.sphinx_logging import get_logger
 VERSION = "0.1.0"
 
 
-def setup(app) -> Dict[str, Any]:
+def setup(app) -> Dict[str, Any]:  # noqa: F841  # used by Sphinx when registering the plugin
     """Set up the extension."""
     log = get_logger(__name__)
     log.info("Setting up sphinx-emf extension")
@@ -18,7 +18,6 @@ def setup(app) -> Dict[str, Any]:
     # configurations
     app.add_config_value(name="emf_path_m1_model", default=None, rebuild="html", types=[str])
     app.add_config_value(name="emf_path_m2_model", default=None, rebuild="html", types=[str])
-    app.add_config_value(name="emf_output_directory", default=None, rebuild="html", types=[str])
     app.add_config_value(name="emf_rst_indent", default=3, rebuild="html", types=[int])
     app.add_config_value(name="emf_allowed_classes", default=[], rebuild="html", types=[List[str]])
     app.add_config_value(name="emf_denied_classes", default=[], rebuild="html", types=[List[str]])

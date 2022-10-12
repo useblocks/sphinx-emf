@@ -32,12 +32,7 @@ class SphinxEmfConfig(BaseModel):
     """ECore M1 model."""
     emf_path_m2_model: StrictStr
     """Ecore M2 model."""
-    emf_output_directory: StrictStr
-    """
-    Output directory for the RST files.
 
-    Deprecated.
-    """
     # see https://github.com/pydantic/pydantic/issues/239
     #     https://github.com/pydantic/pydantic/issues/156
     # for why ignoring seems to be the best solution

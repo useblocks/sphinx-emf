@@ -16,22 +16,6 @@ from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natu
 logger = logging.getLogger(__name__)
 
 
-def set_need_field(
-    ecore_value,
-    definition: Union[str, Tuple[str, Callable[[str, str, List[str], Dict[str, Any]], str]]],
-    need,
-):
-    """Read an MAP_EMF_CLASS_2_NEED_DEF definition and set the field in the given need accordingly."""
-    if isinstance(definition, str):
-        need[definition] = ecore_value
-    elif isinstance(definition, List):
-        # invoke user defined hook
-        hook_out = definition[1](ecore_value)
-        need[definition] = hook_out
-    else:
-        raise ValueError(f"Unexpected definition type {type(definition)} for ECore value {ecore_value}")
-
-
 def get_field_definition(
     definition: Dict[str, Any], emf_field_name
 ) -> Tuple[str, Union[str, None, Tuple[str, Callable[[str, Any, Dict[str, Any]], str]]]]:
@@ -243,16 +227,14 @@ def write_rst(config: SphinxEmfConfig) -> None:
             }
         walk_ecore_tree(root, need_root, context, config, inverted_config)
         remove_unlinked(need_root, context, config, inverted_config)
-        if not os.path.exists(config.emf_output_directory):
-            # create the output directory
-            os.makedirs(config.emf_output_directory, exist_ok=True)
+
         default_config = None  # handle this at the end
         output = {}  # stores all needs for each output path
         for output_config in config.emf_rst_output_configs:
             if "default" in output_config:
                 default_config = output_config
                 continue
-            needs_to_write = []
+            needs_to_write: List[Any] = []
             output[output_config["path"]] = {
                 "needs": needs_to_write,
                 "headline": output_config["headline"] if "headline" in output_config else None,
@@ -273,21 +255,15 @@ def write_rst(config: SphinxEmfConfig) -> None:
                 needs=value["needs"],
                 indent=config.emf_rst_indent,
             )
+            create_dirs(output_path)
             logger.info(f"Writing output file {output_path}")
             with open(output_path, "w", encoding="utf-8") as file_handler:
                 file_handler.write(needs_template_out)
-    # for template_path in TEMPLATES:
-    #     template_dir = os.path.dirname(template_path)
-    #     template_file_name = os.path.basename(template_path)
-    #     tool_j2 = env.get_template(template_file_name)
-    #     tool_j2_out = tool_j2.render(need_root=need_root, indent=RST_INDENT)
-    #     if not template_file_name.endswith(".rst.j2"):
-    #         raise ValueError(f"Template path must end on .rst.j2, given {template_path}")
-    #     output_file_name = template_file_name[:-3]
-    #     with open(os.path.join(OUTPUT_DIRECTORY, output_file_name), "w", encoding="utf-8") as file_handler:
-    #         file_handler.write(tool_j2_out)
 
 
-def read_rst(config: SphinxEmfConfig) -> None:
-    """Load model and read need objects from RST."""
-    del config  # re-activate when implemented
+def create_dirs(file_path: str):
+    """Create all directories to a (non-existent) file."""
+    directory = os.path.basename(file_path)
+    if not os.path.exists(directory):
+        # create the directory
+        os.makedirs(directory, exist_ok=True)
