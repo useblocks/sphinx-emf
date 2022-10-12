@@ -25,7 +25,7 @@ def setup(app) -> Dict[str, Any]:
     app.add_config_value(name="emf_pre_read_hook", default=[], rebuild="html", types=[Callable])
     app.add_config_value(name="emf_post_read_hook", default=[], rebuild="html", types=[Callable])
     app.add_config_value(
-        name="emf_classes_2_needs",
+        name="emf_class_2_need_def",
         default={},
         rebuild="html",
         types=[

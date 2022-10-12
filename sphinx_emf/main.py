@@ -7,6 +7,8 @@ from typing import Any, Callable, Dict, List, Literal, Tuple, Union
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pyecore.ecore import EEnumLiteral, EOrderedSet
 
+from sphinx_emf.config.invert import invert_emf_class_2_need_def
+from sphinx_emf.config.model import SphinxEmfConfig
 from sphinx_emf.ecore.io_ecore import load
 from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natural_sort_in_place
 
@@ -19,7 +21,7 @@ def set_need_field(
     definition: Union[str, Tuple[str, Callable[[str, str, List[str], Dict[str, Any]], str]]],
     need,
 ):
-    """Read an MAP_EMF_CLASSES_2_NEEDS definition and set the field in the given need accordingly."""
+    """Read an MAP_EMF_CLASS_2_NEED_DEF definition and set the field in the given need accordingly."""
     if isinstance(definition, str):
         need[definition] = ecore_value
     elif isinstance(definition, List):
@@ -34,7 +36,7 @@ def get_field_definition(
     definition: Dict[str, Any], emf_field_name
 ) -> Tuple[str, Union[str, None, Tuple[str, Callable[[str, Any, Dict[str, Any]], str]]]]:
     """
-    Look for the field in a MAP_EMF_CLASSES_2_NEEDS[...] definition.
+    Look for the field in a MAP_EMF_CLASS_2_NEED_DEF[...] definition.
 
     It can either be in 'options' or 'content'.
     """
@@ -57,7 +59,7 @@ def set_need_value(
     context,
 ) -> Tuple[str, str]:
     """
-    Set a need field value based on a MAP_EMF_CLASSES_2_NEEDS definition.
+    Set a need field value based on a MAP_EMF_CLASS_2_NEED_DEF definition.
 
     The need dictionary is modified in-place.
     """
@@ -69,14 +71,41 @@ def set_need_value(
     return need_definition[0], transformer_result
 
 
-def walk_ecore_tree(item, need, context, config):
+def remove_unlinked(need, context, config, inverted_config) -> bool:
+    """
+    Remove all need objects that are not linked as per emf_remove_unlinked_types.
+
+    Context holds all actually linked need ids.
+
+    :returns: True if the need is used else False
+    """
+    # go through the chidren first, then evaluate the need itself
+    for emf_type, nested_needs in need["nested_content"].items():
+        reduced_list = []
+        for inner_need in nested_needs:
+            keep_need = remove_unlinked(inner_need, context, config, inverted_config)
+            if keep_need:
+                reduced_list.append(inner_need)
+        need["nested_content"][emf_type] = reduced_list
+
+    # evaluate need
+    emf_type = inverted_config["need_type_2_emf_def"][need["type"]]["type"]
+    if emf_type in context["remove_unlinked_type_2_linked_need_ids"]:
+        if need["id"] not in context["remove_unlinked_type_2_linked_need_ids"][emf_type]:
+            # this need id was not linked from anywhere - release it
+            # also the children are not considered anymore
+            return False
+    return True
+
+
+def walk_ecore_tree(item, need, context, config, inverted_config):
     """Recursively walk the ECore model from a root element and populate a root need."""
     item_type = item.__class__.__name__
     if not is_type_allowed(item, config):
         return
 
     xmi_id = get_xmi_id(item)
-    need_map = config.emf_classes_2_needs[item_type]  # map of ECore field names to need names
+    need_map = config.emf_class_2_need_def[item_type]  # map of ECore field names to need names
 
     # build fields list to analyze, order is the appearance in need_map
     sorted_emf_fields = list(need_map["options"].keys()) + list(need_map["content"].keys())
@@ -112,8 +141,8 @@ def walk_ecore_tree(item, need, context, config):
     need["nested_content"] = {}
 
     # update context with new IDs
-    context["id_map_needs_2_ecore"][need["id"]] = xmi_id
-    context["id_map_ecore_2_needs"][xmi_id] = need["id"]
+    context["need_id_2_ecore_id"][need["id"]] = xmi_id
+    context["ecore_id_2_need_id"][xmi_id] = need["id"]
 
     for field_name in fields:
         if not is_field_allowed(item, field_name, config):
@@ -125,7 +154,7 @@ def walk_ecore_tree(item, need, context, config):
         section, definition = get_field_definition(need_map, field_name)
         if isinstance(value, (str, EEnumLiteral, bool, int)):
             # option or content types, stored as strings
-            # store the value on the need dictionary as per the MAP_EMF_CLASSES_2_NEEDS definition
+            # store the value on the need dictionary as per the MAP_EMF_CLASS_2_NEED_DEF definition
             need_field_name, need_value = set_need_value(definition, field_name, item, context)
             if section == "options":
                 need["extra_options"][need_field_name] = need_value
@@ -138,7 +167,7 @@ def walk_ecore_tree(item, need, context, config):
             list_needs: List[Dict[str, Any]] = []
             for inner_item in value.items:
                 new_need = {}
-                walk_ecore_tree(inner_item, new_need, context, config)
+                walk_ecore_tree(inner_item, new_need, context, config, inverted_config)
                 if new_need:
                     list_needs.append(new_need)
             if list_needs:
@@ -150,11 +179,15 @@ def walk_ecore_tree(item, need, context, config):
                 else:
                     # reference -> UML aggregation -> need link
                     need["link_options"][definition] = [local_need["id"] for local_need in list_needs]
+                    for local_need in list_needs:
+                        emf_type = inverted_config["need_type_2_emf_def"][local_need["type"]]["type"]
+                        if emf_type in context["remove_unlinked_type_2_linked_need_ids"]:
+                            context["remove_unlinked_type_2_linked_need_ids"][emf_type].add(local_need["id"])
         else:
             raise ValueError(f"Unexpected field type {type(value)} for id {xmi_id}")
 
 
-def write_rst(config) -> None:
+def write_rst(config: SphinxEmfConfig) -> None:
     """Load model and write need objects."""
     # history is not used
     roots = load(config)
@@ -165,14 +198,23 @@ def write_rst(config) -> None:
         trim_blocks=True,
         lstrip_blocks=True,
     )
+    inverted_config = invert_emf_class_2_need_def(config.emf_class_2_need_def)
     env.add_extension("jinja2.ext.do")  # enable usage of {% do %}
     for root in roots:
         need_root: Dict[str, Any] = {}
-        context: Dict[Literal["id_map_ecore_2_needs", "id_map_needs_2_ecore"], Any] = {
-            "id_map_ecore_2_needs": {},
-            "id_map_needs_2_ecore": {},
+        context: Dict[
+            Literal["ecore_id_2_need_id", "need_id_2_ecore_id", "remove_unlinked_type_2_linked_need_ids"], Any
+        ] = {
+            "ecore_id_2_need_id": {},
+            "need_id_2_ecore_id": {},
+            "remove_unlinked_type_2_linked_need_ids": {},
         }
-        walk_ecore_tree(root, need_root, context, config)
+        if config.emf_remove_unlinked_types:
+            context["remove_unlinked_type_2_linked_need_ids"] = {
+                emf_type: set() for emf_type in config.emf_remove_unlinked_types
+            }
+        walk_ecore_tree(root, need_root, context, config, inverted_config)
+        remove_unlinked(need_root, context, config, inverted_config)
         if not os.path.exists(config.emf_output_directory):
             # create the output directory
             os.makedirs(config.emf_output_directory, exist_ok=True)
@@ -194,5 +236,6 @@ def write_rst(config) -> None:
     #         file_handler.write(tool_j2_out)
 
 
-def read_rst() -> None:
+def read_rst(config: SphinxEmfConfig) -> None:
     """Load model and read need objects from RST."""
+    del config  # re-activate when implemented

@@ -8,7 +8,7 @@ from sphinx_emf.config.model import SphinxEmfConfig
 def is_type_allowed(item, config: SphinxEmfConfig):
     """Determine whether the ECore item is valid for import."""
     item_type = item.__class__.__name__
-    if item_type not in config.emf_classes_2_needs:
+    if item_type not in config.emf_class_2_need_def:
         # item has no definition in class -> need map
         return False
     if config.emf_allowed_classes:
@@ -46,8 +46,8 @@ def is_field_allowed(item, field_name, config: SphinxEmfConfig):
     field_types = ["options", "content"]
     field_known = False
     for field_type in field_types:
-        if field_type in config.emf_classes_2_needs[item_type]:
-            if field_name in config.emf_classes_2_needs[item_type][field_type]:
+        if field_type in config.emf_class_2_need_def[item_type]:
+            if field_name in config.emf_class_2_need_def[item_type][field_type]:
                 field_known = True
                 break
     if not field_known:

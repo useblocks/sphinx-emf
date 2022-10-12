@@ -22,7 +22,11 @@ def load(config: SphinxEmfConfig):
     # load the M1 model
     resource = rset.get_resource(URI(config.emf_path_m1_model))
 
-    model_roots = resource.contents
+    if config.emf_post_read_hook is not None:
+        # option to run user specific code (like remove model roots)
+        model_roots = config.emf_post_read_hook(resource)
+    else:
+        model_roots = resource.contents
     return model_roots
 
 
