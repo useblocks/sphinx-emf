@@ -212,6 +212,7 @@ def write_rst(config: SphinxEmfConfig) -> None:
     )
     inverted_config = invert_emf_class_2_need_def(config.emf_class_2_need_def)
     env.add_extension("jinja2.ext.do")  # enable usage of {% do %}
+    default_handled = False
     for root in roots:
         need_root: Dict[str, Any] = {}
         context: Dict[
@@ -243,13 +244,17 @@ def write_rst(config: SphinxEmfConfig) -> None:
                 keep_root = reduce_tree(need_root, emf_type, needs_to_write, context, config, inverted_config)
                 if not keep_root:
                     needs_to_write.append(need_root)
-        if default_config:
+        if default_config and not default_handled:
             output[default_config["path"]] = {
                 "needs": [need_root],
                 "headline": default_config["headline"] if "headline" in default_config else None,
             }
+            default_handled = True
         for output_path, value in output.items():
             needs_template = env.get_template("needs.rst.j2")
+            if not value["needs"]:
+                # no export if list is empty
+                continue
             needs_template_out = needs_template.render(
                 headline=value["headline"],
                 needs=value["needs"],

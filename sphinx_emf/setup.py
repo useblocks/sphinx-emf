@@ -53,6 +53,7 @@ def setup(app) -> Dict[str, Any]:  # noqa: F841  # used by Sphinx when registeri
         ],
     )
     app.add_config_value(name="emf_sort_field", default=None, rebuild="html", types=[str])
+    app.add_config_value(name="emf_model_roots", default=[], rebuild="html", types=[List[str]])
 
     return {
         "version": VERSION,  # identifies the version of our extension
