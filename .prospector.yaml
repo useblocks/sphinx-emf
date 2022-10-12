@@ -43,9 +43,10 @@ pylint:
   run: true
   options:
     extension-pkg-whitelist: pydantic
-    max-statements: 100
-    max-locals: 25
+    max-args: 10
     max-branches: 25
+    max-locals: 25
     max-nested-blocks: 10
+    max-statements: 100
   disable:
     - logging-fstring-interpolation
