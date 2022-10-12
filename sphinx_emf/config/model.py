@@ -9,7 +9,7 @@ from pyecore.resources.xmi import XMIResource
 class SphinxEmfConfig(BaseModel):
     """sphinx-emf config model."""
 
-    emf_output_configs: List[
+    emf_rst_output_configs: List[
         Dict[
             Literal["path", "emf_types", "default", "headline"],
             Union[

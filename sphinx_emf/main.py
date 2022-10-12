@@ -9,7 +9,7 @@ from pyecore.ecore import EEnumLiteral, EOrderedSet
 
 from sphinx_emf.config.invert import invert_emf_class_2_need_def
 from sphinx_emf.config.model import SphinxEmfConfig
-from sphinx_emf.ecore.io_ecore import load
+from sphinx_emf.ecore.io_ecore import load_m1
 from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natural_sort_in_place
 
 
@@ -218,7 +218,7 @@ def walk_ecore_tree(item, need, context, config, inverted_config):
 def write_rst(config: SphinxEmfConfig) -> None:
     """Load model and write need objects."""
     # history is not used
-    roots = load(config)
+    roots = load_m1(config)
     dir_this_file = os.path.dirname(os.path.realpath(__file__))
     env = Environment(
         loader=FileSystemLoader(searchpath=os.path.join(dir_this_file, "base_templates")),
@@ -248,7 +248,7 @@ def write_rst(config: SphinxEmfConfig) -> None:
             os.makedirs(config.emf_output_directory, exist_ok=True)
         default_config = None  # handle this at the end
         output = {}  # stores all needs for each output path
-        for output_config in config.emf_output_configs:
+        for output_config in config.emf_rst_output_configs:
             if "default" in output_config:
                 default_config = output_config
                 continue

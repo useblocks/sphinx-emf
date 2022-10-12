@@ -1,6 +1,7 @@
 """Extension entry point for Sphinx."""
 from typing import Any, Callable, Dict, List, Literal, Tuple, Union
 
+from sphinx_emf.builder import EmfBuilder
 from sphinx_emf.sphinx_logging import get_logger
 
 
@@ -11,6 +12,8 @@ def setup(app) -> Dict[str, Any]:
     """Set up the extension."""
     log = get_logger(__name__)
     log.info("Setting up sphinx-emf extension")
+
+    app.add_builder(EmfBuilder)
 
     # configurations
     app.add_config_value(name="emf_path_m1_model", default=None, rebuild="html", types=[str])
