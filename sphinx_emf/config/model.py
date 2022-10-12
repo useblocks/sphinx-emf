@@ -11,7 +11,10 @@ class SphinxEmfConfig(BaseModel):
     emf_path_m1_model: StrictStr
     emf_path_m2_model: StrictStr
     emf_output_directory: StrictStr
-    emf_rst_indent: conint(strict=True, gt=0) = 3
+    # see https://github.com/pydantic/pydantic/issues/239
+    #     https://github.com/pydantic/pydantic/issues/156
+    # for why ignoring seems to be the best solution
+    emf_rst_indent: conint(strict=True, gt=0) = 3  # type: ignore
     emf_allowed_classes: List[StrictStr] = []
     emf_denied_classes: List[StrictStr] = []
     emf_allowed_values: Dict[StrictStr, Dict[StrictStr, List[StrictStr]]] = {}
