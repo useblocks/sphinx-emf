@@ -1,7 +1,15 @@
 """Test basic app functionality."""
-from sphinx_emf.main import run
+import os
+
+from click.testing import CliRunner
+
+from sphinx_emf.cli import run
 
 
 def test_run_main():
     """Check whether main function runs through."""
-    run()
+    dir_this_file = os.path.dirname(os.path.realpath(__file__))
+    config_path = os.path.join(dir_this_file, "data", "prod", "config_writer_user.py")
+    runner = CliRunner()
+    response = runner.invoke(run, [config_path])
+    assert response.exit_code == 0
