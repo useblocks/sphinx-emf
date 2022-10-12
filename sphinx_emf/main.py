@@ -196,7 +196,3 @@ def write_rst(config) -> None:
 
 def read_rst() -> None:
     """Load model and read need objects from RST."""
-
-
-if __name__ == "__main__":
-    write_rst()

@@ -15,27 +15,20 @@ def load(config: SphinxEmfConfig):
     rset.metamodel_registry[mm_root.nsURI] = mm_root
 
     if config.emf_pre_read_hook is not None:
-        # option to run user specific code (like add M2 )
+        # option to run user specific code (like add classes not in M2)
         config.emf_pre_read_hook(rset)
 
     # At this point, the .ecore is loaded in the 'rset' as a metamodel
     # load the M1 model
     resource = rset.get_resource(URI(config.emf_path_m1_model))
 
-    model_root = resource.contents[0]
-    model_root_history = resource.contents[1]
-    return model_root, model_root_history
+    model_roots = resource.contents
+    return model_roots
 
 
-def save(model_root, model_root_history, out_path):
+def save(model_roots, config: SphinxEmfConfig):
     """Save the M1 model back out - the history NS will be saved at the node."""
-    resource_out = XMIResource(URI(out_path), use_uuid=True)
-    resource_out.append(model_root)  # We add the root to the resource
-    resource_out.append(model_root_history)
-    resource_out.save()  # will save the result in 'my/path.xmi'
-
-
-if __name__ == "__main__":
-    # just an example how to use the functions
-    root, history = load("path_m1", "path_m2")
-    save(root, history, "out_path.tca")
+    resource_out = XMIResource(URI(config.emf_output_directory), use_uuid=True)
+    for root in model_roots:
+        resource_out.append(root)
+    resource_out.save()

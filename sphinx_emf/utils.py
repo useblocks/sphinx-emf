@@ -1,7 +1,9 @@
 """Utils to generate need RST code."""
 
 import re
+
 from sphinx_emf.config.model import SphinxEmfConfig
+
 
 def is_type_allowed(item, config: SphinxEmfConfig):
     """Determine whether the ECore item is valid for import."""

@@ -17,14 +17,16 @@ ignore-paths:
   - .mypy_cache/
   - docs/_build/
   - docs/utils/
-ignore-patterns: []
+
+ignore-patterns:
+  - (^|/)\.venv(/|$)
 
 max-line-length: 120
 
 mccabe:
   run: true
   options:
-    max-complexity: 15
+    max-complexity: 20
 
 pydocstyle:
   disable:
@@ -41,5 +43,8 @@ pylint:
   run: true
   options:
     extension-pkg-whitelist: pydantic
+    max-statements: 100
+    max-locals: 25
+    max-branches: 25
   disable:
-    logging-fstring-interpolation
+    - logging-fstring-interpolation
