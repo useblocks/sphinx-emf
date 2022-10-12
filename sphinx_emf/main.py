@@ -71,6 +71,34 @@ def set_need_value(
     return need_definition[0], transformer_result
 
 
+def reduce_tree(need, emf_type, output_needs: List[Any], context, config, inverted_config) -> bool:
+    """
+    Recursively walk the need tree and write the given emf_type items to output_needs.
+
+    It also changes the structure as need["nested_content"] does not contain those anymore.
+
+    :returns: True if the need is kept and False if it is moved.
+    """
+    # evaluate need first before going down the nested needs tree;
+    # if an element is moved to another output file, it should be done with all children
+    curr_emf_type = inverted_config["need_type_2_emf_def"][need["type"]]["type"]
+    if curr_emf_type == emf_type:
+        return False
+
+    # go through the children now
+    for list_emf_type, nested_needs in need["nested_content"].items():
+        reduced_list = []
+        for inner_need in nested_needs:
+            keep_need = reduce_tree(inner_need, emf_type, output_needs, context, config, inverted_config)
+            if keep_need:
+                reduced_list.append(inner_need)
+            else:
+                output_needs.append(inner_need)
+        need["nested_content"][list_emf_type] = reduced_list
+
+    return True
+
+
 def remove_unlinked(need, context, config, inverted_config) -> bool:
     """
     Remove all need objects that are not linked as per emf_remove_unlinked_types.
@@ -218,12 +246,36 @@ def write_rst(config: SphinxEmfConfig) -> None:
         if not os.path.exists(config.emf_output_directory):
             # create the output directory
             os.makedirs(config.emf_output_directory, exist_ok=True)
-
-        need_template = env.get_template("need.rst.j2")
-        need_template_out = need_template.render(need=need_root, indent=config.emf_rst_indent)
-        output_file_name = f"{root.__class__.__name__}_out.rst"
-        with open(os.path.join(config.emf_output_directory, output_file_name), "w", encoding="utf-8") as file_handler:
-            file_handler.write(need_template_out)
+        default_config = None  # handle this at the end
+        output = {}  # stores all needs for each output path
+        for output_config in config.emf_output_configs:
+            if "default" in output_config:
+                default_config = output_config
+                continue
+            needs_to_write = []
+            output[output_config["path"]] = {
+                "needs": needs_to_write,
+                "headline": output_config["headline"] if "headline" in output_config else None,
+            }
+            for emf_type in output_config["emf_types"]:
+                keep_root = reduce_tree(need_root, emf_type, needs_to_write, context, config, inverted_config)
+                if not keep_root:
+                    needs_to_write.append(need_root)
+        if default_config:
+            output[default_config["path"]] = {
+                "needs": [need_root],
+                "headline": default_config["headline"] if "headline" in default_config else None,
+            }
+        for output_path, value in output.items():
+            needs_template = env.get_template("needs.rst.j2")
+            needs_template_out = needs_template.render(
+                headline=value["headline"],
+                needs=value["needs"],
+                indent=config.emf_rst_indent,
+            )
+            logger.info(f"Writing output file {output_path}")
+            with open(output_path, "w", encoding="utf-8") as file_handler:
+                file_handler.write(needs_template_out)
     # for template_path in TEMPLATES:
     #     template_dir = os.path.dirname(template_path)
     #     template_file_name = os.path.basename(template_path)

@@ -16,7 +16,7 @@ from sphinx_emf.config.model import SphinxEmfConfig
 from sphinx_emf.main import write_rst
 
 
-log = logging.getLogger("cli")
+log = logging.getLogger("sphinx_emf.cli")
 
 
 @click.command()
@@ -28,7 +28,7 @@ def run(confpy_path):
     """Import settings from conf.py argument and run the EMF importer."""
     log_format = "[%(levelname)5s] %(name)s - %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
-    log.debug(f"Loading {confpy_path=}")
+    log.info(f"Loading {confpy_path=}")
 
     try:
         confpy = SourceFileLoader("conf", confpy_path).load_module()
@@ -62,4 +62,4 @@ def validate_config(confpy):
 
 
 if __name__ == "__main__":
-    run(["tests/data/prod/config_writer_user.py"])
+    run(["tests/data/prod/config_sphinx_emf.py"])
