@@ -4,6 +4,7 @@ import os
 from typing import Iterable, Optional, Set
 
 from docutils import nodes
+from pyecore.ecore import EEnumLiteral, EOrderedSet
 from sphinx.builders import Builder
 
 from sphinx_emf.config.invert import invert_emf_class_2_need_def
@@ -53,17 +54,17 @@ class EmfBuilder(Builder):
             if e_class is None:
                 log.error(f"Cannot find ECore class for classifier {emf_root}")
                 continue
+
             e_instance = e_class()
-            e_instance._internal_id = root_need["xmi_id"]
-            e_instance.RiskLevel = mm_root.getEClassifier("RiskLevel").from_string(root_need["risklevel"])
-            e_instance.Name = root_need["title"]
-            e_instance.Description = root_need["title"]
-            e_class_tool = mm_root.getEClassifier("Tool")
-            tool = e_class_tool()
-            tool._internal_id = "foo"
-            tool.Name = "Some tool"
-            e_instance.Tools.append(tool)
             root_instances.append(e_instance)
+            walk_create_ecore(
+                root_need,
+                e_instance,
+                need_id_2_need,
+                config.emf_class_2_need_def,
+                inverted_config,
+                mm_root,
+            )
 
         out_path = os.path.join(self.outdir, "ecore_m1.xmi")
         save_m1(root_instances, out_path)
@@ -85,3 +86,46 @@ class EmfBuilder(Builder):
     def get_target_uri(self, _docname: str, _typ: Optional[str] = None) -> str:
         """Needed by Sphinx, it does nothing."""
         return ""
+
+
+def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, inverted_config, mm_root):
+    """Recursively walk the needs and create ECore instances."""
+    curr_emf_type = inverted_config["need_type_2_emf_def"][need["type"]]["type"]
+    definition = emf_class_2_need_def[curr_emf_type]
+    for option, need_def in definition["options"].items():
+        if isinstance(need_def, str):
+            need_field = need_def
+        else:
+            need_field = need_def[0]
+        emf_field = getattr(e_instance, option)
+        if emf_field is None:
+            setattr(e_instance, option, need[need_field])
+        elif isinstance(emf_field, str):
+            setattr(e_instance, option, str(need[need_field]))
+        elif isinstance(emf_field, bool):
+            setattr(e_instance, option, need[need_field].lower() == "true")
+        elif isinstance(emf_field, int):
+            setattr(e_instance, option, int(need[need_field]))
+        elif isinstance(emf_field, EEnumLiteral):
+            enum_value = mm_root.getEClassifier(option).from_string(need[need_field])
+            setattr(e_instance, option, enum_value)
+        elif isinstance(emf_field, EOrderedSet):
+            for link_need_id in need[need_field]:
+                linked_need = need_id_2_need[link_need_id]
+                local_emf_type = inverted_config["need_type_2_emf_def"][linked_need["type"]]["type"]
+                e_class = mm_root.getEClassifier(local_emf_type)
+                if e_class is None:
+                    log.error(f"Cannot find ECore class for classifier {local_emf_type}")
+                    continue
+                local_e_instance = e_class()
+                emf_field.append(local_e_instance)
+                walk_create_ecore(
+                    linked_need,
+                    local_e_instance,
+                    need_id_2_need,
+                    emf_class_2_need_def,
+                    inverted_config,
+                    mm_root,
+                )
+        else:
+            raise ValueError(f"Unexpected EMF field type {type(emf_field)} for need id {need['id']}")
