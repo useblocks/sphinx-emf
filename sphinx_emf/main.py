@@ -268,7 +268,7 @@ def write_rst(config: SphinxEmfConfig) -> None:
 
 def create_dirs(file_path: str):
     """Create all directories to a (non-existent) file."""
-    directory = os.path.basename(file_path)
+    directory = os.path.dirname(file_path)
     if not os.path.exists(directory):
         # create the directory
         os.makedirs(directory, exist_ok=True)
