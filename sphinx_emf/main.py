@@ -69,6 +69,8 @@ def reduce_tree(need, emf_type, output_needs: List[Any], context, config, invert
     if curr_emf_type == emf_type:
         return False
 
+    list_emf_types_remove = []
+
     # go through the children now
     for list_emf_type, nested_needs in need["nested_content"].items():
         reduced_list = []
@@ -79,6 +81,11 @@ def reduce_tree(need, emf_type, output_needs: List[Any], context, config, invert
             else:
                 output_needs.append(inner_need)
         need["nested_content"][list_emf_type] = reduced_list
+        if not reduced_list:
+            list_emf_types_remove.append(list_emf_type)
+
+    for list_emf_type_remove in list_emf_types_remove:
+        del need["nested_content"][list_emf_type_remove]
 
     return True
 
@@ -114,7 +121,9 @@ def walk_ecore_tree(item, need, context, config, inverted_config):
     """Recursively walk the ECore model from a root element and populate a root need."""
     item_type = item.__class__.__name__
     if not is_type_allowed(item, config):
-        return
+        return []
+
+    more_root_needs = []
 
     xmi_id = get_xmi_id(item)
     need_map = config.emf_class_2_need_def[item_type]  # map of ECore field names to need names
@@ -179,17 +188,30 @@ def walk_ecore_tree(item, need, context, config, inverted_config):
             list_needs: List[Dict[str, Any]] = []
             for inner_item in value.items:
                 new_need = {}
-                walk_ecore_tree(inner_item, new_need, context, config, inverted_config)
+                new_root_needs = walk_ecore_tree(inner_item, new_need, context, config, inverted_config)
+                more_root_needs.extend(new_root_needs)
                 if new_need:
                     list_needs.append(new_need)
             if list_needs:
                 if value.is_cont:
-                    # containment -> UML composition -> nested need
-                    if definition not in need["nested_content"]:
-                        need["nested_content"][definition] = []
-                    need["nested_content"][definition].extend(list_needs)
+                    if section == "content":
+                        # containment -> UML composition -> nested need
+                        # SN will add the need is it is part of a need content as a nested directive
+                        if definition not in need["nested_content"]:
+                            need["nested_content"][definition] = []
+                        need["nested_content"][definition].extend(list_needs)
+                    else:
+                        # ECore containment, but defined as link -> SN will not see the node
+                        # -> add it as another root need
+                        more_root_needs.extend(list_needs)
+                        need["link_options"][definition] = [local_need["id"] for local_need in list_needs]
+                        for local_need in list_needs:
+                            emf_type = inverted_config["need_type_2_emf_def"][local_need["type"]]["type"]
+                            if emf_type in context["remove_unlinked_type_2_linked_need_ids"]:
+                                context["remove_unlinked_type_2_linked_need_ids"][emf_type].add(local_need["id"])
                 else:
                     # reference -> UML aggregation -> need link
+                    # the linked need itself will be handled in another tree of the root need
                     need["link_options"][definition] = [local_need["id"] for local_need in list_needs]
                     for local_need in list_needs:
                         emf_type = inverted_config["need_type_2_emf_def"][local_need["type"]]["type"]
@@ -197,6 +219,7 @@ def walk_ecore_tree(item, need, context, config, inverted_config):
                             context["remove_unlinked_type_2_linked_need_ids"][emf_type].add(local_need["id"])
         else:
             raise ValueError(f"Unexpected field type {type(value)} for id {xmi_id}")
+    return more_root_needs
 
 
 def write_rst(config: SphinxEmfConfig) -> None:
@@ -213,8 +236,9 @@ def write_rst(config: SphinxEmfConfig) -> None:
     inverted_config = invert_emf_class_2_need_def(config.emf_class_2_need_def)
     env.add_extension("jinja2.ext.do")  # enable usage of {% do %}
     default_handled = False
+
     for root in roots:
-        need_root: Dict[str, Any] = {}
+        root_need: Dict[str, Any] = {}
         context: Dict[
             Literal["ecore_id_2_need_id", "need_id_2_ecore_id", "remove_unlinked_type_2_linked_need_ids"], Any
         ] = {
@@ -226,11 +250,16 @@ def write_rst(config: SphinxEmfConfig) -> None:
             context["remove_unlinked_type_2_linked_need_ids"] = {
                 emf_type: set() for emf_type in config.emf_remove_unlinked_types
             }
-        walk_ecore_tree(root, need_root, context, config, inverted_config)
-        remove_unlinked(need_root, context, config, inverted_config)
+        more_root_needs: List[Dict[str, Any]] = walk_ecore_tree(root, root_need, context, config, inverted_config)
+
+        # remove all unlinked needs as defined in the config;
+        # all needs in more_root_needs are definitively linked
+        remove_unlinked(root_need, context, config, inverted_config)
+
+        all_root_needs = [root_need] + more_root_needs
 
         default_config = None  # handle this at the end
-        output = {}  # stores all needs for each output path
+        output: Dict[str, Dict[str, Any]] = {}  # stores all needs for each output path
         for output_config in config.emf_rst_output_configs:
             if "default" in output_config:
                 default_config = output_config
@@ -241,12 +270,13 @@ def write_rst(config: SphinxEmfConfig) -> None:
                 "headline": output_config["headline"] if "headline" in output_config else None,
             }
             for emf_type in output_config["emf_types"]:
-                keep_root = reduce_tree(need_root, emf_type, needs_to_write, context, config, inverted_config)
-                if not keep_root:
-                    needs_to_write.append(need_root)
+                for root in all_root_needs:
+                    keep_root = reduce_tree(root, emf_type, needs_to_write, context, config, inverted_config)
+                    if not keep_root:
+                        needs_to_write.append(root)
         if default_config and not default_handled:
             output[default_config["path"]] = {
-                "needs": [need_root],
+                "needs": [root_need],
                 "headline": default_config["headline"] if "headline" in default_config else None,
             }
             default_handled = True

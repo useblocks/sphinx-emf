@@ -17,6 +17,7 @@ ignore-paths:
   - .mypy_cache/
   - docs/_build/
   - docs/utils/
+  - tests/data/prod/rst_out/conf.py
 
 ignore-patterns:
   - (^|/)\.venv(/|$)
@@ -26,7 +27,7 @@ max-line-length: 120
 mccabe:
   run: true
   options:
-    max-complexity: 20
+    max-complexity: 25
 
 pydocstyle:
   disable:
