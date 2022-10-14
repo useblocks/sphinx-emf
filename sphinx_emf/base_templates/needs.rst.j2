@@ -1,3 +1,5 @@
+{% import "macros.j2" as macros %}
+{% include template_name + "_header.rst.j2" ignore missing %}
 {% if headline %}
 {{ headline }}
 {% for i in range(headline|length) %}={%endfor%}
@@ -5,5 +7,8 @@
 {% endif %}
 {% for need in needs %}
 
-{% include "need.rst.j2" %}
+{% include need["type"] + "_pre.rst.j2" ignore missing %}
+{{ macros.wrap_include_need(need, indent) }}
+{% include need["type"] + "_post.rst.j2" ignore missing %}
 {% endfor %}
+{% include template_name + "_footer.rst.j2" ignore missing %}

@@ -1,5 +1,8 @@
+{% import "macros.j2" as macros %}
 {% for field, value in need['direct_content'].items() %}
 
 
-{% include "content_direct_field.rst.j2" %}
+{% include need["type"] + "_pre_direct_content_" + field +  ".rst.j2" ignore missing %}
+{{- macros.wrap_include_direct_field(need, field, value, indent) -}}
+{% include need["type"] + "_post_direct_content_" + field +  ".rst.j2" ignore missing %}
 {% endfor %}

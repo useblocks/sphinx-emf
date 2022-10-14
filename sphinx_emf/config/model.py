@@ -11,9 +11,9 @@ class SphinxEmfConfig(BaseModel):
 
     emf_rst_output_configs: List[
         Dict[
-            Literal["path", "emf_types", "default", "headline"],
+            Literal["path", "emf_types", "default"],
             Union[
-                StrictStr,  # for path / headline
+                StrictStr,  # for path
                 List[StrictStr],  # for emf_types
                 StrictBool,  # for default
             ],
@@ -113,3 +113,44 @@ class SphinxEmfConfig(BaseModel):
 
     emf_model_roots: List[StrictStr] = []
     """List of model roots as they shall appear in the root of the exported M1 model."""
+
+    emf_templates_dir: StrictStr = None
+    """
+    Path to a directory containing user defined Jinja2 templates to be injected into RST output.
+
+    They have access to all variables the base template has access.
+
+    The file names must follow a pattern to be recognized. Variable definition:
+    - <need-type> is a need type.
+    - <need-field> is a need field, can be an extra-option, extra-link, direct content or nested content.
+
+    All file names must end on .rst.j2.
+    Templates have 3 types:
+    - pre  -> injected before the item
+    - post  -> injected after the item
+    - wrap  -> wraps the item, so the need/content gets indented (useful for nested directives like dropdowns)
+
+    Patterns:
+    - <need-type>_pre  -> before the neeed
+    - <need-type>_post  -> after the need
+    - <need-type>_wrap  -> wraps the generated need
+    - <need-type>_pre_extra_options  -> before all extra options
+    - <need-type>_post_extra_options  -> after all extra options
+    - <need-type>_pre_link_options  -> before all link options
+    - <need-type>_post_link_options  -> after all link options
+    - <need-type>_pre_direct_content  -> before all direct content
+    - <need-type>_post_direct_content  -> after all direct content
+    - <need-type>_wrap_direct_content  -> wraps all direct content
+    - <need-type>_pre_direct_content_<need-field>  -> before a direct content needs field/section
+    - <need-type>_post_direct_content_<need-field>  -> after a direct content needs field/section
+    - <need-type>_wrap_direct_content_<need-field>  -> wraps a direct content needs field/section
+    - <need-type>_pre_nested_content  -> before all nested content
+    - <need-type>_post_nested_content  -> after all nested content
+    - <need-type>_wrap_nested_content  -> wraps all nested content
+    - <need-type>_pre_nested_content_<need-type>  -> before all instances of a nested needs type
+    - <need-type>_post_nested_content_<need-type>  -> after all instances of a nested needs type
+    - <need-type>_wrap_nested_content_<need-type>  -> wraps all instances of a nested needs type
+    - <need-type>_pre_nested_content_every_<need-type>  -> before each instance of a nested needs type
+    - <need-type>_post_nested_content_every_<need-type>  -> after each instance of a nested needs type
+    - <need-type>_wrap_nested_content_every_<need-type>  -> wraps each instance of a nested needs type
+    """

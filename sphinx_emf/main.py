@@ -1,5 +1,4 @@
 """Create need objects from an EMF ECore M2/M1 model with pyecore."""
-
 import logging
 import os
 from typing import Any, Callable, Dict, List, Literal, Tuple, Union
@@ -227,8 +226,11 @@ def write_rst(config: SphinxEmfConfig) -> None:
     # history is not used
     roots = load_m1(config)
     dir_this_file = os.path.dirname(os.path.realpath(__file__))
+    jinja_searchpaths = [os.path.join(dir_this_file, "base_templates")]
+    if config.emf_templates_dir:
+        jinja_searchpaths.append(config.emf_templates_dir)
     env = Environment(
-        loader=FileSystemLoader(searchpath=os.path.join(dir_this_file, "base_templates")),
+        loader=FileSystemLoader(searchpath=jinja_searchpaths),
         autoescape=select_autoescape(),
         trim_blocks=True,
         lstrip_blocks=True,
@@ -267,28 +269,38 @@ def write_rst(config: SphinxEmfConfig) -> None:
             needs_to_write: List[Any] = []
             output[output_config["path"]] = {
                 "needs": needs_to_write,
-                "headline": output_config["headline"] if "headline" in output_config else None,
             }
-            for emf_type in output_config["emf_types"]:
+            for need_type in output_config["emf_types"]:
                 for root in all_root_needs:
-                    keep_root = reduce_tree(root, emf_type, needs_to_write, context, config, inverted_config)
+                    keep_root = reduce_tree(root, need_type, needs_to_write, context, config, inverted_config)
                     if not keep_root:
                         needs_to_write.append(root)
         if default_config and not default_handled:
             output[default_config["path"]] = {
                 "needs": [root_need],
-                "headline": default_config["headline"] if "headline" in default_config else None,
             }
             default_handled = True
         for output_path, value in output.items():
-            needs_template = env.get_template("needs.rst.j2")
             if not value["needs"]:
                 # no export if list is empty
                 continue
+            needs_template = env.get_template("needs.rst.j2")
+
+            # add function to Jinja2 context to allow template existence checks
+            template_dir = config.emf_templates_dir or ""
+
+            @static_vars(template_dir=template_dir)  # pylint: disable=cell-var-from-loop
+            def template_exists(template_name):
+                target = os.path.join(template_exists.template_dir, template_name)  # pylint: disable=cell-var-from-loop
+                return os.path.exists(target) and os.path.isfile(target)
+
+            env.globals["exists"] = template_exists
+
+            template_name = os.path.basename(output_path).split(".")[0]
             needs_template_out = needs_template.render(
-                headline=value["headline"],
                 needs=value["needs"],
                 indent=config.emf_rst_indent,
+                template_name=template_name,  # needed for inject header and footer
             )
             create_dirs(output_path)
             logger.info(f"Writing output file {output_path}")
@@ -302,3 +314,14 @@ def create_dirs(file_path: str):
     if not os.path.exists(directory):
         # create the directory
         os.makedirs(directory, exist_ok=True)
+
+
+def static_vars(**kwargs):
+    """Decorate functions to inject variables."""
+
+    def decorate(func):
+        for key, value in kwargs.items():
+            setattr(func, key, value)
+        return func
+
+    return decorate
