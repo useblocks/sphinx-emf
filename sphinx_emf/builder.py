@@ -129,6 +129,6 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, in
                 )
         else:
             raise ValueError(f"Unexpected EMF field type {type(emf_field)} for need id {need['id']}")
-    for option, need_def in definition["contents"].items():
+    for option, need_def in definition["content"].items():
         pass
         # TODO implement me, analyse the docutils nodes

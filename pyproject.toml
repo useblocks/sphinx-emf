@@ -33,6 +33,7 @@ Jinja2 = "^3.1.2"
 pydantic = "^1.8.2"
 pyecore = { git = "https://github.com/pyecore/pyecore.git", rev = "749f76926b784fb945024d761da741ae30ca34cd" } # branch develop on 2022-10-05
 Sphinx = ">=4.0"
+typing-extensions = "^4.4.0"
 
 
 [tool.poetry.group.dev.dependencies]

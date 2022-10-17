@@ -7,8 +7,8 @@
 {% endif %}
 {% for need in needs %}
 
-{% include need["type"] + "_pre.rst.j2" ignore missing %}
+{% include need["internal"]["type"] + "_pre.rst.j2" ignore missing %}
 {{ macros.wrap_include_need(need, indent) }}
-{% include need["type"] + "_post.rst.j2" ignore missing %}
+{% include need["internal"]["type"] + "_post.rst.j2" ignore missing %}
 {% endfor %}
 {% include template_name + "_footer.rst.j2" ignore missing %}

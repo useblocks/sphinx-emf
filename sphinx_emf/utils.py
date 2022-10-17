@@ -43,16 +43,12 @@ def is_field_allowed(item, field_name, config: SphinxEmfConfig):
     if field_name == "_internal_id":
         return True
     item_type = item.__class__.__name__
-    field_types = ["options", "content"]
-    field_known = False
-    for field_type in field_types:
-        if field_type in config.emf_class_2_need_def[item_type]:
-            if field_name in config.emf_class_2_need_def[item_type][field_type]:
-                field_known = True
-                break
-    if not field_known:
-        return False
-    return True
+    all_fields = [x[0] for x in config.emf_class_2_need_def[item_type]["emf_to_need_options"]] + [
+        x[0] for x in config.emf_class_2_need_def[item_type]["emf_to_need_content"]
+    ]
+    if field_name in all_fields:
+        return True
+    return False
 
 
 def natural_sort_in_place(list_to_sort, config: SphinxEmfConfig):

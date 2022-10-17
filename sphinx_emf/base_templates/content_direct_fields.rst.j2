@@ -2,7 +2,7 @@
 {% for field, value in need['direct_content'].items() %}
 
 
-{% include need["type"] + "_pre_direct_content_" + field +  ".rst.j2" ignore missing %}
+{% include need["internal"]["type"] + "_pre_direct_content_" + field +  ".rst.j2" ignore missing %}
 {{- macros.wrap_include_direct_field(need, field, value, indent) -}}
-{% include need["type"] + "_post_direct_content_" + field +  ".rst.j2" ignore missing %}
+{% include need["internal"]["type"] + "_post_direct_content_" + field +  ".rst.j2" ignore missing %}
 {% endfor %}

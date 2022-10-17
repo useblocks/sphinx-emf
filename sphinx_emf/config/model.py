@@ -2,8 +2,30 @@
 from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, Union
 
 from pydantic import BaseModel, StrictBool, StrictStr, conint
+from pyecore.ecore import EObject
 from pyecore.resources import ResourceSet
 from pyecore.resources.xmi import XMIResource
+from typing_extensions import TypedDict
+
+
+class Class2NeedKeys(TypedDict, total=True):
+    """Definition for emf_class_2_need_def."""
+
+    need_static: Dict[StrictStr, StrictStr]
+    emf_to_need_options: List[
+        Union[
+            Tuple[StrictStr, StrictStr],  # direct EMF field reading
+            # transformer: value, ecore_item, context
+            Tuple[StrictStr, StrictStr, Callable[[StrictStr, EObject, Dict[StrictStr, Any]], StrictStr]],
+        ]
+    ]
+    emf_to_need_content: List[
+        Union[
+            Tuple[StrictStr, StrictStr],  # direct EMF field reading
+            # transformer: value, ecore_item, context
+            Tuple[StrictStr, StrictStr, Callable[[StrictStr, EObject, Dict[StrictStr, Any]], StrictStr]],
+        ]
+    ]
 
 
 class SphinxEmfConfig(BaseModel):
@@ -78,25 +100,7 @@ class SphinxEmfConfig(BaseModel):
     Must return the list of ECore model roots (which is the main use case for this).
     """
 
-    emf_class_2_need_def: Dict[
-        StrictStr,  # ECore class
-        Dict[
-            Literal["emf_type", "id", "type", "title", "prefix", "options", "content"],
-            Union[
-                StrictStr,  # for id, type, prefix
-                Callable[[Any, Dict[StrictStr, Any]], StrictStr],  # for id transformer
-                Tuple[StrictStr, Callable[[StrictStr, Any, Dict[StrictStr, Any]], StrictStr]],  # for title transformer
-                Dict[  # for options and content
-                    StrictStr,  # for 1:1 mapping
-                    Union[
-                        StrictStr,  # for 1:1 mapping
-                        None,  # for nested needs in content
-                        Tuple[StrictStr, Callable[[StrictStr, Any, Dict[StrictStr, Any]], StrictStr]],
-                    ],
-                ],
-            ],
-        ],
-    ] = {}
+    emf_class_2_need_def: Dict[StrictStr, Class2NeedKeys] = {}
     """
     Map EMF class names to need definitions.
 
