@@ -7,7 +7,7 @@ from docutils import nodes
 from pyecore.ecore import EEnumLiteral, EOrderedSet
 from sphinx.builders import Builder
 
-from sphinx_emf.config.invert import invert_emf_class_2_need_def
+from sphinx_emf.config.invert import get_emf_class_from_need
 from sphinx_emf.ecore.io_ecore import load_m2, save_m1
 from sphinx_emf.sphinx_logging import get_logger
 
@@ -37,14 +37,12 @@ class EmfBuilder(Builder):
         m2_rset = load_m2(config)
         mm_root = m2_rset.resources[config.emf_path_m2_model].contents[0]
 
-        inverted_config = invert_emf_class_2_need_def(config.emf_class_2_need_def)
-
         root_instances = []
         for emf_root in config.emf_model_roots:
             # get the root need
             root_need = None
             for need in need_id_2_need.values():
-                need_emf_type = inverted_config["need_type_2_emf_def"][need["type"]]["type"]
+                need_emf_type = get_emf_class_from_need(need, config.emf_class_2_need_def, mm_root)
                 if emf_root == need_emf_type:
                     root_need = need
                     break
@@ -62,7 +60,6 @@ class EmfBuilder(Builder):
                 e_instance,
                 need_id_2_need,
                 config.emf_class_2_need_def,
-                inverted_config,
                 mm_root,
             )
 
@@ -88,47 +85,57 @@ class EmfBuilder(Builder):
         return ""
 
 
-def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, inverted_config, mm_root):
+def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm_root):
     """Recursively walk the needs and create ECore instances."""
-    curr_emf_type = inverted_config["need_type_2_emf_def"][need["type"]]["type"]
-    definition = emf_class_2_need_def[curr_emf_type]
-    for option, need_def in definition["options"].items():
-        if isinstance(need_def, str):
-            need_field = need_def
-        else:
-            need_field = need_def[0]
-        emf_field = getattr(e_instance, option)
-        if emf_field is None:
-            setattr(e_instance, option, need[need_field])
-        elif isinstance(emf_field, str):
-            setattr(e_instance, option, str(need[need_field]))
-        elif isinstance(emf_field, bool):
-            setattr(e_instance, option, need[need_field].lower() == "true")
-        elif isinstance(emf_field, int):
-            setattr(e_instance, option, int(need[need_field]))
-        elif isinstance(emf_field, EEnumLiteral):
-            enum_value = mm_root.getEClassifier(option).from_string(need[need_field])
-            setattr(e_instance, option, enum_value)
-        elif isinstance(emf_field, EOrderedSet):
+    curr_emf_type = get_emf_class_from_need(need, emf_class_2_need_def, mm_root)
+    definitions = emf_class_2_need_def[curr_emf_type]
+    # stores a flag for each emf field indicating whether the field has a transformer (== is an exact copy)
+    emf_field_is_exact_copy = {}
+    for definition in definitions["emf_to_need_options"]:
+        emf_field, need_field = definition[0], definition[1]
+        if emf_field in emf_field_is_exact_copy:
+            if not emf_field_is_exact_copy[emf_field]:
+                if len(definition) != 2:
+                    # value was written inexactly previously, but this instance is not better (also not exact)
+                    continue
+            else:
+                # previously written value is already exact
+                continue
+        # if true it means it was a 1:1 copy, else a transformer was involved
+        emf_field_is_exact_copy[emf_field] = len(definition) == 2
+        emf_value = getattr(e_instance, emf_field)
+        if emf_value is None:
+            setattr(e_instance, emf_field, need[need_field])
+        elif isinstance(emf_value, str):
+            setattr(e_instance, emf_field, str(need[need_field]))
+        elif isinstance(emf_value, bool):
+            # if sphinx-emf is used as roundtrip, the import will have the
+            # string values "[Tt]rue"/"[Ff]alse" set on need options
+            setattr(e_instance, emf_field, need[need_field].lower() == "true")
+        elif isinstance(emf_value, int):
+            setattr(e_instance, emf_field, int(need[need_field]))
+        elif isinstance(emf_value, EEnumLiteral):
+            enum_value = mm_root.getEClassifier(emf_field).from_string(need[need_field])
+            setattr(e_instance, emf_field, enum_value)
+        elif isinstance(emf_value, EOrderedSet):
             for link_need_id in need[need_field]:
                 linked_need = need_id_2_need[link_need_id]
-                local_emf_type = inverted_config["need_type_2_emf_def"][linked_need["type"]]["type"]
+                local_emf_type = get_emf_class_from_need(linked_need, emf_class_2_need_def, mm_root)
                 e_class = mm_root.getEClassifier(local_emf_type)
                 if e_class is None:
                     log.error(f"Cannot find ECore class for classifier {local_emf_type}")
                     continue
                 local_e_instance = e_class()
-                emf_field.append(local_e_instance)
+                emf_value.append(local_e_instance)
                 walk_create_ecore(
                     linked_need,
                     local_e_instance,
                     need_id_2_need,
                     emf_class_2_need_def,
-                    inverted_config,
                     mm_root,
                 )
         else:
-            raise ValueError(f"Unexpected EMF field type {type(emf_field)} for need id {need['id']}")
-    for option, need_def in definition["content"].items():
+            raise ValueError(f"Unexpected EMF field type {type(emf_value)} for need id {need['id']}")
+    for definition in definitions["emf_to_need_content"]:
         pass
         # TODO implement me, analyse the docutils nodes

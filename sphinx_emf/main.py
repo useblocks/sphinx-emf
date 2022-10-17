@@ -220,7 +220,6 @@ def write_rst(config: SphinxEmfConfig) -> None:
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    # inverted_config = invert_emf_class_2_need_def(config.emf_class_2_need_def)
     env.add_extension("jinja2.ext.do")  # enable usage of {% do %}
     default_handled = False
 
