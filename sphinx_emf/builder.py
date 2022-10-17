@@ -1,6 +1,7 @@
 """Builders for sphinx-emf."""
 
 import os
+import re
 from typing import Iterable, Optional, Set
 
 from docutils import nodes
@@ -12,7 +13,7 @@ from sphinx_emf.ecore.io_ecore import load_m2, save_m1
 from sphinx_emf.sphinx_logging import get_logger
 
 
-log = get_logger(__name__)
+logger = get_logger(__name__)
 
 
 class EmfBuilder(Builder):
@@ -50,7 +51,7 @@ class EmfBuilder(Builder):
                 raise RuntimeError(f"Could not find need for EMF root {emf_root}")
             e_class = mm_root.getEClassifier(emf_root)
             if e_class is None:
-                log.error(f"Cannot find ECore class for classifier {emf_root}")
+                logger.error(f"Cannot find ECore class for classifier {emf_root}")
                 continue
 
             e_instance = e_class()
@@ -65,7 +66,7 @@ class EmfBuilder(Builder):
 
         out_path = os.path.join(self.outdir, "ecore_m1.xmi")
         save_m1(root_instances, out_path)
-        log.info("EMF M1 model successfully exported")
+        logger.info("EMF M1 model successfully exported")
 
     def get_outdated_docs(self) -> Iterable[str]:
         """Needed by Sphinx, it does nothing."""
@@ -123,7 +124,7 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                 local_emf_type = get_emf_class_from_need(linked_need, emf_class_2_need_def, mm_root)
                 e_class = mm_root.getEClassifier(local_emf_type)
                 if e_class is None:
-                    log.error(f"Cannot find ECore class for classifier {local_emf_type}")
+                    logger.error(f"Cannot find ECore class for classifier {local_emf_type}")
                     continue
                 local_e_instance = e_class()
                 emf_value.append(local_e_instance)
@@ -137,5 +138,110 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
         else:
             raise ValueError(f"Unexpected EMF field type {type(emf_value)} for need id {need['id']}")
     for definition in definitions["emf_to_need_content"]:
-        pass
-        # TODO implement me, analyse the docutils nodes
+        emf_field, need_field = definition[0], definition[1]
+        if emf_field in emf_field_is_exact_copy:
+            if not emf_field_is_exact_copy[emf_field]:
+                if len(definition) != 2:
+                    # value was written inexactly previously, but this instance is not better (also not exact)
+                    continue
+            else:
+                # previously written value is already exact
+                continue
+        # if true it means it was a 1:1 copy, else a transformer was involved
+        emf_field_is_exact_copy[emf_field] = len(definition) == 2
+        emf_value = getattr(e_instance, emf_field)
+        raw_rst_value = get_content_field_from_raw_rst(need["content"], need_field)
+        if emf_value is None:
+            setattr(e_instance, emf_field, raw_rst_value)
+        elif isinstance(emf_value, str):
+            setattr(e_instance, emf_field, raw_rst_value)
+        elif isinstance(emf_value, bool):
+            # if sphinx-emf is used as roundtrip, the import will have the
+            # string values "[Tt]rue"/"[Ff]alse" set on need options
+            if raw_rst_value.lower() == "true":
+                setattr(e_instance, emf_field, True)
+            elif raw_rst_value.lower() == "false":
+                setattr(e_instance, emf_field, False)
+            else:
+                logger.warning(
+                    f"Cannot convert direct content field {need_field} to bool for need id {need['id']},"
+                    f" actual value: '{raw_rst_value}'"
+                )
+        elif isinstance(emf_value, int):
+            try:
+                value = int(raw_rst_value)
+                setattr(e_instance, emf_field, value)
+            except ValueError:
+                logger.warning(
+                    f"Cannot convert direct content field {need_field} to int for need id {need['id']},"
+                    f" actual value: '{raw_rst_value}'"
+                )
+        elif isinstance(emf_value, EEnumLiteral):
+            try:
+                value = mm_root.getEClassifier(emf_field).from_string(raw_rst_value)
+                setattr(e_instance, emf_field, value)
+            except ValueError:
+                logger.warning(
+                    f"Cannot convert direct content field {need_field} to enum for need id {need['id']},"
+                    f" actual value: '{raw_rst_value}'"
+                )
+        elif isinstance(emf_value, EOrderedSet):
+            # find all needs that have the current need as parent and analyze those as well
+            for nested_need in need_id_2_need.values():
+                if nested_need["parent_need"] == need["id"]:
+                    local_emf_type = get_emf_class_from_need(nested_need, emf_class_2_need_def, mm_root)
+                    e_class = mm_root.getEClassifier(local_emf_type)
+                    if e_class is None:
+                        logger.error(f"Cannot find ECore class for classifier {local_emf_type}")
+                        continue
+                    local_e_instance = e_class()
+                    emf_value.append(local_e_instance)
+                    walk_create_ecore(
+                        nested_need,
+                        local_e_instance,
+                        need_id_2_need,
+                        emf_class_2_need_def,
+                        mm_root,
+                    )
+        else:
+            raise ValueError(f"Unexpected EMF field type {type(emf_value)} for need id {need['id']}")
+
+
+def get_content_field_from_raw_rst(content, content_direct_field):
+    """
+    Get the RST content from a raw RST need body.
+
+    The fields must be in the form::
+
+        **Description**
+        This is some text for description
+
+        **Comment**
+        This is a comment
+
+        .. nested-need:: This is a nested need not considered by this function
+        :id: NEED_2
+
+    It shall parse all bold fields and the below content.
+    """
+    ret_str = ""
+    lines = content.split("\n")
+    block_open = False
+    for line in lines:
+        # determine start/stop conditions
+        if line == f"**{content_direct_field}**":
+            block_open = True
+            continue
+        if re.match(r"^.. [a-zA-Z0-9\-_]+::", line):
+            # a directive started
+            break
+        if block_open and re.match(r"^\*\*.+\*\*$", line):
+            # another field started
+            break
+        if block_open:
+            # add to the string
+            ret_str += f"\n{line}"
+    trimmed = ret_str.strip()
+    if trimmed:
+        return trimmed
+    return None
