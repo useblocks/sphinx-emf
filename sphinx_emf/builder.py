@@ -120,16 +120,18 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
         elif isinstance(emf_value, int):
             setattr(e_instance, emf_field, int(need[need_field]))
         elif isinstance(emf_value, EEnumLiteral):
-            enum_value = mm_root.getEClassifier(emf_field).from_string(need[need_field])
+            enum_value = emf_value.eEnum.from_string(need[need_field])
+            if enum_value is None:
+                logger.warning(
+                    f"need {need['id']}: cannot convert '{need[need_field]}' to Enum for field {emf_field}, skipping"
+                    " need"
+                )
+                continue
             setattr(e_instance, emf_field, enum_value)
         elif isinstance(emf_value, EOrderedSet):
             for link_need_id in need[need_field]:
                 linked_need = need_id_2_need[link_need_id]
-                nested_need_emf_type = get_emf_class_from_need(linked_need, emf_class_2_need_def, mm_root)
-                nested_need_class = mm_root.getEClassifier(nested_need_emf_type)
-                if nested_need_class is None:
-                    logger.error(f"Cannot find ECore class for classifier {nested_need_emf_type}")
-                    continue
+                nested_need_class = emf_value.feature.eType
                 local_e_instance = nested_need_class()
                 emf_value.append(local_e_instance)
                 walk_create_ecore(
@@ -184,14 +186,14 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                     f" actual value: '{raw_rst_value}'"
                 )
         elif isinstance(emf_value, EEnumLiteral):
-            try:
-                value = mm_root.getEClassifier(emf_field).from_string(raw_rst_value)
-                setattr(e_instance, emf_field, value)
-            except ValueError:
+            enum_value = emf_value.eEnum.from_string(raw_rst_value)
+            if enum_value is None:
                 logger.warning(
-                    f"Cannot convert direct content field {need_field} to enum for need id {need['id']},"
-                    f" actual value: '{raw_rst_value}'"
+                    f"need {need['id']}: cannot convert '{need[need_field]}' to Enum for field {emf_field}, skipping"
+                    " need"
                 )
+                continue
+            setattr(e_instance, emf_field, enum_value)
         elif isinstance(emf_value, EOrderedSet):  # does not use raw_rst_value, no need to check for emptiness
             # find all needs that have the current need as parent and analyze those as well
             for nested_need in need_id_2_need.values():
