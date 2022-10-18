@@ -48,7 +48,7 @@ def save_m1(model_roots, output_path: str):
         options={
             XMIOptions.SERIALIZE_DEFAULT_VALUES: False,
             # XMIOptions.OPTION_USE_XMI_TYPE: True,
-        }
+        },
     )
     modify_line_breaks(output_path)
 
