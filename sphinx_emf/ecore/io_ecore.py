@@ -1,4 +1,6 @@
 """Read M1 model with pyecore using the M2 model."""
+import re
+
 from pyecore.resources import URI, ResourceSet
 from pyecore.resources.xmi import XMIOptions, XMIResource
 
@@ -44,7 +46,30 @@ def save_m1(model_roots, output_path: str):
         resource_out.append(root)
     resource_out.save(
         options={
-            XMIOptions.SERIALIZE_DEFAULT_VALUES: True,
-            XMIOptions.OPTION_USE_XMI_TYPE: True,
+            XMIOptions.SERIALIZE_DEFAULT_VALUES: False,
+            # XMIOptions.OPTION_USE_XMI_TYPE: True,
         }
     )
+    modify_line_breaks(output_path)
+
+
+def modify_line_breaks(path: str):
+    """Reformat written XML file to wrap attributes on new lines."""
+    with open(path, encoding="utf-8") as f_pointer:
+        data = f_pointer.read()
+
+    element_to_newline_pattern = r"^( *)(<[\w:]+) "
+    element_to_newline_replace = r"\1\2\n\1    "
+
+    data = re.sub(element_to_newline_pattern, element_to_newline_replace, data, flags=re.MULTILINE)
+
+    attribute_to_newline_pattern = r"^( +)([^\"<]+\"[^\"]+\") "
+    attribute_to_newline_replace = r"\1\2\n\1"
+    old_data = data
+    while True:
+        new_data = re.sub(attribute_to_newline_pattern, attribute_to_newline_replace, old_data, flags=re.MULTILINE)
+        if new_data == old_data:
+            break
+        old_data = new_data
+    with open(path, mode="w", encoding="utf-8") as f_pointer:
+        f_pointer.write(new_data)
