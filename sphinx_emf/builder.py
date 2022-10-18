@@ -2,10 +2,10 @@
 
 import os
 import re
-from typing import Iterable, Optional, Set
+from typing import Dict, Iterable, Optional, Set
 
 from docutils import nodes
-from pyecore.ecore import EEnumLiteral, EOrderedSet
+from pyecore.ecore import EEnumLiteral, EObject, EOrderedSet
 from pyecore.valuecontainer import BadValueError
 from sphinx.builders import Builder
 
@@ -57,13 +57,18 @@ class EmfBuilder(Builder):
 
             e_instance = e_class()
             root_instances.append(e_instance)
+            need_id_2_ecore: Dict[str, EObject] = {root_need["id"]: e_instance}
             walk_create_ecore(
                 root_need,
                 e_instance,
                 need_id_2_need,
                 config.emf_class_2_need_def,
                 mm_root,
+                need_id_2_ecore,
             )
+            # replace _isset with a list to get reproducible attribute order
+        for instance in root_instances:
+            overwrite_isset(instance)
 
         out_path = os.path.join(self.outdir, "ecore_m1.xmi")
         save_m1(root_instances, out_path)
@@ -87,7 +92,7 @@ class EmfBuilder(Builder):
         return ""
 
 
-def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm_root):
+def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm_root, need_id_2_ecore):
     """Recursively walk the needs and create ECore instances."""
     curr_emf_type = get_emf_class_from_need(need, emf_class_2_need_def, mm_root)
     definitions = emf_class_2_need_def[curr_emf_type]
@@ -131,15 +136,20 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
         elif isinstance(emf_value, EOrderedSet):
             for link_need_id in need[need_field]:
                 linked_need = need_id_2_need[link_need_id]
-                nested_need_class = emf_value.feature.eType
-                local_e_instance = nested_need_class()
-                emf_value.append(local_e_instance)
+                if link_need_id in need_id_2_ecore:
+                    local_e_instance = need_id_2_ecore[link_need_id]
+                else:
+                    nested_need_class = emf_value.feature.eType
+                    local_e_instance = nested_need_class()
+                    need_id_2_ecore[linked_need["id"]] = local_e_instance
+                    emf_value.append(local_e_instance)
                 walk_create_ecore(
                     linked_need,
                     local_e_instance,
                     need_id_2_need,
                     emf_class_2_need_def,
                     mm_root,
+                    need_id_2_ecore,
                 )
         else:
             raise ValueError(f"Unexpected EMF field type {type(emf_value)} for need id {need['id']}")
@@ -212,7 +222,11 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                         # expected emf class
                         continue
 
-                    local_e_instance = nested_need_class()
+                    if nested_need["id"] in need_id_2_ecore:
+                        local_e_instance = need_id_2_ecore[nested_need["id"]]
+                    else:
+                        local_e_instance = nested_need_class()
+
                     try:
                         emf_value.append(local_e_instance)
                     except BadValueError as exc:
@@ -228,9 +242,22 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                         need_id_2_need,
                         emf_class_2_need_def,
                         mm_root,
+                        need_id_2_ecore,
                     )
         else:
             raise ValueError(f"Unexpected EMF field type {type(emf_value)} for need id {need['id']}")
+
+
+def overwrite_isset(instance: EObject):
+    """Replace emf_value._isset with a sorted list to get reproducable attribute order."""
+    if hasattr(instance, "_isset"):
+        if instance._isset:  # pylint: disable=protected-access
+            instance._isset = sorted(instance._isset, key=lambda x: (x.name))  # pylint: disable=protected-access
+    for field in dir(instance):
+        value = getattr(instance, field)
+        if isinstance(value, EOrderedSet) and value.is_cont:
+            for sub_instance in value.items:
+                overwrite_isset(sub_instance)
 
 
 def get_content_field_from_raw_rst(content, content_direct_field):
