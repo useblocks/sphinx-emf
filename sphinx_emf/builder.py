@@ -6,6 +6,7 @@ from typing import Iterable, Optional, Set
 
 from docutils import nodes
 from pyecore.ecore import EEnumLiteral, EOrderedSet
+from pyecore.valuecontainer import BadValueError
 from sphinx.builders import Builder
 
 from sphinx_emf.config.invert import get_emf_class_from_need
@@ -105,6 +106,9 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
         # if true it means it was a 1:1 copy, else a transformer was involved
         emf_field_is_exact_copy[emf_field] = len(definition) == 2
         emf_value = getattr(e_instance, emf_field)
+        if not need[need_field]:
+            # not setting an empty or None field
+            continue
         if emf_value is None:
             setattr(e_instance, emf_field, need[need_field])
         elif isinstance(emf_value, str):
@@ -121,12 +125,12 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
         elif isinstance(emf_value, EOrderedSet):
             for link_need_id in need[need_field]:
                 linked_need = need_id_2_need[link_need_id]
-                local_emf_type = get_emf_class_from_need(linked_need, emf_class_2_need_def, mm_root)
-                e_class = mm_root.getEClassifier(local_emf_type)
-                if e_class is None:
-                    logger.error(f"Cannot find ECore class for classifier {local_emf_type}")
+                nested_need_emf_type = get_emf_class_from_need(linked_need, emf_class_2_need_def, mm_root)
+                nested_need_class = mm_root.getEClassifier(nested_need_emf_type)
+                if nested_need_class is None:
+                    logger.error(f"Cannot find ECore class for classifier {nested_need_emf_type}")
                     continue
-                local_e_instance = e_class()
+                local_e_instance = nested_need_class()
                 emf_value.append(local_e_instance)
                 walk_create_ecore(
                     linked_need,
@@ -151,6 +155,9 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
         emf_field_is_exact_copy[emf_field] = len(definition) == 2
         emf_value = getattr(e_instance, emf_field)
         raw_rst_value = get_content_field_from_raw_rst(need["content"], need_field)
+        if not raw_rst_value and not isinstance(emf_value, EOrderedSet):
+            # not setting an empty or None field, however for EOrderedSet it is expected
+            continue
         if emf_value is None:
             setattr(e_instance, emf_field, raw_rst_value)
         elif isinstance(emf_value, str):
@@ -185,17 +192,34 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                     f"Cannot convert direct content field {need_field} to enum for need id {need['id']},"
                     f" actual value: '{raw_rst_value}'"
                 )
-        elif isinstance(emf_value, EOrderedSet):
+        elif isinstance(emf_value, EOrderedSet):  # does not use raw_rst_value, no need to check for emptiness
             # find all needs that have the current need as parent and analyze those as well
             for nested_need in need_id_2_need.values():
                 if nested_need["parent_need"] == need["id"]:
-                    local_emf_type = get_emf_class_from_need(nested_need, emf_class_2_need_def, mm_root)
-                    e_class = mm_root.getEClassifier(local_emf_type)
-                    if e_class is None:
-                        logger.error(f"Cannot find ECore class for classifier {local_emf_type}")
+                    expected_emf_class = emf_value.feature.eType.name
+                    nested_need_emf_type = get_emf_class_from_need(nested_need, emf_class_2_need_def, mm_root)
+                    nested_need_class = mm_root.getEClassifier(nested_need_emf_type)
+                    if nested_need_class is None:
+                        logger.error(f"Cannot find ECore class for classifier {nested_need_emf_type}")
                         continue
-                    local_e_instance = e_class()
-                    emf_value.append(local_e_instance)
+                    nested_need_super_classes = [x.name for x in nested_need_class.eSuperTypes.items]
+                    if not (
+                        expected_emf_class == nested_need_emf_type or expected_emf_class in nested_need_super_classes
+                    ):
+                        # the nested need is neither directly the right class nor does the super classes match the
+                        # expected emf class
+                        continue
+
+                    local_e_instance = nested_need_class()
+                    try:
+                        emf_value.append(local_e_instance)
+                    except BadValueError as exc:
+                        logger.warning(
+                            f"need {need['id']}: cannot append nested need {nested_need['id']} (EMF type"
+                            f" '{nested_need_emf_type}', field '{emf_field}'), skipping nested need"
+                        )
+                        logger.warning(f"need {need['id']}: {exc}")
+                        continue
                     walk_create_ecore(
                         nested_need,
                         local_e_instance,
