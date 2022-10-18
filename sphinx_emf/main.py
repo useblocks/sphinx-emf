@@ -134,7 +134,12 @@ def walk_ecore_tree(item, need, context, config):
             if not is_field_allowed(item, emf_field, config):
                 continue
 
-            value = getattr(item, emf_field)
+            try:
+                value = getattr(item, emf_field)
+            except AttributeError as exc:
+                logger.warning(f"xmi:id {xmi_id}: Cannot get field {emf_field}, skipping it")
+                logger.warning(f"xmi:id {xmi_id}: {exc}")
+                continue
             if value is None:
                 # do not transfer this to needs
                 continue
