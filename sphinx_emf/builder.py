@@ -226,6 +226,7 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                         local_e_instance = need_id_2_ecore[nested_need["id"]]
                     else:
                         local_e_instance = nested_need_class()
+                        need_id_2_ecore[nested_need["id"]] = local_e_instance
 
                     try:
                         emf_value.append(local_e_instance)
