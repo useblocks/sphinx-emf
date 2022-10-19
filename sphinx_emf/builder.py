@@ -5,7 +5,7 @@ import re
 from typing import Dict, Iterable, Optional, Set
 
 from docutils import nodes
-from pyecore.ecore import EEnumLiteral, EObject, EOrderedSet
+from pyecore.ecore import EEnumLiteral, EObject, EOrderedSet, ESet
 from pyecore.valuecontainer import BadValueError
 from sphinx.builders import Builder
 
@@ -133,7 +133,7 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                 )
                 continue
             setattr(e_instance, emf_field, enum_value)
-        elif isinstance(emf_value, EOrderedSet):
+        elif isinstance(emf_value, (EOrderedSet, ESet)):
             for link_need_id in need[need_field]:
                 linked_need = need_id_2_need[link_need_id]
                 if link_need_id in need_id_2_ecore:
@@ -142,7 +142,7 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                     nested_need_class = emf_value.feature.eType
                     local_e_instance = nested_need_class()
                     need_id_2_ecore[linked_need["id"]] = local_e_instance
-                    emf_value.append(local_e_instance)
+                emf_value.append(local_e_instance)
                 walk_create_ecore(
                     linked_need,
                     local_e_instance,
@@ -167,7 +167,7 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
         emf_field_is_exact_copy[emf_field] = len(definition) == 2
         emf_value = getattr(e_instance, emf_field)
         raw_rst_value = get_content_field_from_raw_rst(need["content"], need_field)
-        if not raw_rst_value and not isinstance(emf_value, EOrderedSet):
+        if not raw_rst_value and not isinstance(emf_value, (EOrderedSet, ESet)):
             # not setting an empty or None field, however for EOrderedSet it is expected
             continue
         if emf_value is None:
@@ -204,7 +204,7 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
                 )
                 continue
             setattr(e_instance, emf_field, enum_value)
-        elif isinstance(emf_value, EOrderedSet):  # does not use raw_rst_value, no need to check for emptiness
+        elif isinstance(emf_value, (EOrderedSet, ESet)):  # does not use raw_rst_value, no need to check for emptiness
             # find all needs that have the current need as parent and analyze those as well
             for nested_need in need_id_2_need.values():
                 if nested_need["parent_need"] == need["id"]:
@@ -260,7 +260,7 @@ def overwrite_isset(instance: EObject):
             instance._isset = sorted(instance._isset, key=lambda x: (x.name))  # pylint: disable=protected-access
     for field in dir(instance):
         value = getattr(instance, field)
-        if isinstance(value, EOrderedSet) and value.is_cont:
+        if isinstance(value, (EOrderedSet, ESet)) and value.is_cont:
             for sub_instance in value.items:
                 overwrite_isset(sub_instance)
 
