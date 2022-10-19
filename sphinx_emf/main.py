@@ -1,12 +1,12 @@
 """Create need objects from an EMF ECore M2/M1 model with pyecore."""
 import logging
 import os
-from typing import Any, Dict, List, Literal
+from typing import Any, Dict, List, Set
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pyecore.ecore import EEnumLiteral, EOrderedSet
 
-from sphinx_emf.config.model import SphinxEmfConfig
+from sphinx_emf.config.model import Class2NeedKeys, SphinxEmfConfig
 from sphinx_emf.ecore.io_ecore import load_m1
 from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natural_sort_in_place
 
@@ -62,34 +62,86 @@ def reduce_tree(need, emf_type, output_needs: List[Any], context, config) -> boo
     return True
 
 
-def remove_unlinked(need, context, config) -> bool:
-    """
-    Remove all need objects that are not linked as per emf_remove_unlinked_types.
+def create_remove_config(config: Dict[str, Class2NeedKeys]) -> Dict[str, List[str]]:
+    """Simplify the emf_class_2_need_def configuration for the remove feature."""
+    remove_config = {}
+    for emf_type, definitions in config.items():
+        if definitions.get("settings", {}).get("remove_if_unlinked", False):
+            ignored_link_sources = definitions.get("settings", {}).get("remove_ignored_link_sources", [])
+            remove_config[emf_type] = ignored_link_sources
+    return remove_config
 
-    Context holds all actually linked need ids.
 
-    :returns: True if the need is used else False
+def get_needs_backlinked(need, need_id_2_is_linked: Dict[str, Set[str]], need_id_2_need: Dict[str, Any]):
     """
+    Build a dictionary of need ids to emf-types that backlink to the need.
+
+    The information is written to need_id_2_is_linked.
+    """
+    # go through children
+    for nested_needs in need["nested_content"].values():
+        for inner_need in nested_needs:
+            get_needs_backlinked(inner_need, need_id_2_is_linked, need_id_2_need)
+
+    need_id_2_need[need["internal"]["id"]] = need
+
+    # evaluate need
+    emf_type = need["emf_type"]
+    for targets in need["link_options"].values():
+        for target in targets:
+            if target not in need_id_2_is_linked:
+                need_id_2_is_linked[target] = set()
+            need_id_2_is_linked[target].add(emf_type)
+
+
+def removed_unlinked(
+    need,
+    remove_config,
+    need_id_2_is_linked: Dict[str, Set[str]],
+    need_id_2_need: Dict[str, Any],
+):
+    """Actually remove items collected by get_removed_unlinked from the root needs."""
     # go through the chidren first, then evaluate the need itself
     for emf_type, nested_needs in need["nested_content"].items():
         reduced_list = []
         for inner_need in nested_needs:
-            keep_need = remove_unlinked(inner_need, context, config)
+            keep_need = removed_unlinked(
+                inner_need,
+                remove_config,
+                need_id_2_is_linked,
+                need_id_2_need,
+            )
             if keep_need:
                 reduced_list.append(inner_need)
         need["nested_content"][emf_type] = reduced_list
 
     # evaluate need
+    keep = False
     emf_type = need["emf_type"]
-    if emf_type in context["remove_unlinked_type_2_linked_need_ids"]:
-        if need["internal"]["id"] not in context["remove_unlinked_type_2_linked_need_ids"][emf_type]:
-            # this need id was not linked from anywhere - release it
-            # also the children are not considered anymore
-            return False
-    return True
+    if emf_type not in remove_config:
+        keep = True
+    if not keep and need["internal"]["id"] in need_id_2_is_linked:
+        for backlink_emf_type in need_id_2_is_linked[need["internal"]["id"]]:
+            if backlink_emf_type not in remove_config[emf_type]:
+                keep = True
+    if keep:
+        # check the link targets, some may not exist anymore
+        for link_type, link_targets in need["link_options"].items():
+            reduced_list = []
+            for link_target in link_targets:
+                target_emf_type = need_id_2_need[link_target]["emf_type"]
+                if target_emf_type not in remove_config:
+                    reduced_list.append(link_target)
+                else:
+                    for backlink_emf_type in need_id_2_is_linked[need_id_2_need[link_target]["internal"]["id"]]:
+                        if backlink_emf_type not in remove_config[target_emf_type]:
+                            reduced_list.append(link_target)
+                            break
+            need["link_options"][link_type] = reduced_list
+    return keep
 
 
-def get_cat(field_name):
+def get_category(field_name):
     """
     Return the target need field category for a field name.
 
@@ -126,7 +178,7 @@ def walk_ecore_tree(item, need, context, config):
     need["nested_content"] = {}
 
     for need_field, value in need_map["need_static"].items():
-        need[get_cat(need_field)][need_field] = value
+        need[get_category(need_field)][need_field] = value
 
     for section, definitions in all_definitions.items():
         for definition in definitions:
@@ -149,7 +201,7 @@ def walk_ecore_tree(item, need, context, config):
                 # store the value on the need dictionary as per the MAP_EMF_CLASS_2_NEED_DEF definition
                 need_value = emf_2_need_value(definition, item, context)
                 if section == "options":
-                    need[get_cat(need_field)][need_field] = need_value
+                    need[get_category(need_field)][need_field] = need_value
                 else:
                     need["direct_content"][need_field] = need_value
             elif isinstance(value, EOrderedSet):
@@ -179,22 +231,10 @@ def walk_ecore_tree(item, need, context, config):
                             need["link_options"][need_field] = [
                                 local_need["internal"]["id"] for local_need in list_needs
                             ]
-                            for local_need in list_needs:
-                                emf_type = local_need["emf_type"]
-                                if emf_type in context["remove_unlinked_type_2_linked_need_ids"]:
-                                    context["remove_unlinked_type_2_linked_need_ids"][emf_type].add(
-                                        local_need["internal"]["id"]
-                                    )
                     else:
                         # reference -> UML aggregation -> need link
                         # the linked need itself will be handled in another tree of the root need
                         need["link_options"][need_field] = [local_need["internal"]["id"] for local_need in list_needs]
-                        for local_need in list_needs:
-                            emf_type = local_need["emf_type"]
-                            if emf_type in context["remove_unlinked_type_2_linked_need_ids"]:
-                                context["remove_unlinked_type_2_linked_need_ids"][emf_type].add(
-                                    local_need["internal"]["id"]
-                                )
             else:
                 raise ValueError(f"Unexpected field type {type(value)} for id {xmi_id}")
 
@@ -230,20 +270,22 @@ def write_rst(config: SphinxEmfConfig) -> None:
 
     for root in roots:
         root_need: Dict[str, Any] = {}
-        context: Dict[
-            Literal["ecore_id_2_need_id", "need_id_2_ecore_id", "remove_unlinked_type_2_linked_need_ids"], Any
-        ] = {"remove_unlinked_type_2_linked_need_ids": {}}
-        if config.emf_remove_unlinked_types:
-            context["remove_unlinked_type_2_linked_need_ids"] = {
-                emf_type: set() for emf_type in config.emf_remove_unlinked_types
-            }
+        context: Dict[str, Any] = {}  # can be used by user hooks
         more_root_needs: List[Dict[str, Any]] = walk_ecore_tree(root, root_need, context, config)
 
         # remove all unlinked needs as defined in the config;
         # all needs in more_root_needs are definitively linked
-        remove_unlinked(root_need, context, config)
-
+        remove_config = create_remove_config(config.emf_class_2_need_def)
+        need_id_2_is_linked: Dict[str, Set[str]] = {}  # key is need ID, value is Dict[emf-type, is-linked]
         all_root_needs = [root_need] + more_root_needs
+        need_id_2_need: Dict[str, Any] = {}
+        for need in all_root_needs:
+            get_needs_backlinked(need, need_id_2_is_linked, need_id_2_need)
+        roots_to_keep = []
+        for need in all_root_needs:
+            keep_root = removed_unlinked(need, remove_config, need_id_2_is_linked, need_id_2_need)
+            if keep_root:
+                roots_to_keep.append(need)
 
         default_config = None  # handle this at the end
         output: Dict[str, Dict[str, Any]] = {}  # stores all needs for each output path
@@ -256,7 +298,7 @@ def write_rst(config: SphinxEmfConfig) -> None:
                 "needs": needs_to_write,
             }
             for need_type in output_config["emf_types"]:
-                for root in all_root_needs:
+                for root in roots_to_keep:
                     keep_root = reduce_tree(root, need_type, needs_to_write, context, config)
                     if not keep_root:
                         needs_to_write.append(root)

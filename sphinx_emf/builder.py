@@ -249,7 +249,12 @@ def walk_create_ecore(need, e_instance, need_id_2_need, emf_class_2_need_def, mm
 
 
 def overwrite_isset(instance: EObject):
-    """Replace emf_value._isset with a sorted list to get reproducable attribute order."""
+    """
+    Replace instance._isset with a sorted list to get reproducable attribute order.
+
+    This function should be called just before exporting as the list may functionally change
+    the behavior of _isset.
+    """
     if hasattr(instance, "_isset"):
         if instance._isset:  # pylint: disable=protected-access
             instance._isset = sorted(instance._isset, key=lambda x: (x.name))  # pylint: disable=protected-access

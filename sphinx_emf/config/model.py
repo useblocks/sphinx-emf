@@ -8,7 +8,21 @@ from pyecore.resources.xmi import XMIResource
 from typing_extensions import TypedDict
 
 
-class Class2NeedKeys(TypedDict, total=True):
+class Class2NeedSettings(TypedDict, total=False):
+    """Definition for emf_class_2_need_def[type].settings."""
+
+    remove_if_unlinked: StrictBool
+    """Remove the EMF type if it is not linked by other EMF types."""
+
+    remove_ignored_link_sources: List[StrictStr]
+    """
+    List of EMF types whose outgoing links are ignored when removing elements.
+
+    This setting is only relevant if remove_if_unlinked is True.
+    """
+
+
+class Class2NeedKeys(TypedDict, total=False):
     """Definition for emf_class_2_need_def."""
 
     need_static: Dict[StrictStr, StrictStr]
@@ -26,6 +40,7 @@ class Class2NeedKeys(TypedDict, total=True):
             Tuple[StrictStr, StrictStr, Callable[[StrictStr, EObject, Dict[StrictStr, Any]], StrictStr]],
         ]
     ]
+    settings: Class2NeedSettings
 
 
 class SphinxEmfConfig(BaseModel):
@@ -83,9 +98,6 @@ class SphinxEmfConfig(BaseModel):
     emf_denied_values: Dict[StrictStr, Dict[StrictStr, List[StrictStr]]] = {}
     """Map EMF classes to EMF field names to denied values of the fields."""
 
-    emf_remove_unlinked_types: List[StrictStr] = []
-    """ECore class names that should be removed if not linked from anywhere."""
-
     emf_pre_read_hook: Optional[Callable[[ResourceSet], ResourceSet]] = None
     """
     Function that should be called on the ResourceSet before reading the M1 model.
@@ -116,7 +128,7 @@ class SphinxEmfConfig(BaseModel):
     """Sort ECore instances by this field to get reproducible RST output."""
 
     emf_model_roots: List[StrictStr] = []
-    """List of model roots as they shall appear in the root of the exported M1 model."""
+    """List of model roots, ordered as they shall appear in the exported M1 model."""
 
     emf_templates_dir: StrictStr = None
     """
