@@ -125,7 +125,11 @@ class SphinxEmfConfig(BaseModel):
     """
 
     emf_sort_field: StrictStr = None
-    """Sort ECore instances by this field to get reproducible RST output."""
+    """
+    Sort ECore instances by this field to get reproducible RST output.
+
+    Set to None to disable sorting.
+    """
 
     emf_model_roots: List[StrictStr] = []
     """List of model roots, ordered as they shall appear in the exported M1 model."""
