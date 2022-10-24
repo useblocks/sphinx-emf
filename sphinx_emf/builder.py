@@ -10,7 +10,7 @@ from pyecore.valuecontainer import BadValueError
 from sphinx.builders import Builder
 
 from sphinx_emf.config.invert import get_emf_class_from_need
-from sphinx_emf.ecore.io_ecore import load_m2, save_m1
+from sphinx_emf.ecore.ecore_io import load_m2, save_m1
 from sphinx_emf.sphinx_logging import get_logger
 
 

@@ -7,7 +7,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pyecore.ecore import EEnumLiteral, EOrderedSet
 
 from sphinx_emf.config.model import Class2NeedKeys, SphinxEmfConfig
-from sphinx_emf.ecore.io_ecore import load_m1
+from sphinx_emf.ecore.ecore_io import load_m1
 from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natural_sort_in_place
 
 
