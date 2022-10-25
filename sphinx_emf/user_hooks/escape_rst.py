@@ -1,6 +1,9 @@
 """Functions that can be imported by end users to enable handling of non-RST content input."""
 
 
+import re
+from typing import List, Literal, Tuple
+
 import docutils
 from docutils.utils import Reporter
 
@@ -11,7 +14,7 @@ class SilentReporter(Reporter):
     def __init__(
         self, source, report_level, halt_level, stream=None, debug=0, encoding="ascii", error_handler="replace"
     ):
-        """Mainly call super."""
+        """Mainly replace defaults."""
         self.messages = []
         Reporter.__init__(self, source, report_level, halt_level, stream, debug, encoding, error_handler)
 
@@ -25,12 +28,12 @@ def escape_inline_literals(text):
     """
     Run input text through docutils RST parser and check for errors.
 
-    This can be used to check whether escaping is necessary.
+    This is used to check whether escaping is necessary.
     """
     src_path = "XMI field input"
-    # create a static variable, stolen from https://stackoverflow.com/a/279586
+    # create a static context variable, stolen from https://stackoverflow.com/a/279586
+    # it stores variables that are needed in each invocation for better performance
     if "context" not in dir(escape_inline_literals):
-        # statically store variables that are needed over and over for better performance
         parser = docutils.parsers.rst.Parser()
         settings = docutils.frontend.OptionParser().get_default_values()
         settings.tab_width = 4
@@ -84,10 +87,63 @@ def escape_inline_literals(text):
                         found_msg = True
                         new_line = new_line.replace(symbol, f"\\{symbol}")
             if not found_msg:
-                # something else went wrong
+                # something else went wrong - let this appear later in the build;
+                # if the error can be auto-fixed in this library, it should be reported on Github
                 break
         ret_lines.append(new_line)
     return_rst = "\n".join(ret_lines).strip()
+    return return_rst
+
+
+def to_rst(text_in):
+    """
+    Generate valid RST content from plain text input.
+
+    1. incomplete inline literals are escaped
+    2. lists are correctly formatted
+    3. paragraphs are correctly
+    """
+    escaped = escape_inline_literals(text_in)
+    escaped = escaped.strip()  # remove leading/trailing spaces
+    lines = _split_newlines(escaped)
+
+    chunks: List[Tuple[Literal["list", "paragraph"], List[str]]] = []  # tuple str is type, can be list, paragraph
+    for idx, line in enumerate(lines):
+        force_new_chunk = not bool(line)
+        current_type = "list" if (line.startswith("- ") or line.startswith("* ")) else "paragraph"
+        last_chunk_type = None
+        if chunks:
+            if chunks[-1][0] == "list":
+                last_chunk_type = "list"
+            else:
+                last_chunk_type = "paragraph"
+        if last_chunk_type == current_type and not force_new_chunk:
+            # add it to the last chunk
+            chunks[-1][1].append(line)
+        else:
+            if line:
+                chunks.append((current_type, [line]))
+            else:
+                chunks.append((current_type, []))
+
+    output_lines = []
+    for idx, chunk in enumerate(chunks):
+        if idx == 0 and len(chunk[1]) == 1 and chunk[0] == "paragraph":
+            # one-liner paragraph at the start does not get a newline
+            pass
+        else:
+            # prepend a new line for proper RST format
+            output_lines.append("")
+        for line in chunk[1]:
+            # replace all occurrences of \ with \\ for RST that are not escaped inline literals
+            # like \* and \`
+            line_new = re.sub(r"(?<![\\\*`])\\(?![\\\*`])", r"\\\\", line)
+            line = line_new
+            if chunk[0] == "paragraph" and len(chunk[1]) > 1:
+                line = f"| {line}"
+            output_lines.append(line)
+
+    return_rst = "\n".join(output_lines).rstrip()
     return return_rst
 
 
@@ -97,12 +153,12 @@ def _split_newlines(input_str):
 
     Both need to be handled correctly, so the input string is split on all of them.
     """
-    newline_sequences = ["\r\n", "\n", "&#xD;&#xA;"]
+    # ordered new line sequences by their length (\r\n collapses to \n)
+    newline_sequences = ["\r\n", "\r", "\n", "&#xD;&#xA;", "&#xD;", "&#xA;"]
     magic_seq = "$!$#"
     for sequence in newline_sequences:
         if sequence in input_str:
             input_str = input_str.replace(sequence, magic_seq)
     lines = input_str.split(magic_seq)
-    lines = [line.strip() for line in lines]  # remove spaces at beginning and end
-    lines = [line for line in lines if line]  # prepend line with indentation if not empty
+    lines = [line.rstrip() for line in lines]  # remove spaces at beginning and end
     return lines
