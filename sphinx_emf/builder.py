@@ -66,9 +66,13 @@ class EmfBuilder(Builder):
                 mm_root,
                 need_id_2_ecore,
             )
-            # replace _isset with a list to get reproducible attribute order
-        for instance in root_instances:
-            overwrite_isset(instance)
+        # replace _isset with a list to get reproducible attribute order
+        if config.emf_sort_xmi_attributes:
+            for instance in root_instances:
+                # this can be refactored to set sorting order by ordering the setting
+                # of attributes; supported since pyecore 0.13
+                # below solution is a hack that also works in pyecore<0.13
+                overwrite_isset(instance)
 
         out_path = os.path.join(self.outdir, "ecore_m1.xmi")
         save_m1(root_instances, out_path)

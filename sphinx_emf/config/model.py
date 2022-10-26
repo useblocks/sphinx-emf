@@ -183,3 +183,6 @@ class SphinxEmfConfig(BaseModel):
 
     Set it under emf_class_2_need_def -> <emf-type> -> emf_to_need_content -> (<emf-fild>, <title>)
     """
+
+    emf_sort_xmi_attributes: StrictBool = False
+    """Sort attributes of XMI ECore classes by name."""
