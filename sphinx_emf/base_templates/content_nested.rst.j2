@@ -1,0 +1,13 @@
+{% import "macros.j2" as macros %}
+{% for title, nested_needs in need['nested_content'].items() %}
+    {% if title and config.emf_show_nested_need_title %}
+
+
+**{{ title }}**
+    {% else %}
+
+    {% endif %}
+    {% include need["internal"]["type"] + "_content_nested_pre_all_" + title +  ".rst.j2" ignore missing %}
+    {{ macros.wrap_nested_needs(title, need, nested_needs, indent) }}
+    {% include need["internal"]["type"] + "_content_nested_post_all_" + title +  ".rst.j2" ignore missing %}
+{% endfor %}

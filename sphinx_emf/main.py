@@ -266,6 +266,7 @@ def write_rst(config: SphinxEmfConfig) -> None:
         lstrip_blocks=True,
     )
     env.add_extension("jinja2.ext.do")  # enable usage of {% do %}
+    env.globals["config"] = config  # templates can access the config
     default_handled = False
 
     for root in roots:
@@ -277,7 +278,8 @@ def write_rst(config: SphinxEmfConfig) -> None:
         # all needs in more_root_needs are definitively linked
         remove_config = create_remove_config(config.emf_class_2_need_def)
         need_id_2_is_linked: Dict[str, Set[str]] = {}  # key is need ID, value is Dict[emf-type, is-linked]
-        all_root_needs = [root_need] + more_root_needs
+        all_root_needs = [root_need] if root_need else []
+        all_root_needs.extend(more_root_needs)
         need_id_2_need: Dict[str, Any] = {}
         for need in all_root_needs:
             get_needs_backlinked(need, need_id_2_is_linked, need_id_2_need)
@@ -326,7 +328,7 @@ def write_rst(config: SphinxEmfConfig) -> None:
             template_name = os.path.basename(output_path).split(".")[0]
             needs_template_out = needs_template.render(
                 needs=value["needs"],
-                indent=config.emf_rst_indent,
+                indent=config.emf_rst_indent,  # short hand
                 template_name=template_name,  # needed for inject header and footer
             )
             create_dirs(output_path)

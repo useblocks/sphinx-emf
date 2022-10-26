@@ -1,4 +1,4 @@
-{% macro wrap_include_need(need, indent) %}
+{% macro wrap_need(need, indent) %}
     {% if exists(need["internal"]["type"] + "_wrap.rst.j2") %}
         {% include need["internal"]["type"] + "_wrap.rst.j2" %}
         {% filter indent(width=indent, first=True) %}
@@ -9,7 +9,40 @@
     {% endif %}
 {% endmacro %}
 
-{% macro wrap_include_direct_field(need, field, value, indent) %}
+{% macro wrap_content_direct(need, indent) %}
+    {% if exists(need["internal"]["type"] + "_content_direct_wrap.rst.j2") %}
+        {% include need["internal"]["type"] + "_content_direct_wrap.rst.j2" %}
+        {% filter indent(width=indent, first=True) %}
+            {% include "content_direct.rst.j2" %}
+        {% endfilter %}
+    {% else %}
+        {% include "content_direct.rst.j2" %}
+    {% endif %}
+{% endmacro %}
+
+{% macro wrap_content_direct_field(need, field, value, indent) %}
+    {% if exists(need["internal"]["type"] + "_content_direct_wrap_" + field + ".rst.j2") %}
+        {% include need["internal"]["type"] + "_content_direct_wrap_" + field + ".rst.j2" %}
+        {% filter indent(width=indent, first=True) %}
+            {% include "content_direct_field.rst.j2" %}
+        {% endfilter %}
+    {% else %}
+        {% include "content_direct_field.rst.j2" %}
+    {% endif %}
+{% endmacro %}
+
+{% macro wrap_content_nested(need, indent) %}
+    {% if exists(need["internal"]["type"] + "_content_nested_wrap.rst.j2") %}
+        {% include need["internal"]["type"] + "_content_nested_wrap.rst.j2" %}
+        {% filter indent(width=indent, first=True) %}
+            {% include "content_nested.rst.j2" %}
+        {% endfilter %}
+    {% else %}
+        {% include "content_nested.rst.j2" %}
+    {% endif %}
+{% endmacro %}
+
+{% macro wrap_nested_field(need, field, indent) %}
     {% if exists(need["internal"]["type"] + "_wrap_direct_content_" + field + ".rst.j2") %}
         {% include need["internal"]["type"] + "_wrap_direct_content_" + field + ".rst.j2" %}
         {% filter indent(width=indent, first=True) %}
@@ -20,13 +53,25 @@
     {% endif %}
 {% endmacro %}
 
-{% macro wrap_include_nested_field(need, field, indent) %}
-    {% if exists(need["internal"]["type"] + "_wrap_direct_content_" + field + ".rst.j2") %}
-        {% include need["internal"]["type"] + "_wrap_direct_content_" + field + ".rst.j2" %}
+{% macro wrap_nested_needs(title, need, nested_needs, indent) %}
+    {% if exists(need["internal"]["type"] + "_content_nested_wrap_all_" + title + ".rst.j2") %}
+        {% include need["internal"]["type"] + "_content_nested_wrap_all_" + title + ".rst.j2" %}
         {% filter indent(width=indent, first=True) %}
-            {% include "content_direct_field.rst.j2" %}
+            {% include "content_nested_needs.rst.j2" %}
         {% endfilter %}
     {% else %}
-        {% include "content_direct_field.rst.j2" %}
+        {% include "need.rst.j2" %}
+    {% endif %}
+{% endmacro %}
+
+{% macro wrap_nested_need(outer_need, nested_need, indent) %}
+    {% if exists(outer_need["internal"]["type"] + "_content_nested_wrap_" + nested_need["internal"]["type"] + ".rst.j2") %}
+        {% include outer_need["internal"]["type"] + "_content_nested_wrap_" + nested_need["internal"]["type"] + ".rst.j2" %}
+        {% set need = nested_need %}
+        {% filter indent(width=indent, first=True) %}
+            {% include "need.rst.j2" %}
+        {% endfilter %}
+    {% else %}
+        {% include "need.rst.j2" %}
     {% endif %}
 {% endmacro %}

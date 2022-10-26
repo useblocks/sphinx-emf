@@ -151,26 +151,35 @@ class SphinxEmfConfig(BaseModel):
     - wrap  -> wraps the item, so the need/content gets indented (useful for nested directives like dropdowns)
 
     Patterns:
+    - <template-name>_header  -> before all content in RST output file (see emf_rst_output_configs, without .rst)
+    - <template-name>_footer  -> after all content in RST output file (see emf_rst_output_configs, without .rst)
     - <need-type>_pre  -> before the neeed
     - <need-type>_post  -> after the need
     - <need-type>_wrap  -> wraps the generated need
-    - <need-type>_pre_extra_options  -> before all extra options
-    - <need-type>_post_extra_options  -> after all extra options
-    - <need-type>_pre_link_options  -> before all link options
-    - <need-type>_post_link_options  -> after all link options
-    - <need-type>_pre_direct_content  -> before all direct content
-    - <need-type>_post_direct_content  -> after all direct content
-    - <need-type>_wrap_direct_content  -> wraps all direct content
-    - <need-type>_pre_direct_content_<need-field>  -> before a direct content needs field/section
-    - <need-type>_post_direct_content_<need-field>  -> after a direct content needs field/section
-    - <need-type>_wrap_direct_content_<need-field>  -> wraps a direct content needs field/section
-    - <need-type>_pre_nested_content  -> before all nested content
-    - <need-type>_post_nested_content  -> after all nested content
-    - <need-type>_wrap_nested_content  -> wraps all nested content
-    - <need-type>_pre_nested_content_<need-type>  -> before all instances of a nested needs type
-    - <need-type>_post_nested_content_<need-type>  -> after all instances of a nested needs type
-    - <need-type>_wrap_nested_content_<need-type>  -> wraps all instances of a nested needs type
-    - <need-type>_pre_nested_content_every_<need-type>  -> before each instance of a nested needs type
-    - <need-type>_post_nested_content_every_<need-type>  -> after each instance of a nested needs type
-    - <need-type>_wrap_nested_content_every_<need-type>  -> wraps each instance of a nested needs type
+    - <need-type>_options_fields_pre  -> before all extra options
+    - <need-type>_options_fields_post  -> after all extra options
+    - <need-type>_options_links_pre  -> before all link options
+    - <need-type>_options_links_post  -> after all link options
+    - <need-type>_content_direct_pre  -> before all direct content
+    - <need-type>_content_direct_post  -> after all direct content
+    - <need-type>_content_direct_wrap  -> wraps all direct content
+    - <need-type>_content_direct_pre_<need-field>  -> before a direct content needs field/section
+    - <need-type>_content_direct_post_<need-field>  -> after a direct content needs field/section
+    - <need-type>_content_direct_wrap_<need-field>  -> wraps a direct content needs field/section
+    - <need-type>_content_nested_pre  -> before all nested content
+    - <need-type>_content_nested_post  -> after all nested content
+    - <need-type>_content_nested_wrap  -> wraps all nested content
+    - <need-type>_content_nested_pre_<nested-need-type>  -> before each instance of a nested needs type
+    - <need-type>_content_nested_post_<nested-need-type>  -> after each instance of a nested needs type
+    - <need-type>_content_nested_wrap_<nested-need-type>  -> wraps each instance of a nested needs type
+    - <need-type>_content_nested_pre_all_<nested-needs-title>  -> before all instances of a nested needs type
+    - <need-type>_content_nested_post_all_<nested-needs-title>  -> after all instances of a nested needs type
+    - <need-type>_content_nested_wrap_all_<nested-needs-title>  -> wraps all instances of a nested needs type
+    """
+
+    emf_show_nested_need_title: StrictBool = True
+    """
+    Show the title for nested needs as given in emf_class_2_need_def.
+
+    Set it under emf_class_2_need_def -> <emf-type> -> emf_to_need_content -> (<emf-fild>, <title>)
     """
