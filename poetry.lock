@@ -731,24 +731,17 @@ toml = ["toml"]
 
 [[package]]
 name = "pyecore"
-version = "0.12.2"
+version = "0.13.0"
 description = "A Python(ic) Implementation of the Eclipse Modeling Framework (EMF/Ecore)"
 category = "main"
 optional = false
 python-versions = "*"
-develop = false
 
 [package.dependencies]
 future-fstrings = "*"
 lxml = "*"
 ordered-set = ">=4.0.1"
 restrictedpython = ">=4.0b6"
-
-[package.source]
-type = "git"
-url = "https://github.com/pyecore/pyecore.git"
-reference = "2860a2c2425cc24feb9c27e3eeb653f628985203"
-resolved_reference = "2860a2c2425cc24feb9c27e3eeb653f628985203"
 
 [[package]]
 name = "pyflakes"
@@ -1303,7 +1296,7 @@ docs = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.2,<3.11"
-content-hash = "09922d79a99c2b76935aeb6fe26777c49e5783322cce7bb0e5b0accdd36a5363"
+content-hash = "69fc1ad3c19771059df6c78aee6e16bd5357b555e8d34825c9c9f31cfe27b8f9"
 
 [metadata.files]
 alabaster = [
@@ -1761,7 +1754,10 @@ pydocstyle = [
     {file = "pydocstyle-6.1.1-py3-none-any.whl", hash = "sha256:6987826d6775056839940041beef5c08cc7e3d71d63149b48e36727f70144dc4"},
     {file = "pydocstyle-6.1.1.tar.gz", hash = "sha256:1d41b7c459ba0ee6c345f2eb9ae827cab14a7533a88c5c6f7e94923f72df92dc"},
 ]
-pyecore = []
+pyecore = [
+    {file = "pyecore-0.13.0-py3-none-any.whl", hash = "sha256:b7f029d445c9d79c21d88898f4b8247bda9b9b2705432faa0405391225a64915"},
+    {file = "pyecore-0.13.0.tar.gz", hash = "sha256:8580a05c801d750f114d206f6ee4c01fd752ded7896317874503893f10c9fb0f"},
+]
 pyflakes = [
     {file = "pyflakes-2.5.0-py2.py3-none-any.whl", hash = "sha256:4579f67d887f804e67edb544428f264b7b24f435b263c4614f384135cea553d2"},
     {file = "pyflakes-2.5.0.tar.gz", hash = "sha256:491feb020dca48ccc562a8c0cbe8df07ee13078df59813b83959cbdada312ea3"},
