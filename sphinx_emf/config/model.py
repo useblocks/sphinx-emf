@@ -65,6 +65,14 @@ class SphinxEmfConfig(BaseModel):
 
     The list order is important as it defines which elements are moved first - with all its nested needs.
     """
+
+    emf_xmi_output_name: StrictStr = "m1_model.xmi"
+    """
+    Output name for XMI file.
+
+    Directory is always the builder output (default _build/emf)
+    """
+
     emf_path_m1_model: StrictStr
     """ECore M1 model."""
     emf_path_m2_model: StrictStr
@@ -129,6 +137,14 @@ class SphinxEmfConfig(BaseModel):
     Sort ECore instances by this field to get reproducible RST output.
 
     Set to None to disable sorting.
+    """
+
+    emf_sort_xmi_attributes: StrictBool = False
+    """
+    Sort XMI attributes in a natural-alphabetical order.
+
+    Default is False, which means the attributes are written
+    in the order as they appear in emf_class_2_need_def.
     """
 
     emf_model_roots: List[StrictStr] = []

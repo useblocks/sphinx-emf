@@ -22,6 +22,8 @@ def setup(app) -> Dict[str, Any]:  # noqa: F841  # used by Sphinx when registeri
     app.add_config_value(name="emf_post_read_hook", default=None, rebuild="html")
     app.add_config_value(name="emf_class_2_need_def", default={}, rebuild="html")
     app.add_config_value(name="emf_model_roots", default=[], rebuild="html")
+    app.add_config_value(name="emf_sort_xmi_attributes", default=False, rebuild="html")
+    app.add_config_value(name="emf_xmi_output_name", default="m1_model.xmi", rebuild="html")
 
     return {
         "version": VERSION,  # identifies the version of our extension

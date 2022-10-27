@@ -74,7 +74,7 @@ class EmfBuilder(Builder):
                 # below solution is a hack that also works in pyecore<0.13
                 overwrite_isset(instance)
 
-        out_path = os.path.join(self.outdir, "ecore_m1.xmi")
+        out_path = os.path.join(self.outdir, config.emf_xmi_output_name)
         save_m1(root_instances, out_path)
         logger.info("EMF M1 model successfully exported")
 
