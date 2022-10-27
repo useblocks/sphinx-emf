@@ -34,6 +34,7 @@ class EmfBuilder(Builder):
         """Generate the M1 model."""
         env = self.env
         config = env.config
+        config.emf_path_m2_model = os.path.abspath(config.emf_path_m2_model)
 
         need_id_2_need = env.needs_all_needs
         m2_rset = load_m2(config)
