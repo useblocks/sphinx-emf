@@ -212,7 +212,21 @@ def walk_ecore_tree(item, need, context, config):
             elif isinstance(value, EOrderedSet):
                 # need links or nested needs
                 # sort the items to get reproducible RST output
-                natural_sort_in_place(value.items, config)
+                # split by class first
+                class_2_items = {}
+                for curr_item in value.items:
+                    class_name = curr_item.__class__.__name__
+                    if class_name not in class_2_items:
+                        class_2_items[class_name] = []
+                    class_2_items[class_name].append(curr_item)
+                for class_list in class_2_items.values():
+                    natural_sort_in_place(class_list, config)
+                keys_sorted = list(class_2_items.keys())
+                keys_sorted.sort(reverse=True)
+                overall_items = []
+                for key_sorted in keys_sorted:
+                    overall_items.extend(class_2_items[key_sorted])
+                value.items = overall_items
                 # emf_type to new need that is part of the EOrderedSet
                 list_needs: List[Dict[str, Any]] = []
                 for inner_item in value.items:
