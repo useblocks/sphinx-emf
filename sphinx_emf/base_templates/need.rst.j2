@@ -1,6 +1,6 @@
 
 
-.. {{ need["internal"]["type"] }}:: {{ need["internal"]["title"] }}
+.. {{ need["internal"]["type"] }}:: {{ need["internal"]["title"] | trim }}
     {% filter indent(width=indent, first=True) %}
 :id: {{ need["internal"]["id"] -}}
         {% include "options.rst.j2" %}
