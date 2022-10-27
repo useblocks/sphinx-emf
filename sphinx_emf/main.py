@@ -129,6 +129,11 @@ def removed_unlinked(
         for link_type, link_targets in need["link_options"].items():
             reduced_list = []
             for link_target in link_targets:
+                if link_target not in need_id_2_need:
+                    logger.debug(
+                        f"Need {need['internal']['id']}: remove non-existent link target '{link_type}: {link_target}'"
+                    )
+                    continue
                 target_emf_type = need_id_2_need[link_target]["emf_type"]
                 if target_emf_type not in remove_config:
                     reduced_list.append(link_target)
@@ -262,8 +267,9 @@ def write_rst(config: SphinxEmfConfig) -> None:
     env = Environment(
         loader=FileSystemLoader(searchpath=jinja_searchpaths),
         autoescape=select_autoescape(),
-        trim_blocks=True,
-        lstrip_blocks=True,
+        trim_blocks=True,  # no newlines for {% %} blocks
+        lstrip_blocks=True,  # no leading spaces for {% %} blocks
+        keep_trailing_newline=False,  # is the default, however worth mentioning
     )
     env.add_extension("jinja2.ext.do")  # enable usage of {% do %}
     env.globals["config"] = config  # templates can access the config
