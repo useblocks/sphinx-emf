@@ -1,9 +1,8 @@
 {% import "macros.j2" as macros %}
 {% include template_name + "_header.rst.j2" ignore missing %}
 {% for need in needs %}
-
 {% include need["internal"]["type"] + "_pre.rst.j2" ignore missing %}
-{{ macros.wrap_need(need, indent) }}
+{{- macros.wrap_need(need, indent) -}}
 {% include need["internal"]["type"] + "_post.rst.j2" ignore missing %}
 {% endfor %}
 {% include template_name + "_footer.rst.j2" ignore missing %}

@@ -4,10 +4,8 @@
 
 
 **{{ title }}**
-    {% else %}
-
     {% endif %}
     {% include need["internal"]["type"] + "_content_nested_pre_all_" + title +  ".rst.j2" ignore missing %}
-    {{ macros.wrap_content_nested_needs(title, need, nested_needs, indent) }}
+    {{- macros.wrap_content_nested_needs(title, need, nested_needs, indent) -}}
     {% include need["internal"]["type"] + "_content_nested_post_all_" + title +  ".rst.j2" ignore missing %}
 {% endfor %}

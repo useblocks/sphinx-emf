@@ -1,7 +1,6 @@
 {% import "macros.j2" as macros %}
 {% for nested_need in nested_needs %}
-
-    {% include need["internal"]["type"] + "_content_nested_pre_" + nested_need["internal"]["type"] +  ".rst.j2" ignore missing %}
-    {{ macros.wrap_content_nested_need(need, nested_need, indent) }}
-    {% include need["internal"]["type"] + "_content_nested_post_" + nested_need["internal"]["type"] +  ".rst.j2" ignore missing %}
+    {% include need["internal"]["type"] + "_content_nested_pre_" + nested_need["internal"]["type"] + ".rst.j2" ignore missing %}
+    {{- macros.wrap_content_nested_need(need, nested_need, indent) -}}
+    {% include need["internal"]["type"] + "_content_nested_post_" + nested_need["internal"]["type"] + ".rst.j2" ignore missing %}
 {% endfor %}

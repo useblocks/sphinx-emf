@@ -1,7 +1,7 @@
 {% import "macros.j2" as macros %}
 {% include need["internal"]["type"] + "_content_direct_pre.rst.j2" ignore missing %}
-{{ macros.wrap_content_direct(need, indent) }}
+{{- macros.wrap_content_direct(need, indent) -}}
 {% include need["internal"]["type"] + "_content_direct_post.rst.j2" ignore missing %}
 {% include need["internal"]["type"] + "_content_nested_pre.rst.j2" ignore missing %}
-{{ macros.wrap_content_nested(need, indent) }}
+{{- macros.wrap_content_nested(need, indent) -}}
 {% include need["internal"]["type"] + "_content_nested_post.rst.j2" ignore missing %}

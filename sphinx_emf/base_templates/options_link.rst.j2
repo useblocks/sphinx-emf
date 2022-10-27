@@ -1,1 +1,1 @@
-:{{ link_option }}: {{ targets | join(', ') }}
+:{{ link_option }}:{% if targets %} {{ targets | join(', ') }}{% endif %}

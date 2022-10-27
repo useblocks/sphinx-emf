@@ -3,6 +3,6 @@
 
 
 {% include need["internal"]["type"] + "_content_direct_pre_" + field +  ".rst.j2" ignore missing %}
-{{ macros.wrap_content_direct_field(need, field, value, indent) }}
+{{- macros.wrap_content_direct_field(need, field, value, indent) -}}
 {% include need["internal"]["type"] + "_content_direct_post_" + field +  ".rst.j2" ignore missing %}
 {% endfor %}
