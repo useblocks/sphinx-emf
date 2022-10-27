@@ -329,7 +329,7 @@ def write_rst(config: SphinxEmfConfig) -> None:
             needs_template_out = needs_template.render(
                 needs=value["needs"],
                 indent=config.emf_rst_indent,  # short hand
-                template_name=template_name,  # needed for inject header and footer
+                template_name=template_name,  # needed to inject header and footer
             )
             create_dirs(output_path)
             logger.info(f"Writing output file {output_path}")
