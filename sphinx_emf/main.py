@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Set
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pyecore.ecore import EEnumLiteral, EOrderedSet
 
-from sphinx_emf.config.model import Class2NeedKeys, SphinxEmfConfig
+from sphinx_emf.config.model import Class2NeedKeys, SphinxEmfCliConfig
 from sphinx_emf.ecore.ecore_io import load_m1
 from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natural_sort_in_place
 
@@ -270,7 +270,7 @@ def walk_ecore_tree(item, need, context, config):
     return more_root_needs
 
 
-def write_rst(config: SphinxEmfConfig) -> None:
+def write_rst(config: SphinxEmfCliConfig) -> None:
     """Load model and write need objects."""
     # history is not used
     roots = load_m1(config)

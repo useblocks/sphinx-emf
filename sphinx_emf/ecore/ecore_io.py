@@ -4,10 +4,10 @@ import re
 from pyecore.resources import URI, ResourceSet
 from pyecore.resources.xmi import XMIOptions, XMIResource
 
-from sphinx_emf.config.model import SphinxEmfConfig
+from sphinx_emf.config.model import SphinxEmfCliConfig, SphinxEmfCommonConfig
 
 
-def load_m1(config: SphinxEmfConfig):
+def load_m1(config: SphinxEmfCliConfig):
     """Read a M1 EMF file with its M2 ECore model using pyecore."""
     rset = load_m2(config)
 
@@ -23,7 +23,7 @@ def load_m1(config: SphinxEmfConfig):
     return model_roots
 
 
-def load_m2(config: SphinxEmfConfig) -> ResourceSet:
+def load_m2(config: SphinxEmfCommonConfig) -> ResourceSet:
     """Read an M2 EMF using pyecore."""
     rset = ResourceSet()
 

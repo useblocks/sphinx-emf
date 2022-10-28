@@ -43,8 +43,41 @@ class Class2NeedKeys(TypedDict, total=False):
     settings: Class2NeedSettings
 
 
-class SphinxEmfConfig(BaseModel):
-    """sphinx-emf config model."""
+class SphinxEmfCommonConfig(BaseModel):
+    """Common configuration for both CLI (XMI -> RST) and builder (RST -> XMI)."""
+
+    emf_path_m2_model: StrictStr
+    """Ecore M2 model."""
+
+    emf_pre_read_hook: Optional[Callable[[ResourceSet], ResourceSet]] = None
+    """
+    Function that should be called on the ResourceSet before reading the M1 model.
+
+    Must return the ResourceSet again after modifying it.
+    """
+
+    emf_post_read_hook: Optional[Callable[[XMIResource], List[Any]]] = None
+    """
+    Function that should be called on the M1 XMIResource after creating it.
+
+    Must return the list of ECore model roots (which is the main use case for this).
+    """
+
+    emf_class_2_need_def: Dict[StrictStr, Class2NeedKeys] = {}
+    """
+    Map EMF class names to need definitions.
+
+    The needs definition consists of:
+    - id: str: copy from this EMF field; callable: generate it
+    - type: str: taken literally as the need type
+    - title: str: copy from this EMF field; callable: generate it
+    - options: map EMF field names
+    - content: map EMF field names to need content sections (will be converted to RST)
+    """
+
+
+class SphinxEmfCliConfig(SphinxEmfCommonConfig):
+    """sphinx-emf config model for the CLI that converts from XMI to RST."""
 
     emf_rst_output_configs: List[
         Dict[
@@ -66,17 +99,8 @@ class SphinxEmfConfig(BaseModel):
     The list order is important as it defines which elements are moved first - with all its nested needs.
     """
 
-    emf_xmi_output_name: StrictStr = "m1_model.xmi"
-    """
-    Output name for XMI file.
-
-    Directory is always the builder output (default _build/emf)
-    """
-
     emf_path_m1_model: StrictStr
     """ECore M1 model."""
-    emf_path_m2_model: StrictStr
-    """Ecore M2 model."""
 
     # see https://github.com/pydantic/pydantic/issues/239
     #     https://github.com/pydantic/pydantic/issues/156
@@ -106,49 +130,12 @@ class SphinxEmfConfig(BaseModel):
     emf_denied_values: Dict[StrictStr, Dict[StrictStr, List[StrictStr]]] = {}
     """Map EMF classes to EMF field names to denied values of the fields."""
 
-    emf_pre_read_hook: Optional[Callable[[ResourceSet], ResourceSet]] = None
-    """
-    Function that should be called on the ResourceSet before reading the M1 model.
-
-    Must return the ResourceSet again after modifying it.
-    """
-
-    emf_post_read_hook: Optional[Callable[[XMIResource], List[Any]]] = None
-    """
-    Function that should be called on the M1 XMIResource after creating it.
-
-    Must return the list of ECore model roots (which is the main use case for this).
-    """
-
-    emf_class_2_need_def: Dict[StrictStr, Class2NeedKeys] = {}
-    """
-    Map EMF class names to need definitions.
-
-    The needs definition consists of:
-    - id: str: copy from this EMF field; callable: generate it
-    - type: str: taken literally as the need type
-    - title: str: copy from this EMF field; callable: generate it
-    - options: map EMF field names
-    - content: map EMF field names to need content sections (will be converted to RST)
-    """
-
     emf_sort_field: StrictStr = None
     """
     Sort ECore instances by this field to get reproducible RST output.
 
     Set to None to disable sorting.
     """
-
-    emf_sort_xmi_attributes: StrictBool = False
-    """
-    Sort XMI attributes in a natural-alphabetical order.
-
-    Default is False, which means the attributes are written
-    in the order as they appear in emf_class_2_need_def.
-    """
-
-    emf_model_roots: List[StrictStr] = []
-    """List of model roots, ordered as they shall appear in the exported M1 model."""
 
     emf_templates_dir: StrictStr = None
     """
@@ -195,10 +182,36 @@ class SphinxEmfConfig(BaseModel):
 
     emf_show_nested_need_title: StrictBool = True
     """
-    Show the title for nested needs as given in emf_class_2_need_def.
+    Generate the title for nested needs as given in emf_class_2_need_def.
 
     Set it under emf_class_2_need_def -> <emf-type> -> emf_to_need_content -> (<emf-fild>, <title>)
     """
 
+
+class SphinxEmfBuilderConfig(SphinxEmfCommonConfig):
+    """sphinx-emf config model for the Sphinx builder that converts from RST to XMI."""
+
+    emf_model_roots: List[StrictStr] = []
+    """List of model roots, ordered as they shall appear in the exported M1 model."""
+
     emf_sort_xmi_attributes: StrictBool = False
     """Sort attributes of XMI ECore classes by name."""
+
+    emf_xmi_output_name: StrictStr = "m1_model.xmi"
+    """
+    Output name for XMI file.
+
+    Directory is always the builder output (default _build/emf)
+    """
+
+    emf_convert_rst_to_plain: StrictBool = True
+    r"""
+    Flag indicating whether to convert RST sequences to plain text.
+
+    The following sequences will be handled:
+
+    * start of line: '| ' will be removed
+    * '\*' will be converted to '*'
+    * '\`' will be converted to '`'
+    * '\\' will be converted to '\'
+    """

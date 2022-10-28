@@ -2,10 +2,10 @@
 
 import re
 
-from sphinx_emf.config.model import SphinxEmfConfig
+from sphinx_emf.config.model import SphinxEmfCliConfig
 
 
-def is_type_allowed(item, config: SphinxEmfConfig):
+def is_type_allowed(item, config: SphinxEmfCliConfig):
     """Determine whether the ECore item is valid for import."""
     item_type = item.__class__.__name__
     if item_type not in config.emf_class_2_need_def:
@@ -38,7 +38,7 @@ def get_xmi_id(item):
     return item._internal_id  # pylint: disable=protected-access
 
 
-def is_field_allowed(item, field_name, config: SphinxEmfConfig):
+def is_field_allowed(item, field_name, config: SphinxEmfCliConfig):
     """Determine whether a certain ECore item field is valid for import."""
     if field_name == "_internal_id":
         return True
@@ -51,7 +51,7 @@ def is_field_allowed(item, field_name, config: SphinxEmfConfig):
     return False
 
 
-def natural_sort_in_place(list_to_sort, config: SphinxEmfConfig):
+def natural_sort_in_place(list_to_sort, config: SphinxEmfCliConfig):
     """Sort a list by a given attribute naturally (correctly handling numbers)."""
 
     def convert(text):
