@@ -1,7 +1,12 @@
 """Extension entry point for Sphinx."""
 from typing import Any, Dict
 
+from sphinx.application import Sphinx
+from sphinx.config import Config
+
 from sphinx_emf.builder import EmfBuilder
+from sphinx_emf.config.model import SphinxEmfBuilderConfig
+from sphinx_emf.config.validate import validate_config
 from sphinx_emf.sphinx_logging import get_logger
 
 
@@ -14,6 +19,8 @@ def setup(app) -> Dict[str, Any]:  # noqa: F841  # used by Sphinx when registeri
     log.info("Setting up sphinx-emf extension")
 
     app.add_builder(EmfBuilder)
+
+    app.connect("config-inited", check_configuration)
 
     # configurations
     # types are not given as pydantic is used to check the config in detail (see config/model.py)
@@ -30,3 +37,9 @@ def setup(app) -> Dict[str, Any]:  # noqa: F841  # used by Sphinx when registeri
         "parallel_read_safe": True,  # support parallel modes
         "parallel_write_safe": True,
     }
+
+
+def check_configuration(_app: Sphinx, config: Config):
+    """Check all configuration needed by the builder with pydantic."""
+    logger = get_logger(__name__)
+    validate_config(config, logger, SphinxEmfBuilderConfig)
