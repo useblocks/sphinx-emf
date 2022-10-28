@@ -296,7 +296,7 @@ def get_content_field_from_raw_rst(content, content_direct_field):
         if line == f"**{content_direct_field}**":
             block_open = True
             continue
-        if re.match(r"^.. [a-zA-Z0-9\-_]+::", line):
+        if block_open and re.match(r"^.. [a-zA-Z0-9\-_]+::", line):
             # a directive started
             break
         if block_open and re.match(r"^\*\*.+\*\*$", line):
@@ -307,5 +307,25 @@ def get_content_field_from_raw_rst(content, content_direct_field):
             ret_str += f"\n{line}"
     trimmed = ret_str.strip()
     if trimmed:
-        return trimmed
+        plain = rst_2_plain(trimmed)
+        return plain
     return None
+
+
+def rst_2_plain(content):
+    """Unescape certain RST sequences to plain text."""
+    ret_str = ""
+    lines = content.split("\n")
+    replace_seq = [
+        (r"^\| ", r""),
+        (r"\*", r"*"),
+        (r"\`", r"`"),
+        (r"\\\\", r"\\"),
+    ]
+    for line in lines:
+        new_line = line
+        for seq in replace_seq:
+            new_line = re.sub(seq[0], seq[1], new_line)
+        ret_str += f"\n{new_line}"
+    trimmed = ret_str.strip()
+    return trimmed
