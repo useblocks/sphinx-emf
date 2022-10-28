@@ -126,6 +126,9 @@ def to_rst(text_in):
             else:
                 chunks.append((current_type, []))
 
+    # remove empty lists
+    chunks = [chunk for chunk in chunks if chunk[1]]
+
     output_lines = []
     for idx, chunk in enumerate(chunks):
         if idx == 0 and len(chunk[1]) == 1 and chunk[0] == "paragraph":
