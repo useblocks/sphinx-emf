@@ -289,10 +289,12 @@ def write_rst(config: SphinxEmfCliConfig) -> None:
     env.globals["config"] = config  # templates can access the config
     default_handled = False
 
-    for root in roots:
+    for idx, root in enumerate(roots):
+        logger.info(f"Handling root {idx+1} of {len(roots)}")
         root_need: Dict[str, Any] = {}
         context: Dict[str, Any] = {}  # can be used by user hooks
         more_root_needs: List[Dict[str, Any]] = walk_ecore_tree(root, root_need, context, config)
+        logger.debug(f"Collected {len(more_root_needs)} additional root needs.")
 
         # remove all unlinked needs as defined in the config;
         # all needs in more_root_needs are definitively linked
@@ -308,7 +310,7 @@ def write_rst(config: SphinxEmfCliConfig) -> None:
             keep_root = removed_unlinked(need, remove_config, need_id_2_is_linked, need_id_2_need)
             if keep_root:
                 roots_to_keep.append(need)
-
+        logger.info("Removed unlinked needs")
         default_config = None  # handle this at the end
         output: Dict[str, Dict[str, Any]] = {}  # stores all needs for each output path
         for output_config in config.emf_rst_output_configs:
