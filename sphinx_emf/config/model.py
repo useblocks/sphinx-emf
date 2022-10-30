@@ -1,11 +1,17 @@
 """Pydantic model of sphinx-emf configuration parameters."""
-from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from pydantic import BaseModel, StrictBool, StrictStr, conint
 from pyecore.ecore import EObject
 from pyecore.resources import ResourceSet
 from pyecore.resources.xmi import XMIResource
 from typing_extensions import TypedDict
+
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 
 class Class2NeedSettings(TypedDict, total=False):

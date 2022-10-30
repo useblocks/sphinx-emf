@@ -2,10 +2,16 @@
 
 
 import re
-from typing import List, Literal, Tuple
+from typing import List, Tuple
 
 import docutils
 from docutils.utils import Reporter
+
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 
 class SilentReporter(Reporter):
