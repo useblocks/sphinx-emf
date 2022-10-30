@@ -17,12 +17,11 @@ Unreleased
 Please see all `Unreleased Changes`_ for more information.
 
 .. Example below for a release, move the changes from Unreleased to a new version
-
     0.1.0 - 2022-10-01
     ------------------
 
     Added
     ~~~~~
 
-    - Initial version
-    - Initial start of the changelog
+- Initial extension version
+- Initial start of the changelog
