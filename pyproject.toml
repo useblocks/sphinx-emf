@@ -63,7 +63,9 @@ vulture = "^2.6"
 
 [tool.poetry.group.docs.dependencies]
 esbonio = { version = "^0.14.1", optional = true }
-sphinx-rtd-theme = { version = "^1.0.0", optional = true }
+sphinx-immaterial = "^0.10.0"
+sphinx_design = "^0.3.0"
+sphinxcontrib-programoutput = "^0.17"
 
 [tool.poetry.extras]
 docs = ["esbonio", "sphinx-rtd-theme"]

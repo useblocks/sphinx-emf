@@ -8,5 +8,10 @@ Describe your library.
    :maxdepth: 2
    :hidden:
 
+   installation
+   configuration
+   usage
+   contributing
+   support
    license
    changelog

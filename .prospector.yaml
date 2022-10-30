@@ -17,7 +17,6 @@ ignore-paths:
   - .mypy_cache/
   - docs/_build/
   - docs/utils/
-  - tests/data/prod/rst_out/conf.py
 
 ignore-patterns:
   - (^|/)\.venv(/|$)
@@ -51,3 +50,7 @@ pylint:
     max-statements: 100
   disable:
     - logging-fstring-interpolation
+
+pyflakes:
+  disable:
+    - F401  # prefer pylint unused-import/vulture

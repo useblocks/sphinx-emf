@@ -22,7 +22,11 @@ release = "0.1.0"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    "sphinx_design",
+    "sphinx_immaterial",
+    "sphinxcontrib.programoutput",
+]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -31,7 +35,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_immaterial"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -41,16 +45,60 @@ html_sidebars = {
     "**": ["about.html", "navigation.html", "searchbox.html"],
 }
 
-html_logo = "./_static/logo.png"
-html_favicon = "./_static/logo-favicon.ico"
+html_logo = "./_static/sphinx-emf-logo-white.png"
+# html_favicon = "./_static/sphinx-emf-logo-favicon.png"
+# material theme options (see theme.conf for more information)
 html_theme_options = {
-    # TOC options
-    "collapse_navigation": False,
-    "sticky_navigation": False,
-    "navigation_depth": 7,
-    # content options
-    "prev_next_buttons_location": None,
+    "icon": {
+        "repo": "fontawesome/brands/github",
+    },
+    "site_url": "https://sphinx-emf.useblocks.com",
+    "repo_url": "https://github.com/useblocks/sphinx-emf",
+    "repo_name": "Sphinx-EMF",
+    "repo_type": "github",
+    "edit_uri": "blob/master/docs",
+    # "google_analytics": ["UA-XXXXX", "auto"],
+    "globaltoc_collapse": True,
+    "features": [
+        "navigation.sections",
+        "navigation.top",
+        "search.share",
+    ],
+    "palette": [
+        {
+            "media": "(prefers-color-scheme: light)",
+            "scheme": "default",
+            "primary": "blue",
+            "accent": "light-blue",
+            "toggle": {
+                "icon": "material/weather-night",
+                "name": "Switch to dark mode",
+            },
+        },
+        {
+            "media": "(prefers-color-scheme: dark)",
+            "scheme": "slate",
+            "primary": "blue",
+            "accent": "yellow",
+            "toggle": {
+                "icon": "material/weather-sunny",
+                "name": "Switch to light mode",
+            },
+        },
+    ],
+    "toc_title_is_page_title": True,
 }
 
 html_static_path = ["_static"]
 html_css_files = ["custom.css"]
+
+rst_epilog = """
+.. |ex| replace:: **Example**
+
+.. |out| replace:: **Result**
+
+.. |br| raw:: html
+
+   <br>
+
+"""
