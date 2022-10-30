@@ -17,21 +17,37 @@ ignore-paths:
   - .mypy_cache/
   - docs/_build/
   - docs/utils/
-ignore-patterns: []
+  - tests/data/prod/rst_out/conf.py
+
+ignore-patterns:
+  - (^|/)\.venv(/|$)
 
 max-line-length: 120
 
 mccabe:
   run: true
   options:
-    max-complexity: 10
+    max-complexity: 40
 
 pydocstyle:
   disable:
     - D212 # go for summary on line 2 in multiline docstrings
+    - D203 # go for class docstring on line 1
 
 mypy:
   run: true
   options:
     ignore-missing-imports: true
     follow-imports: skip
+
+pylint:
+  run: true
+  options:
+    extension-pkg-whitelist: pydantic
+    max-args: 10
+    max-branches: 25
+    max-locals: 25
+    max-nested-blocks: 10
+    max-statements: 100
+  disable:
+    - logging-fstring-interpolation

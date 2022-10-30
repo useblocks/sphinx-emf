@@ -20,10 +20,13 @@ repos:
     rev: 1.7.7
     hooks:
       - id: prospector
-        additional_dependencies: [
-          ".[with_bandit,with_mypy,with_pyroma,with_vulture]",
-          "nox-poetry"
-        ]
+        additional_dependencies:
+          - "nox-poetry"
+        args:
+          - --without-tool
+          - mypy
+          - --without-tool
+          - pylint
 
   - repo: https://github.com/python-poetry/poetry
     rev: 1.2.1

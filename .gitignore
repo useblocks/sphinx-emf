@@ -297,3 +297,6 @@ pip-selfcheck.json
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,pycharm+all,python,direnv,virtualenv,venv
+
+# productive test data
+tests/data/prod
