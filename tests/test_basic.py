@@ -59,7 +59,7 @@ def test_run_main(tmp_path, caplog):
         emf_show_nested_need_title = True
         emf_rst_output_configs = [
             {{
-                "path": "{rst_out_path}",
+                "path": r"{rst_out_path}",
                 "emf_types": ["Root"],
             }},
         ]
