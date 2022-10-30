@@ -25,7 +25,7 @@ def test_run_main(tmp_path, caplog):
 
     config_common = textwrap.dedent(
         f"""\
-        emf_path_m2_model = "{ecore_path}"
+        emf_path_m2_model = r"{ecore_path}"
         emf_pre_read_hook = None
         emf_post_read_hook = None
         emf_class_2_need_def = {{
@@ -48,14 +48,14 @@ def test_run_main(tmp_path, caplog):
     )
     config_cli = textwrap.dedent(
         f"""\
-        emf_path_m1_model = "{xmi_path}"
+        emf_path_m1_model = r"{xmi_path}"
         emf_rst_indent = 3
         emf_allowed_classes = []
         emf_denied_classes = []
         emf_allowed_values = {{}}
         emf_denied_values = {{}}
         emf_sort_field = "_internal_id"
-        emf_templates_dir = "{templates_path}"
+        emf_templates_dir = r"{templates_path}"
         emf_show_nested_need_title = True
         emf_rst_output_configs = [
             {{
@@ -66,7 +66,6 @@ def test_run_main(tmp_path, caplog):
         """
     )
     config = config_common + config_cli
-    print(config)
     conf_file.write_text(config)
     runner = CliRunner()
     response = runner.invoke(run, [str(conf_file)])
