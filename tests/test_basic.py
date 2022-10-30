@@ -21,6 +21,7 @@ def test_run_main(tmp_path, caplog):
     ecore_path = os.path.join(data_path, "base_test.ecore")
     xmi_path = os.path.join(data_path, "base_test.xmi")
     templates_path = os.path.join(data_path, "templates")
+    rst_out_path = str(tmp_path / "out.rst")
 
     config_common = textwrap.dedent(
         f"""\
@@ -58,13 +59,14 @@ def test_run_main(tmp_path, caplog):
         emf_show_nested_need_title = True
         emf_rst_output_configs = [
             {{
-                "path": "{str(tmp_path / "out.rst")}",
+                "path": "{rst_out_path}",
                 "emf_types": ["Root"],
             }},
         ]
         """
     )
     config = config_common + config_cli
+    print(config)
     conf_file.write_text(config)
     runner = CliRunner()
     response = runner.invoke(run, [str(conf_file)])
