@@ -11,7 +11,7 @@ from sphinx_emf.cli import run
 DIR_THIS_FILE = os.path.dirname(os.path.realpath(__file__))
 
 
-def test_run_main(tmp_path, caplog):
+def test_cli(tmp_path, caplog):
     """Check whether main function runs through."""
     caplog.set_level(logging.DEBUG)
 
@@ -38,6 +38,62 @@ def test_run_main(tmp_path, caplog):
                 ],
                 "emf_to_need_content": [
                     ("Subs", "Subs"),
+                ],
+                "settings": {{
+                    "remove_if_unlinked": False,
+                }},
+            }},
+            "Sub": {{
+                "need_static": {{
+                    "type": "sub",
+                }},
+                "emf_to_need_options": [
+                    ("_internal_id", "id"),
+                ],
+                "emf_to_need_content": [
+                    ("SubSubs", "SubSubs"),
+                ],
+                "settings": {{
+                    "remove_if_unlinked": False,
+                }},
+            }},
+            "SubSub": {{
+                "need_static": {{
+                    "type": "subsub",
+                }},
+                "emf_to_need_options": [
+                    ("_internal_id", "id"),
+                ],
+                "emf_to_need_content": [
+                    ("SubSubSubs", "SubSubSubs"),
+                ],
+                "settings": {{
+                    "remove_if_unlinked": False,
+                }},
+            }},
+            "SubSub2": {{
+                "need_static": {{
+                    "type": "subsub2",
+                }},
+                "emf_to_need_options": [
+                    ("_internal_id", "id"),
+                ],
+                "emf_to_need_content": [
+                    ("SubSubSubs", "SubSubSubs"),
+                ],
+                "settings": {{
+                    "remove_if_unlinked": False,
+                }},
+            }},
+            "SubSubSub": {{
+                "need_static": {{
+                    "type": "subsubsub",
+                }},
+                "emf_to_need_options": [
+                    ("_internal_id", "id"),
+                    ("FieldSet", "name"),
+                ],
+                "emf_to_need_content": [
                 ],
                 "settings": {{
                     "remove_if_unlinked": False,
