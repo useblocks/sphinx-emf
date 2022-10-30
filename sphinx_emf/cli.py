@@ -27,7 +27,7 @@ def run(confpy_path):
     """Import settings from conf.py argument and run the EMF importer."""
     log_format = "[%(levelname)5s] %(name)s - %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
-    log.info(f"Loading {confpy_path=}")
+    log.info(f"Loading confpy_path='{confpy_path}'")
 
     try:
         confpy = SourceFileLoader("conf", confpy_path).load_module()
