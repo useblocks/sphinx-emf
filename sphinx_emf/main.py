@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Set
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pyecore.ecore import EEnumLiteral, EOrderedSet
 
-from sphinx_emf.config.model import Class2NeedKeys, SphinxEmfCliConfig
+from sphinx_emf.config.model import Class2NeedDefValues, SphinxEmfCliConfig
 from sphinx_emf.ecore.ecore_io import load_m1
 from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natural_sort_in_place
 
@@ -62,7 +62,7 @@ def reduce_tree(need, emf_type, output_needs: List[Any], context, config) -> boo
     return True
 
 
-def create_remove_config(config: Dict[str, Class2NeedKeys]) -> Dict[str, List[str]]:
+def create_remove_config(config: Dict[str, Class2NeedDefValues]) -> Dict[str, List[str]]:
     """Simplify the emf_class_2_need_def configuration for the remove feature."""
     remove_config = {}
     for emf_type, definitions in config.items():
