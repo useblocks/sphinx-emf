@@ -23,6 +23,7 @@ release = "0.1.0"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    "sphinx.ext.autodoc",
     "sphinx_design",
     "sphinx_immaterial",
     "sphinxcontrib.programoutput",
@@ -102,3 +103,25 @@ rst_epilog = """
    <br>
 
 """
+
+
+def process_docstring(app, what, name, obj, options, lines):
+    pass
+
+
+def before_process_signature(app, obj, bound_method):
+    pass
+
+
+def process_signature(app, what, name, obj, options, signature, return_annotation):
+    pass
+
+
+def setup(app):
+    app.connect("autodoc-process-docstring", process_docstring)
+    app.connect("autodoc-before-process-signature", before_process_signature)
+    app.connect("autodoc-process-signature", process_signature)
+
+
+add_module_names = False
+python_use_unqualified_type_names = True

@@ -14,8 +14,8 @@ except ImportError:
     from typing_extensions import Literal
 
 
-class Class2NeedSettings(TypedDict, total=False):
-    """Definition for emf_class_2_need_def[type].settings."""
+class Class2NeedDefSettings(TypedDict, total=False):
+    """Definition for :attr:`Class2NeedDefValues.settings`."""
 
     remove_if_unlinked: StrictBool
     """Remove the EMF type if it is not linked by other EMF types."""
@@ -24,14 +24,28 @@ class Class2NeedSettings(TypedDict, total=False):
     """
     List of EMF types whose outgoing links are ignored when removing elements.
 
-    This setting is only relevant if remove_if_unlinked is True.
+    The setting is only relevant if :attr:`remove_if_unlinked` is True.
+    The setting can be used to remove elements that are contained in other types
+    as nested elements (which is also a link source), but should still be removed
+    if not explicitely linked by other elements.
     """
 
 
-class Class2NeedKeys(TypedDict, total=False):
-    """Definition for emf_class_2_need_def."""
+class Class2NeedDefValues(TypedDict, total=False):
+    """Definition for :attr:`SphinxEmfCommonConfig.emf_class_2_need_def`."""
 
     need_static: Dict[StrictStr, StrictStr]
+    """
+    Static needs options given as key-value pairs.
+
+    This is commonly used to set the need type.
+    Example:
+
+    .. code-block:: python
+
+        need_static: { 'type': 'requirement' }
+    """
+
     emf_to_need_options: List[
         Union[
             Tuple[StrictStr, StrictStr],  # direct EMF field reading
@@ -39,6 +53,37 @@ class Class2NeedKeys(TypedDict, total=False):
             Tuple[StrictStr, StrictStr, Callable[[StrictStr, EObject, Dict[StrictStr, Any]], StrictStr]],
         ]
     ]
+    """
+    Define how ECore field names are copied to need options.
+
+    Tuple entries:
+
+    0. ECore field name
+    1. need option name
+    2. transformer function
+
+    Any simple ECore type (bool, int, str) will produce a need_extra_option.
+    List types (``EOrderedSet``) produce a need_extra_link option.
+
+    Any ECore field that does not appear here will be ignored if it is also not contained in
+    :attr:`emf_to_need_content`.
+
+    The transformer function can be used to generate need option values.
+    It is useful to generate unique need IDs from ECore fields. Example:
+
+    .. code-block:: python
+
+        def gen_needs_id(value: str, ecore_item: Any, context: Dict[str, Any]) -> str:
+            pass
+
+    Parameter description:
+
+    * ``value`` ECore field value given in tuple[0]
+    * ``ecore_item`` full ECore object to cross reference fields
+    * ``context`` empty dicionary, will be the same instance for all invocations
+      and can be used to hold context information like already used need IDs.
+    """
+
     emf_to_need_content: List[
         Union[
             Tuple[StrictStr, StrictStr],  # direct EMF field reading
@@ -46,7 +91,23 @@ class Class2NeedKeys(TypedDict, total=False):
             Tuple[StrictStr, StrictStr, Callable[[StrictStr, EObject, Dict[StrictStr, Any]], StrictStr]],
         ]
     ]
-    settings: Class2NeedSettings
+    """
+    Define how ECore field names are copied to the need content area/body.
+
+    Tuple entries:
+
+    0. ECore field name
+    1. need option name
+    2. transformer function
+
+    Any simple ECore type (bool, int, str) will produce a need_extra_option.
+    List types (``EOrderedSet``) produce a need_extra_link option.
+
+    Any ECore field that does not appear here will be ignored if it is also not contained in
+    :attr:`emf_to_need_options`.
+    """
+
+    settings: Class2NeedDefSettings
 
 
 class SphinxEmfCommonConfig(BaseModel):
@@ -69,21 +130,19 @@ class SphinxEmfCommonConfig(BaseModel):
     Must return the list of ECore model roots (which is the main use case for this).
     """
 
-    emf_class_2_need_def: Dict[StrictStr, Class2NeedKeys] = {}
+    emf_class_2_need_def: Dict[StrictStr, Class2NeedDefValues] = {}
     """
-    Map EMF class names to need definitions.
+    Main configuration mapping from EMF ECore classes to need types.
 
-    The needs definition consists of:
-    - id: str: copy from this EMF field; callable: generate it
-    - type: str: taken literally as the need type
-    - title: str: copy from this EMF field; callable: generate it
-    - options: map EMF field names
-    - content: map EMF field names to need content sections (will be converted to RST)
+    Key are ECore class names, value are instances of :class:`Class2NeedDefValues`.
     """
 
 
 class SphinxEmfCliConfig(SphinxEmfCommonConfig):
     """sphinx-emf config model for the CLI that converts from XMI to RST."""
+
+    emf_path_m1_model: StrictStr
+    """ECore M1 model."""
 
     emf_rst_output_configs: List[
         Dict[
@@ -104,9 +163,6 @@ class SphinxEmfCliConfig(SphinxEmfCommonConfig):
 
     The list order is important as it defines which elements are moved first - with all its nested needs.
     """
-
-    emf_path_m1_model: StrictStr
-    """ECore M1 model."""
 
     # see https://github.com/pydantic/pydantic/issues/239
     #     https://github.com/pydantic/pydantic/issues/156
