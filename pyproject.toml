@@ -34,6 +34,7 @@ pydantic = "^1.8.2"
 pyecore = "^0.13"
 Sphinx = ">=4.0"
 sphinx-needs = "^1.0.2"
+sphinxcontrib-plantuml = "^0.24"  # needed as it is no dependency of sphinx-needs (but still mandatory)
 typing-extensions = "^4.4.0"
 
 

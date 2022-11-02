@@ -1352,6 +1352,20 @@ python-versions = ">=3.5"
 test = ["flake8", "mypy", "pytest"]
 
 [[package]]
+name = "sphinxcontrib-plantuml"
+version = "0.24"
+description = "Sphinx \"plantuml\" extension"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Sphinx = ">=1.6"
+
+[package.extras]
+test = ["Pillow", "flake8", "pytest"]
+
+[[package]]
 name = "sphinxcontrib-programoutput"
 version = "0.17"
 description = "Sphinx extension to include program output"
@@ -1537,7 +1551,7 @@ docs = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.2,<3.11"
-content-hash = "ce54d7b207edf819e3a117a87772988fc55be4c6f866e898d3d5d144c6ebb13c"
+content-hash = "ed14f33d2b4dbc3d4815d8b3b4318409dc4d562ab9e7f1f894200d42d717cbde"
 
 [metadata.files]
 alabaster = [
@@ -2395,6 +2409,9 @@ sphinxcontrib-htmlhelp = [
 sphinxcontrib-jsmath = [
     {file = "sphinxcontrib-jsmath-1.0.1.tar.gz", hash = "sha256:a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8"},
     {file = "sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl", hash = "sha256:2ec2eaebfb78f3f2078e73666b1415417a116cc848b72e5172e596c871103178"},
+]
+sphinxcontrib-plantuml = [
+    {file = "sphinxcontrib-plantuml-0.24.tar.gz", hash = "sha256:cf65db7358f785a6498ee03e7198b6680c625d28e55b33475fc3f6c94351451d"},
 ]
 sphinxcontrib-programoutput = [
     {file = "sphinxcontrib-programoutput-0.17.tar.gz", hash = "sha256:300ee9b8caee8355d25cc74b4d1c7efd12e608d2ad165e3141d31e6fbc152b7f"},
