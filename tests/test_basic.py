@@ -55,8 +55,8 @@ def test_basic_roundtrip(tmp_path, caplog):
     all_config = config_needs + config_common + config_builder
     conf_file_builder = tmp_path / "conf.py"
     conf_file_builder.write_text(all_config)
-    # get current python interpreter so run sphinx-build from it
 
+    # get current python interpreter and run sphinx-build from it
     dir_bin = "Scripts" if sys.platform == "win32" else "bin"
     path_sphinx_build = os.path.join(sys.prefix, dir_bin, "sphinx-build")
     completed_process = subprocess.run(
