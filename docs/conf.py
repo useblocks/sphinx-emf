@@ -23,10 +23,11 @@ release = "0.1.0"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "sphinx.ext.autodoc",
     "sphinx_design",
     "sphinx_immaterial",
+    "sphinx.ext.autodoc",
     "sphinxcontrib.programoutput",
+    "sphinxcontrib.autodoc_pydantic",
 ]
 
 templates_path = ["_templates"]
@@ -114,7 +115,9 @@ def before_process_signature(app, obj, bound_method):
 
 
 def process_signature(app, what, name, obj, options, signature, return_annotation):
-    pass
+    if name.startswith("sphinx_emf.config.model."):
+        return "", None
+    return None
 
 
 def setup(app):
@@ -125,3 +128,4 @@ def setup(app):
 
 add_module_names = False
 python_use_unqualified_type_names = True
+autodoc_member_order = "bysource"
