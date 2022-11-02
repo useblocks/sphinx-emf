@@ -33,6 +33,7 @@ Jinja2 = "^3.1.2"
 pydantic = "^1.8.2"
 pyecore = "^0.13"
 Sphinx = ">=4.0"
+sphinx-needs = "^1.0.2"
 typing-extensions = "^4.4.0"
 
 
