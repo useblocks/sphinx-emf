@@ -47,7 +47,7 @@ html_sidebars = {
     "**": ["about.html", "navigation.html", "searchbox.html"],
 }
 
-html_logo = "./_static/sphinx-emf-logo-white.png"
+# html_logo = "./_static/sphinx-emf-logo-white.png"
 # html_favicon = "./_static/sphinx-emf-logo-favicon.png"
 # material theme options (see theme.conf for more information)
 html_theme_options = {
