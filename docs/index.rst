@@ -1,8 +1,9 @@
 
-Introduction
-============
+Sphinx-EMF
+==========
 
-Describe your library.
+.. include:: intro.rst
+
 
 .. toctree::
    :maxdepth: 2
