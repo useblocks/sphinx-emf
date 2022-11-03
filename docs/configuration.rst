@@ -17,25 +17,29 @@ Add **sphinx_emf** to your extensions:
 Options
 -------
 
-All configuration options starts with the prefix ``emf_`` for Sphinx-EMF.
+All configuration options start with the prefix ``emf_`` for Sphinx-EMF.
 
 Sphinx-EMF features some nested configuration parameters and therefore
 uses `pydantic <https://pydantic-docs.helpmanual.io/>`_ to validate the configuration.
-The following parameters start with one of the 3 pydantic class names:
+There are 3 pydantic classes defined:
 
-* ``SphinxEmfCommonConfig`` parameters common to CLI and the Builder
-* ``SphinxEmfCliConfig`` CLI parameters
-* ``SphinxEmfBuilderConfig`` Sphinx Builder parameters
+* ``SphinxEmfCommonConfig`` parameters common to CLI and the Sphinx Builder
+* ``SphinxEmfCliConfig`` CLI specific parameters
+* ``SphinxEmfBuilderConfig`` Sphinx Builder specific parameters
 
 The CLI script transforms from XMI to RST (needs) while the Sphinx Builder reads RST and writes
-XMI. The classes are needed just for pydantic, all settings are primitive Python types such as
-dictionaries, lists, tuples, lists, strings, bools and integers.
+XMI.
 
 .. note::
-   Despite the prefixed class name in the documentation, the option itself does not include
-   the class name, only the parameters starting with ``emf_``.
+   Above classes are not exposed to the user, they are just needed internally for pydantic.
+   The class field names starting with ``emf_`` are the relevant configuration parameters
+   with their documented types. You may put all configuration (common, CLI and builder) into your conf.py
+   and use that file also as input parameter to the CLI script.
 
-
+.. note::
+   The type checking also uses TypedDict types which allows the validation of nested dictionaries.
+   Those are added to the documentation as well (e.g. :class:`sphinx_emf.config.model.Class2NeedDefValues`).
+   The class field names represent the values of the dictionary.
 
 .. autopydantic_model:: sphinx_emf.config.model.SphinxEmfCommonConfig
    :model-show-json: False
