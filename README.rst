@@ -1,6 +1,7 @@
+**Complete documentation**: https://sphinx-emf.useblocks.com/
 
-Sphinx-EMF
-==========
+Introduction
+============
 
 Sphinx-EMF makes it possible to connect
 `Eclipse EMF <https://www.eclipse.org/modeling/emf/>`_ ECore models with
