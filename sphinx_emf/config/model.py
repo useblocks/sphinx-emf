@@ -310,7 +310,7 @@ class SphinxEmfCommonConfig(BaseModel):
     Function that shall be called before reading the M0 model.
 
     Input parameter is the M1 ``ResourceSet``.
-    Must return the M1  ``ResourceSet`` again after modifying it.
+    Must return the M1 ``ResourceSet`` again after modifying it.
 
     This can be used to add custom model parts that are not part of the M1 model.
     """
