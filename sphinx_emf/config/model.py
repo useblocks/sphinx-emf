@@ -38,12 +38,34 @@ class Class2NeedDefValues(TypedDict, total=False):
     """
     Static needs options given as key-value pairs.
 
-    This is commonly used to set the need type.
+    This is commonly used to set the need ``type``.
     Example:
 
     .. code-block:: python
 
-        need_static: { 'type': 'requirement' }
+        {
+          'need_static': { 'type': 'story' }
+        }
+
+    .. uml::
+
+        @startuml
+        class "need 'story'" as need {
+            str type = 'story'
+        }
+        class "ECore 'Story'" as ecore {
+        }
+        note left of need::type
+            <code>
+            emf_class_2_need_def = {
+              "Story": {
+                "need_static": {
+                  "type": "story",
+                },
+              },
+            }
+        end note
+        @enduml
     """
 
     emf_to_need_options: List[
@@ -54,34 +76,108 @@ class Class2NeedDefValues(TypedDict, total=False):
         ]
     ]
     """
-    Define how ECore field names are copied to need options.
+    Define how ECore field names are copied to need extra options and links.
+
+    Any simple ECore type (bool, int, str, enum) leads to a
+    `needs extra option <https://sphinxcontrib-needs.readthedocs.io/en/latest/configuration.html#needs-extra-options>`_.
+    ECore list types (``EOrderedSet``) produce a
+    `needs extra link <https://sphinxcontrib-needs.readthedocs.io/en/latest/configuration.html#needs-extra-links>`_.
+
+    Any ECore field that does not appear here and also not in :attr:`emf_to_need_content`
+    will be ignored.
 
     Tuple entries:
 
     0. ECore field name
-    1. need option name
-    2. transformer function
+    1. need extra option/link name
+    2. transformer function [optional]
 
-    Any simple ECore type (bool, int, str) will produce a need_extra_option.
-    List types (``EOrderedSet``) produce a need_extra_link option.
+    The ECore field name tuple[0] will be transformed to the need extra option or need extra link given in
+    tuple[1].
 
-    Any ECore field that does not appear here will be ignored if it is also not contained in
-    :attr:`emf_to_need_content`.
+    Any ECore values that lead to `need extra options` will be converted to string types.
 
-    The transformer function can be used to generate need option values.
-    It is useful to generate unique need IDs from ECore fields. Example:
+    Any Ecore list values lead to `need extra links`, even when the ECore definition is a containment (nested object).
+    When converting back from RST to XMI, the ECore containment information from the ECore M2 model is used
+    to transform a needs link correctly back to an ECore containment. This makes it possible to change the link
+    modeling for Sphinx-Needs. Users may want to write certain need types to dedicated files which makes it impossible
+    to model them as UML composition (containment) - which in the Sphinx-Needs world - is realized as nested needs.
+
+    The transformer function is only allowed for simple types that lead to `need extra options`.
+    The function must support the following parameters:
+
+    * ``value`` ECore field value of tuple[0] field name
+    * ``ecore_item`` full ECore object; can be used to access other ECore fields
+    * ``context`` empty dicionary, will be the same instance for all invocations
+      of transformers; and can be used to hold context information across invocations
+
+    The function must return a ``str`` type.
+
+    A use case for transformers is to generate unique need IDs from ECore fields. Example:
 
     .. code-block:: python
 
         def gen_needs_id(value: str, ecore_item: Any, context: Dict[str, Any]) -> str:
-            pass
+          need_prefixes = {
+            'Story': 'STORY_',
+            'Requirement': 'REQ_',
+          }
+          prefix = need_prefixes[ecore_item.__class__.__name__]
+          need_id = prefix + value.upper()
+          return need_id
 
-    Parameter description:
+        emf_class_2_need_def = {
+          "Story": {
+            "need_static": {
+              "type": "story",
+            },
+            "emf_to_need_options": [
+              ("Name", "title"),  # need title: direct copy the 'Name' field
+              ("_iternal_id", "id", gen_needs_id),  # need id: use a transformer
+            ],
+          },
+        }
 
-    * ``value`` ECore field value given in tuple[0]
-    * ``ecore_item`` full ECore object to cross reference fields
-    * ``context`` empty dicionary, will be the same instance for all invocations
-      and can be used to hold context information like already used need IDs.
+    .. note:: pyecore stores the XMI unique identifiers in the field ``_internal_id`` which can also be used.
+
+    .. uml::
+
+        @startuml
+        class "need 'story'" as need {
+            str type = 'story'
+            str id = 'STORY_abc'
+            str title = 'The alphabet story'
+        }
+        class "ECore 'Story'" as ecore {
+            str _internal_id = 'abc'
+            str Name = 'The alphabet story'
+        }
+        circle "gen_needs_id()" as gen_needs_id
+
+        ecore::_internal_id --> gen_needs_id
+        gen_needs_id --> need::id
+        ecore::Name --> need::title
+
+        note as n1
+            <code>
+            emf_class_2_need_def = {
+              "Story": {
+                "need_static": {
+                  "type": "story",
+                },
+                "emf_to_need_options": [
+                  ("Name", "title"),
+                  ("_iternal_id", "id", gen_needs_id),
+                ],
+              },
+            }
+        end note
+        @enduml
+
+        .. note::
+            The mandatory need fields ``id``, ``type`` and ``title`` must appear in one the configuration
+            sections :attr:`need_static` or :attr:`emf_to_need_options`.
+
     """
 
     emf_to_need_content: List[
@@ -92,19 +188,46 @@ class Class2NeedDefValues(TypedDict, total=False):
         ]
     ]
     """
-    Define how ECore field names are copied to the need content area/body.
+    Define how ECore field names are copied to the need content area.
 
     Tuple entries:
 
     0. ECore field name
-    1. need option name
-    2. transformer function
+    1. need content title
+    2. transformer function [optional]
 
-    Any simple ECore type (bool, int, str) will produce a need_extra_option.
-    List types (``EOrderedSet``) produce a need_extra_link option.
+    Any simple ECore type (bool, int, str, enum) leads to a highlighted section of the
+    need body. ECore list types (``EOrderedSet``) produce a nested need.
 
-    Any ECore field that does not appear here will be ignored if it is also not contained in
-    :attr:`emf_to_need_options`.
+    Example:
+
+    .. code-block:: python
+
+        emf_class_2_need_def = {
+          "Story": {
+            "need_static": {
+              "type": "story",
+            },
+            "emf_to_need_content": [
+              ("Name", "title"),  # need title: direct copy the 'Name' field
+              ("_iternal_id", "id", gen_needs_id),  # need id: use a transformer
+            ],
+          },
+        }
+
+    .. code-block:: rst
+
+        .. story:: Title
+           :id: STORY_abc
+
+           **Description** The alphabet story.
+
+    ECore list types (``EOrderedSet``) produce a nested need, so a new needs directive in the
+    current need's body. See also the description of :attr:`emf_to_need_options` about modeling
+    of ECore list fields as linked needs or nested needs.
+
+    Any ECore field that does not appear here and also not in :attr:`emf_to_need_options`
+    will be ignored.
     """
 
     settings: Class2NeedDefSettings

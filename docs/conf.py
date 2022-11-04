@@ -28,6 +28,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinxcontrib.programoutput",
     "sphinxcontrib.autodoc_pydantic",
+    "sphinxcontrib.plantuml",
 ]
 
 templates_path = ["_templates"]
