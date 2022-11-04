@@ -33,6 +33,15 @@
           }
         ]
       }
+    },
+    {
+      "label": "docs_make_clean",
+      "command": "rm",
+      "args": ["-rf", "_build/html"],
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/docs/"
+      }
     }
   ]
 }

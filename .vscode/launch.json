@@ -1,10 +1,16 @@
 {
+  "version": "2.0.0",
   "configurations": [
     {
-      "name": "Python: main",
+      "name": "make clean html",
       "type": "python",
       "request": "launch",
-      "module": "sphinx_emf.main",
+      "preLaunchTask": "docs_make_clean",
+      "program": "${workspaceFolder}/.venv/bin/sphinx-build",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "cwd": "${workspaceFolder}/docs",
+      "args": ["-v", "-b", "html", ".", "_build/html"],
+      "console": "integratedTerminal",
       "justMyCode": false
     }
   ]
