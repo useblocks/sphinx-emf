@@ -177,7 +177,6 @@ class Class2NeedDefValues(TypedDict, total=False):
         .. note::
             The mandatory need fields ``id``, ``type`` and ``title`` must appear in one the configuration
             sections :attr:`need_static` or :attr:`emf_to_need_options`.
-
     """
 
     emf_to_need_content: List[
@@ -196,35 +195,85 @@ class Class2NeedDefValues(TypedDict, total=False):
     1. need content title
     2. transformer function [optional]
 
-    Any simple ECore type (bool, int, str, enum) leads to a highlighted section of the
-    need body. ECore list types (``EOrderedSet``) produce a nested need.
+    Any simple ECore type (bool, int, str, enum) leads to a highlighted section in the
+    need body with the tuple[1] prepended as bold text.
+    Any ECore list type (``EOrderedSet``) produces a list of nested needs, so new need directives are
+    added to the current need's body. See also the description of :attr:`emf_to_need_options` about modeling
+    of ECore list fields as linked needs or nested needs.
 
     Example:
 
     .. code-block:: python
+
+        from sphinx_emf.user_hooks.escape_rst import to_rst
+
+        def escape_rst(value: str, ecore_item: Any, context: Dict[str, Any]) -> str:
+          del ecore_item
+          del context
+          escaped_value = to_rst(value)
+          return escaped_value
 
         emf_class_2_need_def = {
           "Story": {
             "need_static": {
               "type": "story",
             },
+            "emf_to_need_options": [
+              ("Name", "title"),
+              ("_iternal_id", "id", gen_needs_id),
+            ],
             "emf_to_need_content": [
-              ("Name", "title"),  # need title: direct copy the 'Name' field
-              ("_iternal_id", "id", gen_needs_id),  # need id: use a transformer
+              ("Description", "Description"),
+              ("LongDescription", "Long Description", escape_rst),
+              ("Requirements", "Requirements"),
             ],
           },
         }
 
     .. code-block:: rst
 
-        .. story:: Title
+        .. story:: The alphabet story
            :id: STORY_abc
 
-           **Description** The alphabet story.
+           **Description** Names all letters.
 
-    ECore list types (``EOrderedSet``) produce a nested need, so a new needs directive in the
-    current need's body. See also the description of :attr:`emf_to_need_options` about modeling
-    of ECore list fields as linked needs or nested needs.
+           **Long Description**
+
+           Special care for:
+
+           - the sort order and
+           - not to forget a letter
+
+           **Requirements**
+
+           .. requirement:: Must be sorted
+              :id: REQ_sorted
+
+           .. requirement:: Must not forget a letter
+              :id: REQ_forget
+
+    The transformer has the same parameters and return type as in :attr:`emf_to_need_options`.
+    It can only be used for simple ECore types (bool, int, str, enum).
+
+    .. note::
+        In above example an ECore class called ``Requirement`` is missing in ``emf_class_2_need_def``.
+        It is needed to tell sphinx-emf how to represent the nested ``requirement`` need types.
+        It is skipped to keep the example short.
+
+    .. note::
+        XMI does not specify any highlighting language such as Markdown, RestructuredText or
+        HTML for plain text (multiline) fields.
+        Therefore text fields cannot be copied 1:1 to RST as strings like ``the *.json files`` are
+        not valid RST. The ``*`` needs to be escaped. sphinx-emf provides a function to transform
+        plain text to RST. See above example how to import and use it. The function handles the following
+        scenarios:
+
+        #. all incomplete inline literals are escaped
+        #. lists are correctly formatted
+        #. paragraphs are correctly formatted, line breaks lead to lines prepended with '| '
+
+        You may also decide to store RST directly to XMI. This however needs custom escaping
+        of ``"`` as it is the start/stop sequence of values.
 
     Any ECore field that does not appear here and also not in :attr:`emf_to_need_options`
     will be ignored.
@@ -237,27 +286,45 @@ class SphinxEmfCommonConfig(BaseModel):
     """Common configuration for both CLI (XMI -> RST) and builder (RST -> XMI)."""
 
     emf_path_m2_model: StrictStr
-    """Ecore M2 model."""
+    """Path to the ECore M2 model."""
 
     emf_pre_read_hook: Optional[Callable[[ResourceSet], ResourceSet]] = None
     """
-    Function that should be called on the ResourceSet before reading the M1 model.
+    Function that shall be called on the ``ResourceSet`` before reading the M1 model.
 
-    Must return the ResourceSet again after modifying it.
+    Must return the ``ResourceSet`` again after modifying it.
     """
 
     emf_post_read_hook: Optional[Callable[[XMIResource], List[Any]]] = None
     """
-    Function that should be called on the M1 XMIResource after creating it.
+    Function that shall be called on the M1 ``XMIResource`` after creating it.
 
-    Must return the list of ECore model roots (which is the main use case for this).
+    Must return a list of ECore model roots.
+    The main use case is the removal of unused ECore model roots.
     """
 
     emf_class_2_need_def: Dict[StrictStr, Class2NeedDefValues] = {}
     """
     Main configuration mapping from EMF ECore classes to need types.
 
-    Key are ECore class names, value are instances of :class:`Class2NeedDefValues`.
+    Keys are ECore class names, values are instances of :class:`Class2NeedDefValues`.
+    Example:
+
+    .. code-block:: python
+
+        emf_class_2_need_def = {
+          "Story": {
+            "need_static": {
+              "type": "story",
+            },
+            "emf_to_need_options": [
+              ("Name", "title"),
+              ("_iternal_id", "id", gen_needs_id),
+            ],
+          },
+        }
+
+    For more explanation see :class:`Class2NeedDefValues`.
     """
 
 
@@ -265,7 +332,7 @@ class SphinxEmfCliConfig(SphinxEmfCommonConfig):
     """sphinx-emf config model for the CLI that converts from XMI to RST."""
 
     emf_path_m1_model: StrictStr
-    """ECore M1 model."""
+    """Path to the ECore M1 model."""
 
     emf_rst_output_configs: List[
         Dict[
@@ -280,11 +347,24 @@ class SphinxEmfCliConfig(SphinxEmfCommonConfig):
     """
     Mapping of ECore types to output files.
 
-    'path' is mandatory for all.
-    Only one list item may contain 'default'.
-    All others must have 'emf_types'. 'emf_types' must be unique across the full config param.
+    This is needed to distribute ECore types from one XMI to multiple RST files.
 
-    The list order is important as it defines which elements are moved first - with all its nested needs.
+    .. note::
+        Any ECore type that goes to a different file as its parent must be part of ``emf_to_need_options``
+        of its original ECore parent. See :attr:`emf_to_need_options`.
+        It cannot be be a nested need as it is located in a different file.
+
+    Dictionary keys:
+
+    * ``path`` RST output file path
+    * ``emf_types`` list of ECore types for the file
+    * ``default`` if ``True`` the file will be the target for all remaining ECore classes
+
+    .. note:: ``"default": True`` can only be set for one dictionary in the list
+
+    .. note:: ``emf_types`` must be unique across all list entries
+
+    .. note:: The list order is important as it defines which elements are moved first - with all its nested needs.
     """
 
     # see https://github.com/pydantic/pydantic/issues/239

@@ -107,7 +107,7 @@ def to_rst(text_in):
 
     1. incomplete inline literals are escaped
     2. lists are correctly formatted
-    3. paragraphs are correctly
+    3. paragraphs are correctly formatted, line breaks lead to lines prepended with '| '
     """
     escaped = escape_inline_literals(text_in)
     escaped = escaped.strip()  # remove leading/trailing spaces
