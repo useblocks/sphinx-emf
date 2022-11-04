@@ -2,15 +2,17 @@
 
 
 import re
+import sys
 from typing import List, Tuple
 
 import docutils
 from docutils.utils import Reporter
 
 
-try:
+# solution as per https://mypy.readthedocs.io/en/stable/runtime_troubles.html#using-new-additions-to-the-typing-module
+if sys.version_info >= (3, 8):
     from typing import Literal
-except ImportError:
+else:
     from typing_extensions import Literal
 
 
@@ -101,13 +103,13 @@ def escape_inline_literals(text):
     return return_rst
 
 
-def to_rst(text_in):
+def to_rst(text_in):  # noqa: F401
     """
     Generate valid RST content from plain text input.
 
     1. incomplete inline literals are escaped
     2. lists are correctly formatted
-    3. paragraphs are correctly
+    3. paragraphs are correctly formatted, line breaks lead to lines prepended with '| '
     """
     escaped = escape_inline_literals(text_in)
     escaped = escaped.strip()  # remove leading/trailing spaces
