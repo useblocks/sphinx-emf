@@ -9,9 +9,9 @@ Sphinx-EMF makes it possible to exchange data between
 This Sphinx extensions comes with 2 main features:
 
 * a CLI script ``sphinx-emf-cli`` that reads an XMI model and writes RST files contain needs objects
-* a Sphinx builder that reads a Sphinx project containing Sphinx-Needs objects and writes an M1 XMI model from it 
+* a Sphinx builder that reads a Sphinx project containing Sphinx-Needs objects and writes an M0 XMI model from it
 
-Both features require an EMF ECore M2 model.
+Both features require an EMF ECore M1 model.
 
 
 .. toctree::
@@ -25,3 +25,22 @@ Both features require an EMF ECore M2 model.
    support
    license
    changelog
+
+Motivation
+----------
+
+Sphinx-Needs makes managing objects inside docs-as-code approaches easy and joyful.
+It also features options to get objects in and out the Sphinx-Needs ecosystem:
+
+- `needs.json <https://sphinx-needs.readthedocs.io/en/latest/builders.html#needs-builder>`_
+- `Dynamic functions <https://sphinx-needs.readthedocs.io/en/latest/dynamic_functions.html>`_
+- `Sphinx-Collections <https://sphinx-collections.readthedocs.io/en/latest/>`_
+
+They all do not support enforcing a defined model when exporting or importing needs.
+This includes options, links, the needs body and nested needs in the body.
+
+Sphinx-EMF makes it possible to define an EMF ECore `M1 <https://en.wikipedia.org/wiki/Meta-Object_Facility>`_
+model and write RST files from an M0 XMI file.  Objects can then be managed in docs-as-code, then exported to
+XMI using a Sphinx builder.
+
+The extension also enables data exchange with tools that use EMF ECore as data models.
