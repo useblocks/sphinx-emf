@@ -10,7 +10,7 @@ from pyecore.valuecontainer import BadValueError
 from sphinx.builders import Builder
 
 from sphinx_emf.config.invert import get_emf_class_from_need
-from sphinx_emf.ecore.ecore_io import load_m2, save_m1
+from sphinx_emf.ecore.ecore_io import load_m1, save_m0
 from sphinx_emf.sphinx_logging import get_logger
 
 
@@ -18,7 +18,7 @@ logger = get_logger(__name__)
 
 
 class EmfBuilder(Builder):
-    """Generate ECore M1 model from RST needs."""
+    """Generate ECore M0 model from RST needs."""
 
     name = "emf"
     format = "xmi"  # noqa: F841
@@ -31,14 +31,14 @@ class EmfBuilder(Builder):
         del doctree
 
     def finish(self) -> None:
-        """Generate the M1 model."""
+        """Generate the M0 model."""
         env = self.env
         config = env.config
-        config.emf_path_m2_model = os.path.abspath(config.emf_path_m2_model)
+        config.emf_path_m1_model = os.path.abspath(config.emf_path_m1_model)
 
         need_id_2_need = env.needs_all_needs
-        m2_rset = load_m2(config)
-        mm_root = m2_rset.resources[config.emf_path_m2_model].contents[0]
+        m1_rset = load_m1(config)
+        mm_root = m1_rset.resources[config.emf_path_m1_model].contents[0]
 
         root_instances = []
         for emf_root in config.emf_model_roots:
@@ -76,8 +76,8 @@ class EmfBuilder(Builder):
                 overwrite_isset(instance)
 
         out_path = os.path.join(self.outdir, config.emf_xmi_output_name)
-        save_m1(root_instances, out_path)
-        logger.info("EMF M1 model successfully exported")
+        save_m0(root_instances, out_path)
+        logger.info("EMF M0 model successfully exported")
 
     def get_outdated_docs(self) -> Iterable[str]:
         """Needed by Sphinx, it does nothing."""
