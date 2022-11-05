@@ -14,6 +14,9 @@ https://www.sphinx-doc.org/en/master/usage/configuration.html
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+
+
 project = "sphinx-emf"
 copyright = "2022, useblocks GmbH"  # pylint: disable=redefined-builtin
 author = "useblocks GmbH"
@@ -30,6 +33,11 @@ extensions = [
     "sphinxcontrib.autodoc_pydantic",
     "sphinxcontrib.plantuml",
 ]
+
+# set plantuml path
+DIR_THIS_FILE = os.path.dirname(os.path.realpath(__file__))
+plantuml_jar_path = os.path.join(DIR_THIS_FILE, "utils", "plantuml.jar")
+plantuml = f"java -jar {plantuml_jar_path}"
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
