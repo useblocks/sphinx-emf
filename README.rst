@@ -10,6 +10,6 @@ Sphinx-EMF makes it possible to exchange data between
 This Sphinx extensions comes with 2 main features:
 
 * a CLI script ``sphinx-emf-cli`` that reads an XMI model and writes RST files contain needs objects
-* a Sphinx builder that reads a Sphinx project containing Sphinx-Needs objects and writes an M1 XMI model from it 
+* a Sphinx builder that reads a Sphinx project containing Sphinx-Needs objects and writes an XMI model from it 
 
-Both features require an EMF ECore M2 model.
+Both features require an EMF ECore metamodel.

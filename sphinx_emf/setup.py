@@ -24,13 +24,13 @@ def setup(app) -> Dict[str, Any]:  # noqa: F841  # used by Sphinx when registeri
 
     # configurations
     # types are not given as pydantic is used to check the config in detail (see config/model.py)
-    app.add_config_value(name="emf_path_m2_model", default=None, rebuild="html")
-    app.add_config_value(name="emf_pre_read_hook", default=None, rebuild="html")
-    app.add_config_value(name="emf_post_read_hook", default=None, rebuild="html")
+    app.add_config_value(name="emf_path_ecore", default=None, rebuild="html")
+    app.add_config_value(name="emf_pre_xmi_read_hook", default=None, rebuild="html")
+    app.add_config_value(name="emf_post_xmi_read_hook", default=None, rebuild="html")
     app.add_config_value(name="emf_class_2_need_def", default={}, rebuild="html")
     app.add_config_value(name="emf_model_roots", default=[], rebuild="html")
     app.add_config_value(name="emf_sort_xmi_attributes", default=False, rebuild="html")
-    app.add_config_value(name="emf_xmi_output_name", default="m1_model.xmi", rebuild="html")
+    app.add_config_value(name="emf_xmi_output_name", default="model.xmi", rebuild="html")
 
     return {
         "version": VERSION,  # identifies the version of our extension

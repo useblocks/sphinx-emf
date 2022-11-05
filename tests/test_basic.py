@@ -65,14 +65,15 @@ def test_basic_roundtrip(tmp_path, caplog):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    assert completed_process.returncode == 0
+
     if completed_process.stderr != b"Matplotlib is building the font cache; this may take a moment.\r\n":
         # above error appears on Github CI for Windows
         assert len(completed_process.stderr) == 0  # nothing expected in stderr
+    assert completed_process.returncode == 0
 
     # compare input XMI and output XMI for equality, also XML formatting should not differ
     path_in = os.path.join(data_path, "base_test.xmi")
-    path_out = str(tmp_path / "_build" / "emf" / "m1_model_out.xmi")
+    path_out = str(tmp_path / "_build" / "emf" / "model_out.xmi")
     compare_result = filecmp.cmp(path_in, path_out, shallow=False)
     assert compare_result  # files must be identical
 
@@ -83,7 +84,7 @@ def gen_cli_conf(data_path, rst_out_path):
     templates_path = os.path.join(data_path, "templates")
     return textwrap.dedent(
         f"""\
-        emf_path_m1_model = r"{xmi_path}"
+        emf_path_xmi = r"{xmi_path}"
         emf_rst_indent = 3
         emf_allowed_classes = []
         emf_denied_classes = []
@@ -108,7 +109,7 @@ def gen_builder_conf():
         """\
         emf_model_roots = ['Root']
         emf_sort_xmi_attributes = False
-        emf_xmi_output_name = "m1_model_out.xmi"
+        emf_xmi_output_name = "model_out.xmi"
         emf_convert_rst_to_plain = True
         """
     )
@@ -149,9 +150,9 @@ def gen_common_conf(ecore_path):
     """Generate the sphinx-emf config part common to CLI and builder."""
     return textwrap.dedent(
         f"""\
-        emf_path_m2_model = r"{ecore_path}"
-        emf_pre_read_hook = None
-        emf_post_read_hook = None
+        emf_path_ecore = r"{ecore_path}"
+        emf_pre_xmi_read_hook = None
+        emf_post_xmi_read_hook = None
         emf_class_2_need_def = {{
             "Root": {{
                 "need_static": {{
