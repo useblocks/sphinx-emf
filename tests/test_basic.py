@@ -65,10 +65,11 @@ def test_basic_roundtrip(tmp_path, caplog):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    assert completed_process.returncode == 0
+
     if completed_process.stderr != b"Matplotlib is building the font cache; this may take a moment.\r\n":
         # above error appears on Github CI for Windows
         assert len(completed_process.stderr) == 0  # nothing expected in stderr
+    assert completed_process.returncode == 0
 
     # compare input XMI and output XMI for equality, also XML formatting should not differ
     path_in = os.path.join(data_path, "base_test.xmi")
