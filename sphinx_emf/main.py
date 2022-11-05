@@ -1,4 +1,4 @@
-"""Create need objects from an EMF ECore M1/M0 model with pyecore."""
+"""Create need objects from an EMF ECore metamodel/XMI with pyecore."""
 import logging
 import os
 from typing import Any, Dict, List, Set
@@ -7,7 +7,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pyecore.ecore import EEnumLiteral, EOrderedSet
 
 from sphinx_emf.config.model import Class2NeedDefValues, SphinxEmfCliConfig
-from sphinx_emf.ecore.ecore_io import load_m0
+from sphinx_emf.ecore.ecore_io import load_xmi
 from sphinx_emf.utils import get_xmi_id, is_field_allowed, is_type_allowed, natural_sort_in_place
 
 
@@ -273,7 +273,7 @@ def walk_ecore_tree(item, need, context, config):
 def write_rst(config: SphinxEmfCliConfig) -> None:
     """Load model and write need objects."""
     # history is not used
-    roots = load_m0(config)
+    roots = load_xmi(config)
     dir_this_file = os.path.dirname(os.path.realpath(__file__))
     jinja_searchpaths = [os.path.join(dir_this_file, "base_templates")]
     if config.emf_templates_dir:

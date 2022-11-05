@@ -115,7 +115,7 @@ class Class2NeedDefValues(TypedDict, total=False):
     Any ECore values that lead to `need extra options` will be converted to string types.
 
     Any Ecore list values lead to `need extra links`, even when the ECore definition is a containment (nested object).
-    When converting back from RST to XMI, the ECore containment information from the ECore M1 model is used
+    When converting back from RST to XMI, the ECore containment information from the ECore metamodel is used
     to transform a needs link correctly back to an ECore containment. This makes it possible to change the link
     modeling for Sphinx-Needs. Users may want to write certain need types to dedicated files which makes it impossible
     to model them as UML composition (containment) - which in the Sphinx-Needs world - is realized as nested needs.
@@ -302,27 +302,27 @@ class Class2NeedDefValues(TypedDict, total=False):
 class SphinxEmfCommonConfig(BaseModel):
     """Common configuration for both CLI (XMI -> RST) and builder (RST -> XMI)."""
 
-    emf_path_m1_model: StrictStr
-    """Path to the ECore M1 model."""
+    emf_path_ecore: StrictStr
+    """Path to the ECore metamodel."""
 
-    emf_pre_read_hook: Optional[Callable[[ResourceSet], ResourceSet]] = None
+    emf_pre_xmi_read_hook: Optional[Callable[[ResourceSet], ResourceSet]] = None
     """
-    Function that shall be called before reading the M0 model.
+    Function that shall be called before reading the XMI model.
 
-    Input parameter is the M1 ``ResourceSet``.
-    Must return the M1 ``ResourceSet`` again after modifying it.
+    Input parameter is the ECore metamodel ``ResourceSet``.
+    Must return the ECore metamodel ``ResourceSet`` again after modifying it.
 
-    This can be used to add custom model parts that are not part of the M1 model.
+    This can be used to add custom model parts that are not part of the ECore metamodel.
     """
 
-    emf_post_read_hook: Optional[Callable[[XMIResource], List[Any]]] = None
+    emf_post_xmi_read_hook: Optional[Callable[[XMIResource], List[Any]]] = None
     """
-    Function that shall be called after reading the M0 model.
+    Function that shall be called after reading the XMI model.
 
-    Input paramter is the M0 ``XMIResource``.
-    Must return a list of ECore model roots.
+    Input paramter is the XMI model ``XMIResource``.
+    Must return a list of XMI model roots.
 
-    The main use case is the removal of unused ECore model roots.
+    The main use case is the removal of unused XMI model roots.
     """
 
     emf_class_2_need_def: Dict[StrictStr, Class2NeedDefValues] = {}
@@ -353,8 +353,8 @@ class SphinxEmfCommonConfig(BaseModel):
 class SphinxEmfCliConfig(SphinxEmfCommonConfig):
     """Sphinx-EMF config model for the CLI that converts from XMI to RST."""
 
-    emf_path_m0_model: StrictStr
-    """Path to the ECore M0 model."""
+    emf_path_xmi: StrictStr
+    """Path to the ECore XMI model."""
 
     emf_rst_output_configs: List[
         Dict[
@@ -523,12 +523,12 @@ class SphinxEmfBuilderConfig(SphinxEmfCommonConfig):
     """Sphinx-EMF config model for the Sphinx builder that converts from RST to XMI."""
 
     emf_model_roots: List[StrictStr] = []
-    """List of model roots, ordered as they shall appear in the exported M0 model."""
+    """List of model roots, ordered as they shall appear in the exported XMI model."""
 
     emf_sort_xmi_attributes: StrictBool = False
     """Sort attributes of XMI ECore classes by name."""
 
-    emf_xmi_output_name: StrictStr = "m0_model.xmi"
+    emf_xmi_output_name: StrictStr = "model.xmi"
     """
     Output name for the XMI file.
 

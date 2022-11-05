@@ -1,7 +1,7 @@
 """
 CLI interface to sphinx-emf.
 
-Usecase is to read M0/M1 models and generate need RST files.
+Usecase is to read ECore metamodels and XMI models and generate need RST files.
 """
 
 from importlib.machinery import SourceFileLoader
