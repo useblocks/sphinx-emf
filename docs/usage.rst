@@ -13,9 +13,9 @@ This extensions installs a CLI entry point that can be used for a one-time impor
     sphinx-emf-cli CONFPY_PATH
 
 ``CONFPY_PATH`` is the path to a Python configuration file (commonly conf.py) that contains all configuration
-parameters needed for the import.
+parameters requirement for the import.
 
-The needed parameters are :any:`SphinxEmfCommonConfig` and :any:`SphinxEmfCliConfig`.
+The relevant parameters are fields of :any:`SphinxEmfCommonConfig` and :any:`SphinxEmfCliConfig`.
 
 
 Generate ECore XMI from RST
@@ -26,10 +26,10 @@ It must be called from the root of a Sphinx project::
 
     sphinx-build -b emf . _build/emf
 
-This assumes all configuration parameters are available in the conf.py of the Sphinx project.
+All Sphinx-EMF configuration parameters must be available in the Sphinx conf.py file.
 
-Besides all `Sphinx-Needs parameters <https://sphinx-needs.readthedocs.io/en/latest/configuration.html>`_
-the needed Sphinx-EMF parameters are :any:`SphinxEmfCommonConfig` and :any:`SphinxEmfBuilderConfig`.
+Besides `Sphinx-Needs parameters <https://sphinx-needs.readthedocs.io/en/latest/configuration.html>`_
+the relevant Sphinx-EMF parameters are fields of :any:`SphinxEmfCommonConfig` and :any:`SphinxEmfBuilderConfig`.
 
 The builder run will put the XMI output file to the directory ``_build/emf`` using the file name specified in
 :any:`emf_xmi_output_name`.
