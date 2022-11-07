@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "sphinx-emf"
 
-# Don't miss updates docs/conf.py and docs/changelog.rst when updating
-version = "0.1.0"
+# Don't miss updates in docs/conf.py, docs/changelog.rst and sphinx_emf/setup.py when updating
+version = "0.2.0"
 
 description = "Connect Sphinx-Needs to EMF models."
 authors = ["team useblocks <info@useblocks.com>"]
@@ -21,6 +21,9 @@ classifiers = [
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
+    'Topic :: Documentation',
+    'Topic :: Utilities',
+    'Framework :: Sphinx :: Extension',
 ]
 
 packages = [{ include = "sphinx_emf" }]
