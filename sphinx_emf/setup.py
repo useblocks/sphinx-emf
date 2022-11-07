@@ -10,7 +10,7 @@ from sphinx_emf.config.validate import validate_config
 from sphinx_emf.sphinx_logging import get_logger
 
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 
 def setup(app) -> Dict[str, Any]:  # noqa: F841  # used by Sphinx when registering the plugin
