@@ -18,6 +18,10 @@ Unreleased
 
 Please see all `Unreleased Changes`_ for more information.
 
+**Added**
+
+- New CLI config parameter :any:`SphinxEmfCliConfig.emf_rst_write_default_values`
+
 `0.2.0`_ - 2022-11-07
 ---------------------
 
@@ -26,10 +30,10 @@ The `(E)MOF terms <https://en.wikipedia.org/wiki/Meta-Object_Facility>`_ M1/M2 w
 
 **Changed**
 
-- Renamed parameter ``emf_path_m1_model`` to ``emf_path_xmi``
-- Renamed parameter ``emf_path_m2_model`` to ``emf_path_ecore``
-- Renamed parameter ``emf_pre_read_hook`` to ``emf_pre_xmi_read_hook``
-- Renamed parameter ``emf_post_read_hook`` to ``emf_post_xmi_read_hook``
+- Renamed parameter ``emf_path_m1_model`` to :any:`SphinxEmfCliConfig.emf_path_xmi`
+- Renamed parameter ``emf_path_m2_model`` to :any:`SphinxEmfCommonConfig.emf_path_ecore`
+- Renamed parameter ``emf_pre_read_hook`` to :any:`SphinxEmfCommonConfig.emf_pre_xmi_read_hook`
+- Renamed parameter ``emf_post_read_hook`` to :any:`SphinxEmfCommonConfig.emf_post_xmi_read_hook`
 
 
 `0.1.0`_ - 2022-11-03
