@@ -21,6 +21,11 @@ Please see all `Unreleased Changes`_ for more information.
 **Added**
 
 - New CLI config parameter :any:`SphinxEmfCliConfig.emf_rst_write_default_values`
+  (`PR #13 <https://github.com/useblocks/sphinx-emf/pull/13>`_)
+
+**Fixed**
+
+- Replaced deprecated importlib loader (`PR #14 <https://github.com/useblocks/sphinx-emf/pull/14>`_)
 
 `0.2.0`_ - 2022-11-07
 ---------------------

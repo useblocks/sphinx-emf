@@ -1,4 +1,3 @@
-
 name: CI
 on: [pull_request]
 jobs:
@@ -6,7 +5,7 @@ jobs:
     name: "${{ matrix.os }}: py${{ matrix.python-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true  # Set on "false" to get the results of ALL builds
+      fail-fast: true # Set on "false" to get the results of ALL builds
       matrix:
         os: ["ubuntu-latest"]
         # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1829077.html
@@ -21,19 +20,23 @@ jobs:
         run: pipx install poetry
       - name: Set Up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
+        id: setup_python
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'poetry'
+          cache: "poetry"
       - name: Install project
         run: poetry install
       - name: Final package list
         run: |
           poetry show --all
       - name: Run Tests on Windows
-        run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
+        run: make test
         if: runner.os == 'Windows'
       - name: Run Tests on Linux
-        run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
+        run: make test
+        # use below run command to invoke nox in case the matrix gets bigger than just the
+        # Python version
+        # run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
         if: runner.os == 'Linux'
 
   lint:
@@ -47,8 +50,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
-          cache: 'poetry'
+          cache: "poetry"
       - name: Install project
         run: poetry install
       - uses: pre-commit/action@v3.0.0
-
