@@ -30,7 +30,8 @@ jobs:
         run: |
           poetry show --all
       - name: Run Tests on Windows
-        run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
+        run: make test
+        # run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
         if: runner.os == 'Windows'
       - name: Run Tests on Linux
         run: make test
