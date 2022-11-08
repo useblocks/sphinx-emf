@@ -182,6 +182,8 @@ def walk_ecore_tree(item, need, context, config):
     need["direct_content"] = {}
     need["nested_content"] = {}
 
+    mandatory_need_fields = ["title", "id", "type"]
+
     for need_field, value in need_map["need_static"].items():
         need[get_category(need_field)][need_field] = value
 
@@ -204,6 +206,19 @@ def walk_ecore_tree(item, need, context, config):
             if isinstance(value, (str, EEnumLiteral, bool, int)):
                 # option or content types, stored as strings
                 # store the value on the need dictionary as per the MAP_EMF_CLASS_2_NEED_DEF definition
+                if (
+                    not config.emf_rst_write_default_values
+                    and need_field not in mandatory_need_fields
+                    and emf_field != "_internal_id"
+                ):
+                    is_explicitly_set = (
+                        len(
+                            [item for item in item._isset if item.name == emf_field]  # pylint: disable=protected-access
+                        )
+                        > 0
+                    )
+                    if not is_explicitly_set:
+                        continue
                 need_value = emf_2_need_value(definition, item, context)
                 if section == "options":
                     need[get_category(need_field)][need_field] = need_value

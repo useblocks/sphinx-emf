@@ -392,9 +392,21 @@ class SphinxEmfCliConfig(SphinxEmfCommonConfig):
 
     # see https://github.com/pydantic/pydantic/issues/239
     #     https://github.com/pydantic/pydantic/issues/156
-    # for why ignoring seems to be the best solution
+    # for why ignoring the type error seems to be the best solution
     emf_rst_indent: conint(strict=True, gt=0) = 3  # type: ignore
     """Amount of leading spaces for each RST code indentation level."""
+
+    emf_rst_write_default_values: StrictBool = False
+    """
+    Serialize XMI default values to RST need objects.
+
+    If ``False``, need extra options and need content fields will not get created if the ECore field is not explicitly
+    set in XMI.
+
+    If ``True``, need extra options and need content fields get created with the default value even when the field is
+    not explicitely set in XMI. For ``EBoolean`` types, if not given in the ECore metamodel as ``defaultValueLiteral``,
+    the default value is ``False``.
+    """
 
     emf_allowed_classes: List[StrictStr] = []
     """
