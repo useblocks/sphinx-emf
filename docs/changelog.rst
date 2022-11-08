@@ -25,7 +25,7 @@ Please see all `Unreleased Changes`_ for more information.
 
 **Fixed**
 
-- Deprecated importlib loader (`PR #14 <https://github.com/useblocks/sphinx-emf/pull/14>`_)
+- Replaced deprecated importlib loader (`PR #14 <https://github.com/useblocks/sphinx-emf/pull/14>`_)
 
 `0.2.0`_ - 2022-11-07
 ---------------------
