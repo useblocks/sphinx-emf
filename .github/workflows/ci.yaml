@@ -24,7 +24,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: "poetry"
-      - run: echo '${{ steps.setup_python.outputs.cache-hit }}' # true if cache-hit occured on the primary key
       - name: Install project
         run: poetry install
       - name: Final package list
@@ -34,7 +33,7 @@ jobs:
         run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
         if: runner.os == 'Windows'
       - name: Run Tests on Linux
-        run: poetry run nox --non-interactive --session "tests-${{ matrix.python-version }}"
+        run: make test
         if: runner.os == 'Linux'
 
   lint:
