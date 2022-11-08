@@ -1,0 +1,1777 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>Configuration - sphinx-emf 0.2.0 documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="_static/stylesheets/main.95d89437.min.css">
+      
+        
+        <link rel="stylesheet" href="_static/stylesheets/palette.ae371752.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+        <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
+        <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+        <link rel="stylesheet" type="text/css" href="_static/google_fonts.css" />
+        <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#activation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="sphinx-emf 0.2.0 documentation" class="md-header__button md-logo" aria-label="sphinx-emf 0.2.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            sphinx-emf 0.2.0 documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Configuration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="yellow"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/useblocks/sphinx-emf" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Sphinx-EMF
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="sphinx-emf 0.2.0 documentation" class="md-nav__button md-logo" aria-label="sphinx-emf 0.2.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+    </a>
+    sphinx-emf 0.2.0 documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/useblocks/sphinx-emf" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Sphinx-EMF
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="installation.html" class="md-nav__link">
+        <span class="md-ellipsis">Installation</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          <span class="md-ellipsis">Configuration</span>
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        <span class="md-ellipsis">Configuration</span>
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      <span class="md-ellipsis">Configuration</span>
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#activation" class="md-nav__link">
+    <span class="md-ellipsis">Activation</span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    <span class="md-ellipsis">Options</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig (Python model) — Common configuration for both CLI (XMI -&gt; RST) and builder (RST -&gt; XMI)." class="md-ellipsis">Sphinx<wbr>Emf<wbr>Common<wbr>Config</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SphinxEmfCommonConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_path_ecore" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_path_ecore (Python field) — Path to the ECore metamodel." class="md-ellipsis">emf_<wbr>path_<wbr>ecore</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_pre_xmi_read_hook" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_pre_xmi_read_hook (Python field) — Function that shall be called before reading the XMI model." class="md-ellipsis">emf_<wbr>pre_<wbr>xmi_<wbr>read_<wbr>hook</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_post_xmi_read_hook" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_post_xmi_read_hook (Python field) — Function that shall be called after reading the XMI model." class="md-ellipsis">emf_<wbr>post_<wbr>xmi_<wbr>read_<wbr>hook</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_class_2_need_def" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_class_2_need_def (Python field) — Main configuration mapping from EMF ECore classes to need types." class="md-ellipsis">emf_<wbr>class_<wbr>2_<wbr>need_<wbr>def</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues" class="md-nav__link">
+    <span aria-label="Python class" class="objinfo-icon objinfo-icon__data" title="Python class">C</span><span title="sphinx_emf.config.model.Class2NeedDefValues (Python class) — Definition for SphinxEmfCommonConfig.emf_class_2_need_def." class="md-ellipsis">Class2Need<wbr>Def<wbr>Values</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Class2NeedDefValues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues.need_static" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefValues.need_static (Python attribute) — Static needs options given as key-value pairs." class="md-ellipsis">need_<wbr>static</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options (Python attribute) — Define how ECore field names are copied to need extra options and links." class="md-ellipsis">emf_<wbr>to_<wbr>need_<wbr>options</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content (Python attribute) — Define how ECore field names are copied to the need content area." class="md-ellipsis">emf_<wbr>to_<wbr>need_<wbr>content</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues.settings" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefValues.settings (Python attribute)" class="md-ellipsis">settings</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefSettings" class="md-nav__link">
+    <span aria-label="Python class" class="objinfo-icon objinfo-icon__data" title="Python class">C</span><span title="sphinx_emf.config.model.Class2NeedDefSettings (Python class) — Definition for Class2NeedDefValues.settings." class="md-ellipsis">Class2Need<wbr>Def<wbr>Settings</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Class2NeedDefSettings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefSettings.remove_if_unlinked" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefSettings.remove_if_unlinked (Python attribute) — Remove the EMF type if it is not linked by other EMF types." class="md-ellipsis">remove_<wbr>if_<wbr>unlinked</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefSettings.remove_ignored_link_sources" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefSettings.remove_ignored_link_sources (Python attribute) — List of EMF types whose outgoing links are ignored when removing elements." class="md-ellipsis">remove_<wbr>ignored_<wbr>link_<wbr>sources</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig (Python model) — Sphinx-EMF config model for the CLI that converts from XMI to RST." class="md-ellipsis">Sphinx<wbr>Emf<wbr>Cli<wbr>Config</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SphinxEmfCliConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_path_xmi" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_path_xmi (Python field) — Path to the ECore XMI model." class="md-ellipsis">emf_<wbr>path_<wbr>xmi</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_output_configs" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_output_configs (Python field) — Mapping of ECore types to output files." class="md-ellipsis">emf_<wbr>rst_<wbr>output_<wbr>configs</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent (Python field) — Amount of leading spaces for each RST code indentation level." class="md-ellipsis">emf_<wbr>rst_<wbr>indent</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_rst_indent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values (Python field) — Serialize XMI default values to RST need objects." class="md-ellipsis">emf_<wbr>rst_<wbr>write_<wbr>default_<wbr>values</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_rst_write_default_values">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes (Python field) — List of EMF class names that should be allowed for importing." class="md-ellipsis">emf_<wbr>allowed_<wbr>classes</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes (Python field) — List of EMF class names that should be denied for importing." class="md-ellipsis">emf_<wbr>denied_<wbr>classes</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values (Python field) — Map EMF class names to EMF field names to allowed values of the fields." class="md-ellipsis">emf_<wbr>allowed_<wbr>values</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values (Python field) — Map EMF class names to EMF field names to denied values of the fields." class="md-ellipsis">emf_<wbr>denied_<wbr>values</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_sort_field" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_sort_field (Python field) — Sort ECore instances by this field to get reproducible RST output." class="md-ellipsis">emf_<wbr>sort_<wbr>field</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_templates_dir" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_templates_dir (Python field) — Path to a directory containing user defined Jinja2 templates to be injected into RST output." class="md-ellipsis">emf_<wbr>templates_<wbr>dir</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title (Python field) — Generate the title for nested needs as given in Class2NeedDefValues.emf_to_need_content tuple[1]." class="md-ellipsis">emf_<wbr>show_<wbr>nested_<wbr>need_<wbr>title</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_show_nested_need_title">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig (Python model) — Sphinx-EMF config model for the Sphinx builder that converts from RST to XMI." class="md-ellipsis">Sphinx<wbr>Emf<wbr>Builder<wbr>Config</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SphinxEmfBuilderConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_model_roots" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_model_roots (Python field) — List of model roots, ordered as they shall appear in the exported XMI model." class="md-ellipsis">emf_<wbr>model_<wbr>roots</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes (Python field) — Sort attributes of XMI ECore classes by name." class="md-ellipsis">emf_<wbr>sort_<wbr>xmi_<wbr>attributes</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_sort_xmi_attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_xmi_output_name" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_xmi_output_name (Python field) — Output name for the XMI file." class="md-ellipsis">emf_<wbr>xmi_<wbr>output_<wbr>name</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain (Python field) — Flag indicating whether to convert RST sequences to plain text." class="md-ellipsis">emf_<wbr>convert_<wbr>rst_<wbr>to_<wbr>plain</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_convert_rst_to_plain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage.html" class="md-nav__link">
+        <span class="md-ellipsis">Usage</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contributing.html" class="md-nav__link">
+        <span class="md-ellipsis">Contributing</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="support.html" class="md-nav__link">
+        <span class="md-ellipsis">Support</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="license.html" class="md-nav__link">
+        <span class="md-ellipsis">License</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="changelog.html" class="md-nav__link">
+        <span class="md-ellipsis">Changelog</span>
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      <span class="md-ellipsis">Configuration</span>
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#activation" class="md-nav__link">
+    <span class="md-ellipsis">Activation</span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    <span class="md-ellipsis">Options</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig (Python model) — Common configuration for both CLI (XMI -&gt; RST) and builder (RST -&gt; XMI)." class="md-ellipsis">Sphinx<wbr>Emf<wbr>Common<wbr>Config</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SphinxEmfCommonConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_path_ecore" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_path_ecore (Python field) — Path to the ECore metamodel." class="md-ellipsis">emf_<wbr>path_<wbr>ecore</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_pre_xmi_read_hook" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_pre_xmi_read_hook (Python field) — Function that shall be called before reading the XMI model." class="md-ellipsis">emf_<wbr>pre_<wbr>xmi_<wbr>read_<wbr>hook</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_post_xmi_read_hook" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_post_xmi_read_hook (Python field) — Function that shall be called after reading the XMI model." class="md-ellipsis">emf_<wbr>post_<wbr>xmi_<wbr>read_<wbr>hook</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_class_2_need_def" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_class_2_need_def (Python field) — Main configuration mapping from EMF ECore classes to need types." class="md-ellipsis">emf_<wbr>class_<wbr>2_<wbr>need_<wbr>def</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues" class="md-nav__link">
+    <span aria-label="Python class" class="objinfo-icon objinfo-icon__data" title="Python class">C</span><span title="sphinx_emf.config.model.Class2NeedDefValues (Python class) — Definition for SphinxEmfCommonConfig.emf_class_2_need_def." class="md-ellipsis">Class2Need<wbr>Def<wbr>Values</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Class2NeedDefValues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues.need_static" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefValues.need_static (Python attribute) — Static needs options given as key-value pairs." class="md-ellipsis">need_<wbr>static</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options (Python attribute) — Define how ECore field names are copied to need extra options and links." class="md-ellipsis">emf_<wbr>to_<wbr>need_<wbr>options</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content (Python attribute) — Define how ECore field names are copied to the need content area." class="md-ellipsis">emf_<wbr>to_<wbr>need_<wbr>content</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefValues.settings" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefValues.settings (Python attribute)" class="md-ellipsis">settings</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefSettings" class="md-nav__link">
+    <span aria-label="Python class" class="objinfo-icon objinfo-icon__data" title="Python class">C</span><span title="sphinx_emf.config.model.Class2NeedDefSettings (Python class) — Definition for Class2NeedDefValues.settings." class="md-ellipsis">Class2Need<wbr>Def<wbr>Settings</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Class2NeedDefSettings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefSettings.remove_if_unlinked" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefSettings.remove_if_unlinked (Python attribute) — Remove the EMF type if it is not linked by other EMF types." class="md-ellipsis">remove_<wbr>if_<wbr>unlinked</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.Class2NeedDefSettings.remove_ignored_link_sources" class="md-nav__link">
+    <span aria-label="Python attribute" class="objinfo-icon objinfo-icon__alias" title="Python attribute">A</span><span title="sphinx_emf.config.model.Class2NeedDefSettings.remove_ignored_link_sources (Python attribute) — List of EMF types whose outgoing links are ignored when removing elements." class="md-ellipsis">remove_<wbr>ignored_<wbr>link_<wbr>sources</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig (Python model) — Sphinx-EMF config model for the CLI that converts from XMI to RST." class="md-ellipsis">Sphinx<wbr>Emf<wbr>Cli<wbr>Config</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SphinxEmfCliConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_path_xmi" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_path_xmi (Python field) — Path to the ECore XMI model." class="md-ellipsis">emf_<wbr>path_<wbr>xmi</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_output_configs" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_output_configs (Python field) — Mapping of ECore types to output files." class="md-ellipsis">emf_<wbr>rst_<wbr>output_<wbr>configs</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent (Python field) — Amount of leading spaces for each RST code indentation level." class="md-ellipsis">emf_<wbr>rst_<wbr>indent</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_rst_indent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values (Python field) — Serialize XMI default values to RST need objects." class="md-ellipsis">emf_<wbr>rst_<wbr>write_<wbr>default_<wbr>values</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_rst_write_default_values">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes (Python field) — List of EMF class names that should be allowed for importing." class="md-ellipsis">emf_<wbr>allowed_<wbr>classes</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes (Python field) — List of EMF class names that should be denied for importing." class="md-ellipsis">emf_<wbr>denied_<wbr>classes</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values (Python field) — Map EMF class names to EMF field names to allowed values of the fields." class="md-ellipsis">emf_<wbr>allowed_<wbr>values</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values (Python field) — Map EMF class names to EMF field names to denied values of the fields." class="md-ellipsis">emf_<wbr>denied_<wbr>values</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_sort_field" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_sort_field (Python field) — Sort ECore instances by this field to get reproducible RST output." class="md-ellipsis">emf_<wbr>sort_<wbr>field</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_templates_dir" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_templates_dir (Python field) — Path to a directory containing user defined Jinja2 templates to be injected into RST output." class="md-ellipsis">emf_<wbr>templates_<wbr>dir</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title (Python field) — Generate the title for nested needs as given in Class2NeedDefValues.emf_to_need_content tuple[1]." class="md-ellipsis">emf_<wbr>show_<wbr>nested_<wbr>need_<wbr>title</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_show_nested_need_title">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig (Python model) — Sphinx-EMF config model for the Sphinx builder that converts from RST to XMI." class="md-ellipsis">Sphinx<wbr>Emf<wbr>Builder<wbr>Config</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SphinxEmfBuilderConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_model_roots" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_model_roots (Python field) — List of model roots, ordered as they shall appear in the exported XMI model." class="md-ellipsis">emf_<wbr>model_<wbr>roots</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes (Python field) — Sort attributes of XMI ECore classes by name." class="md-ellipsis">emf_<wbr>sort_<wbr>xmi_<wbr>attributes</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_sort_xmi_attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_xmi_output_name" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_xmi_output_name (Python field) — Output name for the XMI file." class="md-ellipsis">emf_<wbr>xmi_<wbr>output_<wbr>name</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain" class="md-nav__link">
+    <span title="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain (Python field) — Flag indicating whether to convert RST sequences to plain text." class="md-ellipsis">emf_<wbr>convert_<wbr>rst_<wbr>to_<wbr>plain</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="emf_convert_rst_to_plain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain-constraints" class="md-nav__link">
+    <span class="md-ellipsis">Constraints</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                  
+
+
+  <a href="https://github.com/useblocks/sphinx-emf/blob/master/docs/configuration.rst" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+<h1 id="configuration"><span id="config"></span>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h1>
+<p>All configurations take place in your project’s <strong>conf.py</strong> file.</p>
+<h2 id="activation">Activation<a class="headerlink" href="#activation" title="Permalink to this heading">¶</a></h2>
+<p>Add <strong>sphinx_emf</strong> to your extensions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sphinx_needs&quot;</span><span class="p">,</span> <span class="s2">&quot;sphinx_emf&quot;</span><span class="p">,</span> <span class="p">]</span>
+</code></pre></div>
+</div>
+<h2 id="options">Options<a class="headerlink" href="#options" title="Permalink to this heading">¶</a></h2>
+<p>All configuration options start with the prefix <code class="docutils literal notranslate"><span class="pre">emf_</span></code> for Sphinx-EMF.</p>
+<p>Sphinx-EMF features some nested configuration parameters and therefore
+uses <a class="reference external" href="https://pydantic-docs.helpmanual.io/">pydantic</a> to validate the configuration.
+There are 3 pydantic classes defined:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SphinxEmfCommonConfig</span></code> parameters common to CLI and the Sphinx Builder</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SphinxEmfCliConfig</span></code> CLI specific parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SphinxEmfBuilderConfig</span></code> Sphinx Builder specific parameters</p></li>
+</ul>
+<p>The CLI script transforms from XMI to RST (needs) while the Sphinx Builder reads RST and writes
+XMI.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Above classes are not exposed to the user, they are just needed internally for pydantic.
+The class field names starting with <code class="docutils literal notranslate"><span class="pre">emf_</span></code> are the relevant configuration parameters
+with their documented types. You may put all configuration (common, CLI and builder) into your conf.py
+and use that file also as input parameter to the CLI script.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The type checking also uses TypedDict types which allows the validation of nested dictionaries.
+Those are added to the documentation as well (e.g. <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues" title="sphinx_emf.config.model.Class2NeedDefValues (Python class) — Definition for SphinxEmfCommonConfig.emf_class_2_need_def."><code class="xref py py-class docutils literal notranslate"><span class="pre">sphinx_emf.config.model.Class2NeedDefValues</span></code></a>).
+The class field names represent the values of the dictionary.</p>
+</div>
+<dl class="py class pydantic_model objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCommonConfig">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SphinxEmfCommonConfig</span></span><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCommonConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Common configuration for both CLI (XMI -&gt; RST) and builder (RST -&gt; XMI).</p>
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_path_ecore">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_path_ecore</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictStr</span></span><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_path_ecore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the ECore metamodel.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight sig-wrap py" id="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_pre_xmi_read_hook">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_pre_xmi_read_hook</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">ResourceSet</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ResourceSet</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="kc">None</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_pre_xmi_read_hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that shall be called before reading the XMI model.</p>
+<p>Input parameter is the ECore metamodel <code class="docutils literal notranslate"><span class="pre">ResourceSet</span></code>.
+Must return the ECore metamodel <code class="docutils literal notranslate"><span class="pre">ResourceSet</span></code> again after modifying it.</p>
+<p>This can be used to add custom model parts that are not part of the ECore metamodel.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight sig-wrap py" id="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_post_xmi_read_hook">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_post_xmi_read_hook</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">XMIResource</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="kc">None</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_post_xmi_read_hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that shall be called after reading the XMI model.</p>
+<p>Input paramter is the XMI model <code class="docutils literal notranslate"><span class="pre">XMIResource</span></code>.
+Must return a list of XMI model roots.</p>
+<p>The main use case is the removal of unused XMI model roots.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight sig-wrap py" id="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_class_2_need_def">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_class_2_need_def</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues" title="sphinx_emf.config.model.Class2NeedDefValues (Python class) — Definition for SphinxEmfCommonConfig.emf_class_2_need_def."><span class="pre">Class2NeedDefValues</span></a><span class="p"><span class="pre">]</span></span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="p">{}</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_class_2_need_def" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main configuration mapping from EMF ECore classes to need types.</p>
+<p>Keys are ECore class names, values are instances of <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues" title="sphinx_emf.config.model.Class2NeedDefValues (Python class) — Definition for SphinxEmfCommonConfig.emf_class_2_need_def."><code class="xref py py-class docutils literal notranslate"><span class="pre">Class2NeedDefValues</span></code></a>.
+Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="n">emf_class_2_need_def</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&quot;Story&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;need_static&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;story&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;emf_to_need_options&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">),</span>
+      <span class="p">(</span><span class="s2">&quot;_iternal_id&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">gen_needs_id</span><span class="p">),</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>For more explanation see <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues" title="sphinx_emf.config.model.Class2NeedDefValues (Python class) — Definition for SphinxEmfCommonConfig.emf_class_2_need_def."><code class="xref py py-class docutils literal notranslate"><span class="pre">Class2NeedDefValues</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.Class2NeedDefValues">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Class2NeedDefValues</span></span><a class="headerlink" href="#sphinx_emf.config.model.Class2NeedDefValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Definition for <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCommonConfig.emf_class_2_need_def" title="sphinx_emf.config.model.SphinxEmfCommonConfig.emf_class_2_need_def (Python field) — Main configuration mapping from EMF ECore classes to need types."><code class="xref py py-attr docutils literal notranslate"><span class="pre">SphinxEmfCommonConfig.emf_class_2_need_def</span></code></a>.</p>
+<dl class="py attribute objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.Class2NeedDefValues.need_static">
+<span class="sig-name descname"><span class="pre">need_static</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#sphinx_emf.config.model.Class2NeedDefValues.need_static" title="Permalink to this definition">¶</a></dt>
+<dd><p>Static needs options given as key-value pairs.</p>
+<p>This is commonly used to set the need <code class="docutils literal notranslate"><span class="pre">type</span></code>.
+Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="s1">&#39;need_static&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;story&#39;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p class="plantuml">
+<img src="_images/plantuml-4e829c3ebbd5755b1e2a47fad13614ba144e8543.png" alt="&#64;startuml
+class &quot;need 'story'&quot; as need {
+    str type = 'story'
+}
+class &quot;ECore 'Story'&quot; as ecore {
+}
+note left of need::type
+    &lt;code&gt;
+    emf_class_2_need_def = {
+      &quot;Story&quot;: {
+        &quot;need_static&quot;: {
+          &quot;type&quot;: &quot;story&quot;,
+        },
+      },
+    }
+end note
+&#64;enduml"/>
+</p>
+</dd></dl>
+
+<dl class="py attribute objdesc">
+<dt class="sig sig-object highlight sig-wrap py" id="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options">
+<span class="sig-name descname"><span class="pre">emf_to_need_options</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">EObject</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define how ECore field names are copied to need extra options and links.</p>
+<p>Any simple ECore type (bool, int, str, enum) leads to a
+<a class="reference external" href="https://sphinxcontrib-needs.readthedocs.io/en/latest/configuration.html#needs-extra-options">needs extra option</a>.
+ECore list types (<code class="docutils literal notranslate"><span class="pre">EOrderedSet</span></code>) produce a
+<a class="reference external" href="https://sphinxcontrib-needs.readthedocs.io/en/latest/configuration.html#needs-extra-links">needs extra link</a>.</p>
+<p>Any ECore field that does not appear here and also not in <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content" title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content (Python attribute) — Define how ECore field names are copied to the need content area."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_to_need_content</span></code></a>
+will be ignored.</p>
+<p>Tuple entries:</p>
+<ol class="arabic simple" start="0">
+<li><p>ECore field name</p></li>
+<li><p>need extra option/link name</p></li>
+<li><p>transformer function [optional]</p></li>
+</ol>
+<p>The ECore field name tuple[0] will be transformed to the need extra option or need extra link given in
+tuple[1].</p>
+<p>Any ECore values that lead to <cite>need extra options</cite> will be converted to string types.</p>
+<p>Any Ecore list values lead to <cite>need extra links</cite>, even when the ECore definition is a containment (nested object).
+When converting back from RST to XMI, the ECore containment information from the ECore metamodel is used
+to transform a needs link correctly back to an ECore containment. This makes it possible to change the link
+modeling for Sphinx-Needs. Users may want to write certain need types to dedicated files which makes it impossible
+to model them as UML composition (containment) - which in the Sphinx-Needs world - is realized as nested needs.</p>
+<p>The transformer function is only allowed for simple types that lead to <cite>need extra options</cite>.
+The function must support the following parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> ECore field value of tuple[0] field name</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ecore_item</span></code> full ECore object; can be used to access other ECore fields</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">context</span></code> empty dicionary, will be the same instance for all invocations
+of transformers; and can be used to hold context information across invocations</p></li>
+</ul>
+<p>The function must return a <code class="docutils literal notranslate"><span class="pre">str</span></code> type.</p>
+<p>A use case for transformers is to generate unique need IDs from ECore fields. Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">gen_needs_id</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ecore_item</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+  <span class="n">need_prefixes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Story&#39;</span><span class="p">:</span> <span class="s1">&#39;STORY_&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Requirement&#39;</span><span class="p">:</span> <span class="s1">&#39;REQ_&#39;</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="n">prefix</span> <span class="o">=</span> <span class="n">need_prefixes</span><span class="p">[</span><span class="n">ecore_item</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
+  <span class="n">need_id</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+  <span class="k">return</span> <span class="n">need_id</span>
+
+<span class="n">emf_class_2_need_def</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&quot;Story&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;need_static&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;story&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;emf_to_need_options&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">),</span>  <span class="c1"># need title: direct copy the &#39;Name&#39; field</span>
+      <span class="p">(</span><span class="s2">&quot;_iternal_id&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">gen_needs_id</span><span class="p">),</span>  <span class="c1"># need id: use a transformer</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>pyecore stores the XMI unique identifiers in the field <code class="docutils literal notranslate"><span class="pre">_internal_id</span></code> which can also be used.</p>
+</div>
+<p class="plantuml">
+<img src="_images/plantuml-54148630778f150f40ad1995920c0349956fb377.png" alt="&#64;startuml
+class &quot;need 'story'&quot; as need {
+    str type = 'story'
+    str id = 'STORY_abc'
+    str title = 'The alphabet story'
+}
+class &quot;ECore 'Story'&quot; as ecore {
+    str _internal_id = 'abc'
+    str Name = 'The alphabet story'
+}
+circle &quot;gen_needs_id()&quot; as gen_needs_id
+
+ecore::_internal_id --&gt; gen_needs_id
+gen_needs_id --&gt; need::id
+ecore::Name --&gt; need::title
+
+note as n1
+    &lt;code&gt;
+    emf_class_2_need_def = {
+      &quot;Story&quot;: {
+        &quot;need_static&quot;: {
+          &quot;type&quot;: &quot;story&quot;,
+        },
+        &quot;emf_to_need_options&quot;: [
+          (&quot;Name&quot;, &quot;title&quot;),
+          (&quot;_iternal_id&quot;, &quot;id&quot;, gen_needs_id),
+        ],
+      },
+    }
+end note
+&#64;enduml
+
+.. note::
+    The mandatory need fields ``id``, ``type`` and ``title`` must appear in one the configuration
+    sections :attr:`need_static` or :attr:`emf_to_need_options`."/>
+</p>
+</dd></dl>
+
+<dl class="py attribute objdesc">
+<dt class="sig sig-object highlight sig-wrap py" id="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content">
+<span class="sig-name descname"><span class="pre">emf_to_need_content</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">EObject</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define how ECore field names are copied to the need content area.</p>
+<p>Tuple entries:</p>
+<ol class="arabic simple" start="0">
+<li><p>ECore field name</p></li>
+<li><p>need content title</p></li>
+<li><p>transformer function [optional]</p></li>
+</ol>
+<p>Any simple ECore type (bool, int, str, enum) leads to a highlighted section in the
+need body with the tuple[1] prepended as bold text.
+Any ECore list type (<code class="docutils literal notranslate"><span class="pre">EOrderedSet</span></code>) produces a list of nested needs, so new need directives are
+added to the current need’s body. See also the description of <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options" title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options (Python attribute) — Define how ECore field names are copied to need extra options and links."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_to_need_options</span></code></a> about modeling
+of ECore list fields as linked needs or nested needs.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sphinx_emf.user_hooks.escape_rst</span> <span class="kn">import</span> <span class="n">to_rst</span>
+
+<span class="k">def</span> <span class="nf">escape_rst</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ecore_item</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+  <span class="k">del</span> <span class="n">ecore_item</span>
+  <span class="k">del</span> <span class="n">context</span>
+  <span class="n">escaped_value</span> <span class="o">=</span> <span class="n">to_rst</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">escaped_value</span>
+
+<span class="n">emf_class_2_need_def</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&quot;Story&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;need_static&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;story&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;emf_to_need_options&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">),</span>
+      <span class="p">(</span><span class="s2">&quot;_iternal_id&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">gen_needs_id</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;emf_to_need_content&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">,</span> <span class="s2">&quot;Description&quot;</span><span class="p">),</span>
+      <span class="p">(</span><span class="s2">&quot;LongDescription&quot;</span><span class="p">,</span> <span class="s2">&quot;Long Description&quot;</span><span class="p">,</span> <span class="n">escape_rst</span><span class="p">),</span>
+      <span class="p">(</span><span class="s2">&quot;Requirements&quot;</span><span class="p">,</span> <span class="s2">&quot;Requirements&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><code><span class="p">..</span> <span class="ow">story</span><span class="p">::</span> The alphabet story
+   <span class="nc">:id:</span> STORY_abc
+
+   <span class="gs">**Description**</span> Names all letters.
+
+   <span class="gs">**Long Description**</span>
+
+   Special care for:
+
+   <span class="m">-</span> the sort order and
+   <span class="m">-</span> not to forget a letter
+
+   <span class="gs">**Requirements**</span>
+
+<span class="p">   ..</span> <span class="ow">requirement</span><span class="p">::</span> Must be sorted
+      <span class="nc">:id:</span> REQ_sorted
+
+<span class="p">   ..</span> <span class="ow">requirement</span><span class="p">::</span> Must not forget a letter
+      <span class="nc">:id:</span> REQ_forget
+</code></pre></div>
+</div>
+<p>The transformer has the same parameters and return type as in <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options" title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options (Python attribute) — Define how ECore field names are copied to need extra options and links."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_to_need_options</span></code></a>.
+It can only be used for simple ECore types (bool, int, str, enum).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In above example an ECore class called <code class="docutils literal notranslate"><span class="pre">Requirement</span></code> is missing in <code class="docutils literal notranslate"><span class="pre">emf_class_2_need_def</span></code>.
+It is needed to tell Sphinx-EMF how to represent the nested <code class="docutils literal notranslate"><span class="pre">requirement</span></code> need types.
+It is skipped to keep the example short.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>XMI does not specify any highlighting language such as Markdown, RestructuredText or
+HTML for plain text (multiline) fields.
+Therefore text fields cannot be copied 1:1 to RST as strings like <code class="docutils literal notranslate"><span class="pre">the</span> <span class="pre">*.json</span> <span class="pre">files</span></code> are
+not valid RST. The <code class="docutils literal notranslate"><span class="pre">*</span></code> needs to be escaped. Sphinx-EMF provides a function to transform
+plain text to RST. See above example how to import and use it. The function handles the following
+scenarios:</p>
+<ol class="arabic simple">
+<li><p>all incomplete inline literals are escaped</p></li>
+<li><p>lists are correctly formatted</p></li>
+<li><p>paragraphs are correctly formatted, line breaks lead to lines prepended with ‘| ‘</p></li>
+</ol>
+<p>You may also decide to store RST directly to XMI. This however needs custom escaping
+of <code class="docutils literal notranslate"><span class="pre">&quot;</span></code> as it is the start/stop sequence of values.</p>
+</div>
+<p>Any ECore field that does not appear here and also not in <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options" title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options (Python attribute) — Define how ECore field names are copied to need extra options and links."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_to_need_options</span></code></a>
+will be ignored.</p>
+</dd></dl>
+
+<dl class="py attribute objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.Class2NeedDefValues.settings">
+<span class="sig-name descname"><span class="pre">settings</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefSettings" title="sphinx_emf.config.model.Class2NeedDefSettings (Python class) — Definition for Class2NeedDefValues.settings."><span class="pre">Class2NeedDefSettings</span></a></span><a class="headerlink" href="#sphinx_emf.config.model.Class2NeedDefValues.settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.Class2NeedDefSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Class2NeedDefSettings</span></span><a class="headerlink" href="#sphinx_emf.config.model.Class2NeedDefSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Definition for <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues.settings" title="sphinx_emf.config.model.Class2NeedDefValues.settings (Python attribute)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Class2NeedDefValues.settings</span></code></a>.</p>
+<dl class="py attribute objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.Class2NeedDefSettings.remove_if_unlinked">
+<span class="sig-name descname"><span class="pre">remove_if_unlinked</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictBool</span></span><a class="headerlink" href="#sphinx_emf.config.model.Class2NeedDefSettings.remove_if_unlinked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the EMF type if it is not linked by other EMF types.</p>
+<p>The idea of this parameter is to prevent importing ECore objects that are not needed (linked) by the main objects
+of interest. All ECore instances can be a link target in one way or another:</p>
+<ul class="simple">
+<li><p>they are a nested containment of another ECore instance</p></li>
+<li><p>they are linked by another ECore instance</p></li>
+</ul>
+<p>If this setting is <code class="docutils literal notranslate"><span class="pre">True</span></code>, root ECore instances are ignored during import.
+The parameter <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefSettings.remove_ignored_link_sources" title="sphinx_emf.config.model.Class2NeedDefSettings.remove_ignored_link_sources (Python attribute) — List of EMF types whose outgoing links are ignored when removing elements."><code class="xref py py-attr docutils literal notranslate"><span class="pre">remove_ignored_link_sources</span></code></a> can be used to further specify the behavior.</p>
+</dd></dl>
+
+<dl class="py attribute objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.Class2NeedDefSettings.remove_ignored_link_sources">
+<span class="sig-name descname"><span class="pre">remove_ignored_link_sources</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#sphinx_emf.config.model.Class2NeedDefSettings.remove_ignored_link_sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of EMF types whose outgoing links are ignored when removing elements.</p>
+<p>The setting is only relevant if <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefSettings.remove_if_unlinked" title="sphinx_emf.config.model.Class2NeedDefSettings.remove_if_unlinked (Python attribute) — Remove the EMF type if it is not linked by other EMF types."><code class="xref py py-attr docutils literal notranslate"><span class="pre">remove_if_unlinked</span></code></a> is True.</p>
+<p>The setting can be used to also ignore (remove) elements that are contained in the listed types
+as nested elements or that are linked by the listed elements types. The elements will only be removed
+if they are not linked by other element types not listed here.</p>
+<p>The main use case of the feature is to ignore containment links when removing ECore objects.
+Almost all ECore objects are contained by another ECore object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SphinxEmfCliConfig</span></span><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sphinx-EMF config model for the CLI that converts from XMI to RST.</p>
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_path_xmi">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_path_xmi</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictStr</span></span><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_path_xmi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the ECore XMI model.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight sig-wrap py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_output_configs">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_rst_output_configs</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'path'</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="s"><span class="pre">'emf_types'</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="s"><span class="pre">'default'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StrictStr</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">StrictBool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_output_configs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping of ECore types to output files.</p>
+<p>This is needed to distribute ECore types from one XMI to multiple RST files.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any ECore type that goes to another file than its parent must be part of
+<a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options" title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_options (Python attribute) — Define how ECore field names are copied to need extra options and links."><code class="xref py py-attr docutils literal notranslate"><span class="pre">Class2NeedDefValues.emf_to_need_options</span></code></a> of its original ECore parent.
+It cannot be be a nested need as it is located in a different file.</p>
+</div>
+<p>It is a list of dictionaries with the following keys:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) RST output file path</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">emf_types</span></code> (<code class="docutils literal notranslate"><span class="pre">List[str]</span></code>) list of ECore types for the file;
+must exist if <code class="docutils literal notranslate"><span class="pre">default</span></code> is not given or <code class="docutils literal notranslate"><span class="pre">False</span></code> [optional]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">default</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> the file will be the target for all remaining ECore classes [optional]</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;default&quot;:</span> <span class="pre">True</span></code> can only be set for one dictionary in the list</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">emf_types</span></code> must be unique across all list entries</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The list order is important as it defines which elements are moved first - with all its nested needs.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_rst_indent</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">ConstrainedIntValue</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="mi">3</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Amount of leading spaces for each RST code indentation level.</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent-constraints">Constraints<span class="colon">:</span><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_indent-constraints" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exclusiveMinimum</strong> = 0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_rst_write_default_values</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictBool</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="kc">False</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize XMI default values to RST need objects.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">False</span></code>, need extra options and need content fields will not get created if the ECore field is not explicitly
+set in XMI.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, need extra options and need content fields get created with the default value even when the field is
+not explicitely set in XMI. For <code class="docutils literal notranslate"><span class="pre">EBoolean</span></code> types, if not given in the ECore metamodel as <code class="docutils literal notranslate"><span class="pre">defaultValueLiteral</span></code>,
+the default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values-constraints">Constraints<span class="colon">:</span><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_rst_write_default_values-constraints" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> = boolean</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_allowed_classes</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="p">[]</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of EMF class names that should be allowed for importing.</p>
+<p>The filter fields</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes (Python field) — List of EMF class names that should be allowed for importing."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_classes</span></code></a></p></li>
+<li><p><a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes (Python field) — List of EMF class names that should be denied for importing."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_denied_classes</span></code></a></p></li>
+<li><p><a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values (Python field) — Map EMF class names to EMF field names to allowed values of the fields."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_values</span></code></a></p></li>
+<li><p><a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values (Python field) — Map EMF class names to EMF field names to denied values of the fields."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_denied_values</span></code></a></p></li>
+</ul>
+<p>are evaluated with the following logic for each object instance in order:</p>
+<ul class="simple">
+<li><p>discard the object if</p>
+<ul>
+<li><p><a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes (Python field) — List of EMF class names that should be allowed for importing."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_classes</span></code></a> is not empty and</p></li>
+<li><p>the object class does not appear in <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes (Python field) — List of EMF class names that should be allowed for importing."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_classes</span></code></a></p></li>
+</ul>
+</li>
+<li><p>discard the object if</p>
+<ul>
+<li><p>the object class appears in <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes (Python field) — List of EMF class names that should be denied for importing."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_denied_classes</span></code></a></p></li>
+</ul>
+</li>
+<li><p>discard the object if</p>
+<ul>
+<li><p>the class name appears in <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values (Python field) — Map EMF class names to EMF field names to allowed values of the fields."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_values</span></code></a> and</p></li>
+<li><p>the values of the object fields don’t appear in <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values (Python field) — Map EMF class names to EMF field names to allowed values of the fields."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_values</span></code></a></p></li>
+</ul>
+</li>
+<li><p>discard the object if</p>
+<ul>
+<li><p>the class name appears in <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values (Python field) — Map EMF class names to EMF field names to denied values of the fields."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_denied_values</span></code></a> and</p></li>
+<li><p>the values of the object fields appear in <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values (Python field) — Map EMF class names to EMF field names to denied values of the fields."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_denied_values</span></code></a></p></li>
+</ul>
+</li>
+<li><p>if the logic reaches this point and the object is not discarded, it will be imported</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_denied_classes</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="p">[]</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of EMF class names that should be denied for importing.</p>
+<p>For the filter evaluation logic see <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes (Python field) — List of EMF class names that should be allowed for importing."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_classes</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight sig-wrap py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_allowed_values</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="p">{}</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map EMF class names to EMF field names to allowed values of the fields.</p>
+<p>For the filter evaluation logic see <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes (Python field) — List of EMF class names that should be allowed for importing."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_classes</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight sig-wrap py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_denied_values</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="p">{}</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_denied_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map EMF class names to EMF field names to denied values of the fields.</p>
+<p>For the filter evaluation logic see <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_allowed_classes (Python field) — List of EMF class names that should be allowed for importing."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_allowed_classes</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_sort_field">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_sort_field</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictStr</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="kc">None</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_sort_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort ECore instances by this field to get reproducible RST output.</p>
+<p>This affects containment links as well as non-containment links.</p>
+<p>Set to <code class="docutils literal notranslate"><span class="pre">None</span></code> to disable sorting.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_templates_dir">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_templates_dir</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictStr</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="kc">None</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_templates_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to a directory containing user defined Jinja2 templates to be injected into RST output.</p>
+<p>They have access to all variables the Sphinx-EMF base template have access.
+When using those it is helpful to debug Sphinx-EMF and inspect available variables in the various templates.</p>
+<p>The file names must follow a specific pattern to be recognized. Variable definition:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;template-name&gt;</span></code> RST output file name without extension</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;</span></code> is a need type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-field&gt;</span></code> is a need field; can be an extra-option, extra-link, direct content or nested content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;nested-need-type&gt;</span></code> is one instance of a nested need type in a <code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;</span></code> content area</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;nested-needs-title&gt;</span></code> is the title of all nested needs (of a single type) in a <code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;</span></code> content area</p></li>
+</ul>
+<p>All file names must end on <code class="docutils literal notranslate"><span class="pre">.rst.j2</span></code>.</p>
+<p>Templates have 3 types:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pre</span></code> injected before the item</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">post</span></code> injected after the item</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrap</span></code> wraps the item, so the need/content gets indented (useful for nested directives like dropdowns)</p></li>
+</ul>
+<p>Patterns:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;template-name&gt;_header</span></code> before all content in RST output file (see emf_rst_output_configs, without .rst)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;template-name&gt;_footer</span></code> after all content in RST output file (see emf_rst_output_configs, without .rst)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_pre</span></code> before the neeed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_post</span></code> after the need</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_wrap</span></code> wraps the generated need</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_options_fields_pre</span></code> before all extra options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_options_fields_post</span></code> after all extra options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_options_links_pre</span></code> before all link options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_options_links_post</span></code> after all link options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_direct_pre</span></code> before all direct content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_direct_post</span></code> after all direct content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_direct_wrap</span></code> wraps all direct content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_direct_pre_&lt;need-field&gt;</span></code> before a direct content needs field/section</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_direct_post_&lt;need-field&gt;</span></code> after a direct content needs field/section</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_direct_wrap_&lt;need-field&gt;</span></code> wraps a direct content needs field/section</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_pre</span></code> before all nested content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_post</span></code> after all nested content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_wrap</span></code> wraps all nested content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_pre_&lt;nested-need-type&gt;</span></code> before each instance of a nested needs type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_post_&lt;nested-need-type&gt;</span></code> after each instance of a nested needs type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_wrap_&lt;nested-need-type&gt;</span></code> wraps each instance of a nested needs type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_pre_all_&lt;nested-needs-title&gt;</span></code> before all instances of a nested needs type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_post_all_&lt;nested-needs-title&gt;</span></code> after all instances of a nested needs type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;need-type&gt;_content_nested_wrap_all_&lt;nested-needs-title&gt;</span></code> wraps all instances of a nested needs type</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_show_nested_need_title</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictBool</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="kc">True</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the title for nested needs as given in <a class="reference internal" href="#sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content" title="sphinx_emf.config.model.Class2NeedDefValues.emf_to_need_content (Python attribute) — Define how ECore field names are copied to the need content area."><code class="xref py py-attr docutils literal notranslate"><span class="pre">Class2NeedDefValues.emf_to_need_content</span></code></a> tuple[1].</p>
+<p>The setting exist as it might not be wanted because documentation readers will directly spot the nested need
+contents without a title. Also a template as documented in <a class="reference internal" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_templates_dir" title="sphinx_emf.config.model.SphinxEmfCliConfig.emf_templates_dir (Python field) — Path to a directory containing user defined Jinja2 templates to be injected into RST output."><code class="xref py py-attr docutils literal notranslate"><span class="pre">emf_templates_dir</span></code></a> can be used to
+set a custom title.</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title-constraints">Constraints<span class="colon">:</span><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfCliConfig.emf_show_nested_need_title-constraints" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> = boolean</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfBuilderConfig">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SphinxEmfBuilderConfig</span></span><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfBuilderConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sphinx-EMF config model for the Sphinx builder that converts from RST to XMI.</p>
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_model_roots">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_model_roots</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">StrictStr</span><span class="p"><span class="pre">]</span></span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="p">[]</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_model_roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of model roots, ordered as they shall appear in the exported XMI model.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_sort_xmi_attributes</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictBool</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="kc">False</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort attributes of XMI ECore classes by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes-constraints">Constraints<span class="colon">:</span><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_sort_xmi_attributes-constraints" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> = boolean</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_xmi_output_name">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_xmi_output_name</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictStr</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="s1">&#39;model.xmi&#39;</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_xmi_output_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output name for the XMI file.</p>
+<p>Directory is always the builder output, commonly <code class="docutils literal notranslate"><span class="pre">_build/emf</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field objdesc">
+<dt class="sig sig-object highlight py" id="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emf_convert_rst_to_plain</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">StrictBool</span></span><span class="p"> <span class="pre">=</span> </span><code class="code python docutils literal highlight highlight-python"><span class="kc">True</span></code><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag indicating whether to convert RST sequences to plain text.</p>
+<p>The following sequences will be handled:</p>
+<ul class="simple">
+<li><p>explicit line breaks on start of line <code class="docutils literal notranslate"><span class="pre">|</span> </code> will be removed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">\*</span></code> will be converted to <code class="docutils literal notranslate"><span class="pre">*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">\`</span></code> will be converted to <code class="docutils literal notranslate"><span class="pre">`</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">\\</span></code> will be converted to <code class="docutils literal notranslate"><span class="pre">\</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd" id="sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain-constraints">Constraints<span class="colon">:</span><a class="headerlink" href="#sphinx_emf.config.model.SphinxEmfBuilderConfig.emf_convert_rst_to_plain-constraints" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> = boolean</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="installation.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Installation" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Installation
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="usage.html" class="md-footer__link md-footer__link--next" aria-label="Next: Usage" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Usage
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2022, useblocks GmbH.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    5.3.0.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.sections", "navigation.top", "search.share"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="_static/javascripts/bundle.309d5c42.min.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/design-tabs.js"></script>
+    
+  </body>
+</html>
