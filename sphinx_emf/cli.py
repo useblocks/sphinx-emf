@@ -4,7 +4,7 @@ CLI interface to sphinx-emf.
 Usecase is to read ECore metamodels and XMI models and generate need RST files.
 """
 
-from importlib.machinery import SourceFileLoader
+import importlib
 import logging
 import sys
 
@@ -30,7 +30,12 @@ def run(confpy_path):
     log.info(f"Loading confpy_path={confpy_path}")
 
     try:
-        confpy = SourceFileLoader("conf", confpy_path).load_module()
+        # creates a new module spec
+        confpy_spec = importlib.util.spec_from_file_location("conf", confpy_path)
+        # create a new module from the spec
+        confpy = importlib.util.module_from_spec(confpy_spec)
+        # execute the module in its own namespace
+        confpy_spec.loader.exec_module(confpy)
     except SyntaxError as exc:
         log.error("Error importing config file")
         log.error(exc)
