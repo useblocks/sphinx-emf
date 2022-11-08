@@ -30,7 +30,7 @@ def run(confpy_path):
     log.info(f"Loading confpy_path={confpy_path}")
 
     try:
-        # creates a new module spec
+        # creates a new module spec to load from an absolute file location
         confpy_spec = importlib.util.spec_from_file_location("conf", confpy_path)
         # create a new module from the spec
         confpy = importlib.util.module_from_spec(confpy_spec)
