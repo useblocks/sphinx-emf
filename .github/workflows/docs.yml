@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v1
+        uses: ts-graphviz/setup-graphviz@v2
       - name: Install poetry
         run: pipx install poetry
       # https://github.com/marketplace/actions/setup-python
